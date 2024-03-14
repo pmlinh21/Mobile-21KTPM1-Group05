@@ -1,11 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity" >
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/menu_bar"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginTop="-75dp"
+        android:background="@drawable/navbar_background"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingHorizontal="25dp"
+        android:paddingTop="0dp">
+
+        <Button
+            android:id="@+id/home_icon"
+            android:contentDescription=" "
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@null"
+            android:drawableBottom="@drawable/ic_home"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp" />
+
+        <Button
+            android:id="@+id/study_icon"
+            android:contentDescription=" "
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@null"
+            android:drawableBottom="@drawable/ic_study"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp" />
+
+        <Button
+            android:id="@+id/create_task_icon"
+            android:contentDescription=" "
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@null"
+            android:drawableBottom="@drawable/ic_create_task"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="5dp" />
 
 
+        <Button
+            android:id="@+id/report_icon"
+            android:contentDescription=" "
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@null"
+            android:drawableBottom="@drawable/ic_report"
+            android:paddingStart="24dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="20dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/account_icon"
+            android:contentDescription=" "
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:background="@null"
+            android:drawableBottom="@drawable/ic_account"
+            android:paddingStart="20dp"
+            android:paddingTop="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

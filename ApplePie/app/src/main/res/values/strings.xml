@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Apple Pie</string>
+    <string name="placeholder">hint text</string>
 </resources>
