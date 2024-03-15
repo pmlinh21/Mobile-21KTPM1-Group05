@@ -2,8 +2,9 @@
 <resources>
     <color name="light_light_green">#E3ECE3</color>
     <color name="light_green">#B3D7B4</color>
-    <color name="green">#61B365</color>
+    <color name="green">#319F43</color>
     <color name="black">#484C52</color>
+    <color name="light_grey">#DADDE1</color>
     <color name="grey">#949494</color>
     <color name="white">#FFFFFFFF</color>
 
