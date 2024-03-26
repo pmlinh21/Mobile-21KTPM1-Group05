@@ -9,7 +9,10 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.graphics.drawable.Drawable;
+import android.util.Log
+import com.example.applepie.database.FirebaseManager
 import java.util.Locale
+import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,46 +22,9 @@ class MainActivity : AppCompatActivity() {
 
         setLanguage()
         setUI()
-    }
 
-    fun setLanguage(){
-        Locale.setDefault(Locale.ENGLISH)
-        val config = Configuration()
-        config.locale = Locale.ENGLISH
-        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
-    }
-
-    fun setUI(){
-        homeButton = findViewById(R.id.home_icon)
-        studyButton = findViewById(R.id.study_icon)
-        createTaskButton = findViewById(R.id.create_task_icon)
-        reportButton = findViewById(R.id.report_icon)
-        accountButton = findViewById(R.id.account_icon)
-
-        homeButton.setOnClickListener {
-            handleNavbarClick(homeButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, LoginFragment()).addToBackStack(null).commit()
-        }
-
-        studyButton.setOnClickListener {
-            handleNavbarClick(studyButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
-        }
-
-        createTaskButton.setOnClickListener {
-            handleNavbarClick(createTaskButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SearchFragment()).addToBackStack(null).commit()
-        }
-
-        reportButton.setOnClickListener {
-            handleNavbarClick(reportButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FlashlightFragment()).addToBackStack(null).commit()
-        }
-
-        accountButton.setOnClickListener {
-            handleNavbarClick(accountButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Account()).addToBackStack(null).commit()
-        }
+        getInfoFromPreference()
+        getInfoFromFirebase()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -95,6 +61,66 @@ class MainActivity : AppCompatActivity() {
 
         button.background = getDrawable(R.drawable.bg_button_active)
     }
+
+    fun setUI(){
+        homeButton = findViewById(R.id.home_icon)
+        studyButton = findViewById(R.id.study_icon)
+        createTaskButton = findViewById(R.id.create_task_icon)
+        reportButton = findViewById(R.id.report_icon)
+        accountButton = findViewById(R.id.account_icon)
+
+        homeButton.setOnClickListener {
+            handleNavbarClick(homeButton)
+//            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, LoginFragment()).addToBackStack(null).commit()
+        }
+
+        studyButton.setOnClickListener {
+            handleNavbarClick(studyButton)
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
+        }
+
+        createTaskButton.setOnClickListener {
+            handleNavbarClick(createTaskButton)
+//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SearchFragment()).addToBackStack(null).commit()
+        }
+
+        reportButton.setOnClickListener {
+            handleNavbarClick(reportButton)
+//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FlashlightFragment()).addToBackStack(null).commit()
+        }
+
+        accountButton.setOnClickListener {
+            handleNavbarClick(accountButton)
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Account()).addToBackStack(null).commit()
+        }
+    }
+
+    fun getInfoFromPreference(){
+// TODO: get index of the specific user in firebase from preference
+    }
+
+    fun getInfoFromFirebase(){
+        index = 0
+
+        if (index != -1){
+            Log.i("UserInfo","0")
+            FirebaseManager.setUserRef(0)
+            FirebaseManager.setUserInfoRef(0)
+            FirebaseManager.setUserListsRef(0)
+            FirebaseManager.setUserTasksRef(0)
+
+            FirebaseManager.setUserInfo()
+        }
+    }
+
+    fun setLanguage(){
+        Locale.setDefault(Locale.ENGLISH)
+        val config = Configuration()
+        config.locale = Locale.ENGLISH
+        baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
+    }
+
+    private var index: Int = -1
 
     private lateinit var homeButton: Button
     private lateinit var studyButton: Button
