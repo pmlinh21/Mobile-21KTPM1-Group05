@@ -7,8 +7,8 @@
     https://fontawesome.com/
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="65dp"
-    android:height="65dp"
+    android:width="45dp"
+    android:height="45dp"
     android:viewportWidth="512"
     android:viewportHeight="512">
     <path

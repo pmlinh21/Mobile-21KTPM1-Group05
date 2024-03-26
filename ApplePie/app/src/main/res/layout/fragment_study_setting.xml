@@ -1,163 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".StudySetting">
 
-    <LinearLayout
-        android:id="@+id/study_setting_layout_1"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="79dp"
-        android:background="@color/green"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/back_btn"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription=" "
-            android:drawableBottom="@drawable/ic_back"
-            android:paddingStart="20dp"
-            android:paddingTop="25dp"
-            android:paddingEnd="20dp"
-            android:paddingBottom="25dp" />
-
-        <TextView
-            android:id="@+id/study_title"
-            android:layout_width="256dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Study Space"
-            android:textColor="@color/white"
-            android:textSize="24dp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/setting_btn"
-            android:layout_width="55dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:clickable="false"
-            android:contentDescription=" " />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/study_setting_layout_2"
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/study_setting_layout_1">
-
-        <TextView
-            android:id="@+id/notification_text"
+        <LinearLayout
+            android:id="@+id/study_setting_layout_1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="Notification"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/notification_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="You can turn on/off notification from the other apps."
-            android:textColor="@color/grey"
-            android:textSize="20dp" />
-
-        <Button
-            android:id="@+id/notification_btn"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
+            android:layout_height="79dp"
             android:background="@color/green"
-            android:text="See more"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:textStyle="bold"/>
-    </LinearLayout>
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <LinearLayout
-        android:id="@+id/study_setting_layout_3"
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/study_setting_layout_2">
+            <Button
+                android:id="@+id/back_btn"
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:contentDescription=" "
+                android:drawableBottom="@drawable/ic_back"
+                android:paddingStart="20dp"
+                android:paddingTop="25dp"
+                android:paddingEnd="20dp"
+                android:paddingBottom="25dp" />
 
-        <TextView
-            android:id="@+id/whitenoise_text"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/study_title"
+                android:layout_width="256dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Study Space"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/setting_btn"
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:clickable="false"
+                android:contentDescription=" " />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/study_setting_layout_2"
+            android:layout_width="390dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="White noise"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/study_setting_layout_1">
 
-        <TextView
-            android:id="@+id/whitenoise_description"
-            android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/notification_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Notification"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/notification_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="You can turn on/off notification from the other apps."
+                android:textColor="@color/grey"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/notification_btn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:text="See more"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/study_setting_layout_3"
+            android:layout_width="390dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="You can select the sound and music from the list and then listen to them when starting the study session."
-            android:textColor="@color/grey"
-            android:textSize="20dp" />
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/study_setting_layout_2">
 
-        <Button
-            android:id="@+id/whitenoise_btn"
-            android:layout_width="150dp"
+            <TextView
+                android:id="@+id/whitenoise_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="White noise"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/whitenoise_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="You can select the sound and music from the list and then listen to them when starting the study session."
+                android:textColor="@color/grey"
+                android:textSize="20dp" />
+
+            <Button
+                android:id="@+id/whitenoise_btn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:shadowColor="@color/black"
+                android:text="See more"
+                android:textColor="@color/white"
+                android:textSize="16dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="390dp"
             android:layout_height="wrap_content"
-            android:background="@color/green"
-            android:shadowColor="@color/black"
-            android:text="See more"
-            android:textColor="@color/white"
-            android:textSize="16dp"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/study_setting_layout_3">
 
-    <LinearLayout
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/study_setting_layout_3">
+            <TextView
+                android:id="@+id/soundmusic_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Turn on/off sound and music"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/soundmusic_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="Turn on/off sound and music"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <Switch
-            android:id="@+id/soundmusic_switch"
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:contentDescription=" "
-            android:trackTint="@color/green"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            <Switch
+                android:id="@+id/soundmusic_switch"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:contentDescription=" "
+                android:trackTint="@color/green"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
