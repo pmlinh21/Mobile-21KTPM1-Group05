@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         homeButton.setOnClickListener {
             handleNavbarClick(homeButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, LoginFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
         }
 
         studyButton.setOnClickListener {
