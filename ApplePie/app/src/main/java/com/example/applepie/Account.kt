@@ -57,9 +57,8 @@ class Account : Fragment() {
     }
 
     fun setUI(){
-//        FirebaseManager.getUser(0)
-
-
+        usernameInput.setText(FirebaseManager.getUserInfo().username)
+        emailInput.setText(FirebaseManager.getUserInfo().email)
     }
 
     fun handleEventListener(){
@@ -72,7 +71,7 @@ class Account : Fragment() {
         }
 
         logoutButton.setOnClickListener {
-            // TODO:  log out
+            // TODO:  delete index from preferences
         }
     }
 
