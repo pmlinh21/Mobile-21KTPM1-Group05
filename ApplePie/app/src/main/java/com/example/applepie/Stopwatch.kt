@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,10 +19,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class Stopwatch : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,7 +32,30 @@ class Stopwatch : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stopwatch, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_stopwatch, container, false)
+
+        pomodoroButton = rootView.findViewById(R.id.pomodoro_btn)
+        undoButton = rootView.findViewById(R.id.undo_btn)
+        playButton = rootView.findViewById(R.id.play_btn)
+        settingButton = rootView.findViewById(R.id.setting_btn)
+
+        pomodoroButton.setOnClickListener {
+            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
+        }
+
+        undoButton.setOnClickListener {
+            // TODO:  add study timer to firebase, reset timer
+        }
+
+        playButton.setOnClickListener {
+            // TODO:  start timer
+        }
+
+        settingButton.setOnClickListener {
+            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudySetting()).addToBackStack("study_setting").commit()
+        }
+
+        return rootView
     }
 
     companion object {
@@ -56,4 +77,12 @@ class Stopwatch : Fragment() {
                 }
             }
     }
+
+    private var param1: String? = null
+    private var param2: String? = null
+
+    private lateinit var pomodoroButton: Button
+    private lateinit var undoButton: Button
+    private lateinit var playButton: Button
+    private lateinit var settingButton: Button
 }

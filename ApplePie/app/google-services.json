@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "310508665927",
+    "firebase_url": "https://applepie-231df-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "applepie-231df",
+    "storage_bucket": "applepie-231df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310508665927:android:8b7c63a5c98e5602760562",
+        "android_client_info": {
+          "package_name": "com.example.applepie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9kwhNWg0ZoF8y4TdOzoNPxqK1mEOi_eY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

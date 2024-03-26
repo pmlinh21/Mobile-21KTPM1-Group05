@@ -5,6 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.Switch
+import androidx.appcompat.app.AppCompatActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +37,39 @@ class StudySetting : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_study_setting, container, false)
+
+        val rootView = inflater.inflate(R.layout.fragment_study_setting, container, false)
+
+        notificationButton = rootView.findViewById(R.id.notification_btn)
+        whitenoiseButton = rootView.findViewById(R.id.whitenoise_btn)
+        soundmusicSwitch = rootView.findViewById(R.id.soundmusic_switch)
+        backButton = rootView.findViewById(R.id.back_btn)
+
+        notificationButton.setOnClickListener {
+            // TODO: show list app to manage noti
+        }
+
+        whitenoiseButton.setOnClickListener {
+            // TODO:  show list music
+        }
+
+        soundmusicSwitch.setOnClickListener {
+            // TODO:  turn on/off sound in app
+        }
+
+        backButton.setOnClickListener {
+            previousRedFragment()
+        }
+
+        return rootView
+    }
+
+    private fun previousRedFragment(){
+        val transaction = activity?.supportFragmentManager?.beginTransaction()
+        val fragmentManager = activity?.supportFragmentManager
+        val count = fragmentManager!!.backStackEntryCount
+        fragmentManager.popBackStackImmediate()
+        transaction?.commit()
     }
 
     companion object {
@@ -56,4 +91,9 @@ class StudySetting : Fragment() {
                 }
             }
     }
+
+    private lateinit var notificationButton: Button
+    private lateinit var whitenoiseButton: Button
+    private lateinit var soundmusicSwitch: Switch
+    private lateinit var backButton: Button
 }

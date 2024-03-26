@@ -7,13 +7,22 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="393dp"
+        android:layout_height="698dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/nav_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:background="@drawable/navbar_background"
+        android:background="@drawable/bg_navbar"
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:paddingHorizontal="0dp"
@@ -26,13 +35,13 @@
             android:id="@+id/home_icon"
             android:layout_width="70dp"
             android:layout_height="75dp"
-            android:background="@null"
+            android:background="@drawable/bg_button_active"
             android:contentDescription=" "
             android:drawableBottom="@drawable/ic_home"
             android:paddingStart="20dp"
-            android:paddingTop="20dp"
+            android:paddingTop="22dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="20dp" />
+            android:paddingBottom="22dp" />
 
         <Button
             android:id="@+id/study_icon"
@@ -42,9 +51,9 @@
             android:contentDescription=" "
             android:drawableBottom="@drawable/ic_study"
             android:paddingStart="20dp"
-            android:paddingTop="20dp"
+            android:paddingTop="22dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="20dp" />
+            android:paddingBottom="22dp" />
 
         <Button
             android:id="@+id/create_task_icon"
@@ -69,9 +78,9 @@
 
             android:drawableBottom="@drawable/ic_report"
             android:paddingStart="24dp"
-            android:paddingTop="20dp"
+            android:paddingTop="22dp"
             android:paddingEnd="24dp"
-            android:paddingBottom="20dp" />
+            android:paddingBottom="22dp" />
 
 
         <Button
@@ -82,20 +91,12 @@
             android:contentDescription=" "
             android:drawableBottom="@drawable/ic_account"
             android:paddingStart="20dp"
-            android:paddingTop="20dp"
+            android:paddingTop="22dp"
             android:paddingEnd="20dp"
-            android:paddingBottom="20dp" />
+            android:paddingBottom="22dp" />
 
     </LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="391dp"
-        android:layout_height="580dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

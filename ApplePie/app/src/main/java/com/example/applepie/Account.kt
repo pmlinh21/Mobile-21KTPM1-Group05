@@ -5,10 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CalendarView
+import android.widget.EditText
+import android.widget.TextView
+import com.example.applepie.database.FirebaseManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
+private const val ARG_INDEX_USER = "indexUser"
 private const val ARG_PARAM2 = "param2"
 
 /**
@@ -18,23 +23,57 @@ private const val ARG_PARAM2 = "param2"
  */
 class Account : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
+    private var indexUser: Int? = null
     private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
+            indexUser = it.getInt(ARG_INDEX_USER)
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false)
+
+        val rootView = inflater.inflate(R.layout.fragment_account, container, false)
+
+        subscriptionButton = rootView.findViewById(R.id.subscription_btn)
+        reminderButton = rootView.findViewById(R.id.reminder_btn)
+        logoutButton = rootView.findViewById(R.id.logout_btn)
+        usernameInput = rootView.findViewById(R.id.username_input)
+        emailInput = rootView.findViewById(R.id.email_input)
+        currentStreakText = rootView.findViewById(R.id.current_streak_text)
+        longestStreakText = rootView.findViewById(R.id.longest_streak_text)
+        calendar = rootView.findViewById(R.id.calendarView)
+
+        setUI()
+        handleEventListener()
+
+        return rootView
+    }
+
+    fun setUI(){
+//        FirebaseManager.getUser(0)
+
+
+    }
+
+    fun handleEventListener(){
+        subscriptionButton.setOnClickListener {
+            // TODO: go to subscription fragment
+        }
+
+        reminderButton.setOnClickListener {
+            // TODO:  pop up input field for user to change
+        }
+
+        logoutButton.setOnClickListener {
+            // TODO:  log out
+        }
     }
 
     companion object {
@@ -48,12 +87,24 @@ class Account : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(indexUser: Int, param2: String) =
             Account().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
+                    putInt(ARG_INDEX_USER, indexUser)
                     putString(ARG_PARAM2, param2)
                 }
             }
     }
+
+    private lateinit var subscriptionButton: Button
+    private lateinit var reminderButton: Button
+    private lateinit var logoutButton: Button
+
+    private lateinit var usernameInput: EditText
+    private lateinit var emailInput: EditText
+
+    private lateinit var currentStreakText: TextView
+    private lateinit var longestStreakText: TextView
+
+    private lateinit var calendar: CalendarView
 }

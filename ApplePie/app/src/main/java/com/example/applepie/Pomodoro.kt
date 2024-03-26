@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +36,35 @@ class Pomodoro : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pomodoro, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_pomodoro, container, false)
+
+        stopwatchButton = rootView.findViewById(R.id.stopwatch_btn)
+        undoButton = rootView.findViewById(R.id.undo_btn)
+        playButton = rootView.findViewById(R.id.play_btn)
+        forwardButton = rootView.findViewById(R.id.forward_btn)
+        settingButton = rootView.findViewById(R.id.setting_btn)
+
+        stopwatchButton.setOnClickListener {
+            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
+        }
+
+        undoButton.setOnClickListener {
+            // TODO:  add study timer to firebase, reset timer
+        }
+
+        playButton.setOnClickListener {
+            // TODO:  start timer
+        }
+
+        forwardButton.setOnClickListener {
+            // TODO:  start timer for break or study
+        }
+
+        settingButton.setOnClickListener {
+            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudySetting()).addToBackStack("study_setting").commit()
+        }
+
+        return rootView
     }
 
     companion object {
@@ -56,4 +86,10 @@ class Pomodoro : Fragment() {
                 }
             }
     }
+
+    private lateinit var stopwatchButton: Button
+    private lateinit var undoButton: Button
+    private lateinit var playButton: Button
+    private lateinit var forwardButton: Button
+    private lateinit var settingButton: Button
 }
