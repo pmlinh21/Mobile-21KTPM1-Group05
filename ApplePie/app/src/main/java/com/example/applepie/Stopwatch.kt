@@ -1,12 +1,14 @@
 package com.example.applepie
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +39,12 @@ class Stopwatch : Fragment() {
         pomodoroButton = rootView.findViewById(R.id.pomodoro_btn)
         undoButton = rootView.findViewById(R.id.undo_btn)
         playButton = rootView.findViewById(R.id.play_btn)
+        pauseButton = rootView.findViewById(R.id.pause_btn)
         settingButton = rootView.findViewById(R.id.setting_btn)
+        stopwatchTimeText = rootView.findViewById(R.id.stopwatch_time_text)
+
+        undoButton.visibility = View.GONE
+        pauseButton.visibility = View.GONE
 
         pomodoroButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
@@ -45,17 +52,61 @@ class Stopwatch : Fragment() {
 
         undoButton.setOnClickListener {
             // TODO:  add study timer to firebase, reset timer
+            timerManager.resetTimer()
+            timerManager.stopTimer()
+            updateTimeText()
+            
+            undoButton.visibility = View.GONE
+            playButton.visibility = View.VISIBLE
+            pauseButton.visibility = View.GONE
+        }
+
+        pauseButton.setOnClickListener {
+            // TODO:  pause timer
+            timerManager.pauseTimer()
+
+            playButton.visibility = View.VISIBLE
+            pauseButton.visibility = View.GONE
         }
 
         playButton.setOnClickListener {
             // TODO:  start timer
+            if (timerManager.getPause()){
+                timerManager.resumeTimer()
+            }
+            timerManager.startTimer()
+
+            undoButton.visibility = View.VISIBLE
+            playButton.visibility = View.GONE
+            pauseButton.visibility = View.VISIBLE
         }
 
         settingButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudySetting()).addToBackStack("study_setting").commit()
         }
 
+        timerManager = TimerManager()
+        timerManager.setUpdateCallback { updateTimeText() }
+
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        timerManager = TimerManager()
+        timerManager.setUpdateCallback { updateTimeText() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timerManager.stopTimer()
+    }
+
+    private fun updateTimeText() {
+        val formattedTime = timerManager.getFormattedTime()
+        // Update your UI with formattedTime
+        stopwatchTimeText.text = formattedTime
     }
 
     companion object {
@@ -84,5 +135,11 @@ class Stopwatch : Fragment() {
     private lateinit var pomodoroButton: Button
     private lateinit var undoButton: Button
     private lateinit var playButton: Button
+    private lateinit var pauseButton: Button
     private lateinit var settingButton: Button
+    private lateinit var stopwatchTimeText: TextView
+    private lateinit var timerManager: TimerManager
 }
+
+
+

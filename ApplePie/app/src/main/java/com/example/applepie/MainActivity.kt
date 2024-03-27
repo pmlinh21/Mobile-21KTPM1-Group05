@@ -11,6 +11,10 @@ import androidx.core.content.ContextCompat
 import android.graphics.drawable.Drawable;
 import android.util.Log
 import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.Lists
+import com.example.applepie.database.Task
+import com.example.applepie.database.User
+import com.google.firebase.database.DatabaseError
 import java.util.Locale
 import kotlin.properties.Delegates
 
@@ -30,27 +34,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     fun handleNavbarClick(button: Button){
 
-        // Change the button icon
-//        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_home)
-//        val newColor = ContextCompat.getColor(this, R.color.green)
-//        drawable!!.setColorFilter(newColor, PorterDuff.Mode.SRC_IN)
-//        button.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getDrawable(R.drawable.ic_home))
-//
-//        if (button == homeButton) {
-//            homeButton.background = getDrawable(R.drawable.bg_button_active)
-//        }
-//        else if (button == studyButton) {
-//            studyButton.background = getDrawable(R.drawable.bg_button_active)
-//        }
-//        else if (button == createTaskButton) {
-//            createTaskButton.background = getDrawable(R.drawable.bg_button_active)
-//        }
-//        else if (button == reportButton) {
-//            reportButton.background = getDrawable(R.drawable.ic_report)
-//        }
-//        else if (button == accountButton) {
-//            accountButton.background = getDrawable(R.drawable.ic_account)
-//        }
+        // TODO: Change the button icon to @color/green
 
         // Change the button background
         homeButton.setBackgroundColor(Color.TRANSPARENT)
@@ -71,7 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         homeButton.setOnClickListener {
             handleNavbarClick(homeButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.frame_layout, LoginFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
         }
 
         studyButton.setOnClickListener {
@@ -109,7 +93,38 @@ class MainActivity : AppCompatActivity() {
             FirebaseManager.setUserListsRef(0)
             FirebaseManager.setUserTasksRef(0)
 
-            FirebaseManager.setUserInfo()
+            FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<Lists>> {
+                override fun onDataReceived(data: List<Lists>) {
+                    // Handle received user list data
+                    Log.i("data", FirebaseManager.getUserList().toString())
+                }
+
+                override fun onError(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+
+            FirebaseManager.setUserInfo(object : FirebaseManager.DataCallback<User> {
+                override fun onDataReceived(data: User) {
+                    // Handle received user list data
+                    Log.i("data", FirebaseManager.getUserInfo().toString())
+                }
+
+                override fun onError(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+
+            FirebaseManager.setUserTask(object : FirebaseManager.DataCallback<List<Task>> {
+                override fun onDataReceived(data: List<Task>) {
+                    // Handle received user list data
+                    Log.i("data", FirebaseManager.getUserTask().toString())
+                }
+
+                override fun onError(error: DatabaseError) {
+                    // Handle error
+                }
+            })
         }
     }
 

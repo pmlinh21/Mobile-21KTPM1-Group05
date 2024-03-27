@@ -21,6 +21,18 @@ object FirebaseManager {
     private lateinit var userList: List<Lists>
     private lateinit var userTask: List<Task>
 
+    /*
+
+    setter : get data from firebase and set it to FirebaseDatabase
+    getter: get data from FirebaseDatabase
+
+    */
+
+    interface DataCallback<T> {
+        fun onDataReceived(data: T)
+        fun onError(error: DatabaseError)
+    }
+
     fun getFirebaseDatabase(): FirebaseDatabase {
         return database
     }
@@ -53,12 +65,13 @@ object FirebaseManager {
         return userTasksRef
     }
 
-    fun setUserInfo() {
+    fun setUserInfo(callback: DataCallback<User>) {
         userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     userInfo = dataSnapshot.getValue(User::class.java)!!
-                    Log.i("data",userInfo.toString())
+                    callback.onDataReceived(userInfo)
+//                    Log.i("data",userInfo.toString())
                 } else {
                     Log.d("UserInfo", "User info not found for UID")
                 }
@@ -66,12 +79,61 @@ object FirebaseManager {
 
             override fun onCancelled(databaseError: DatabaseError) {
                 // Handle potential errors
+                callback.onError(databaseError)
                 Log.e("Firebase", "Error retrieving user info: ${databaseError.message}")
             }
         })
     }
     fun getUserInfo(): User {
         return userInfo
+    }
+
+    fun setUserList(callback: DataCallback<List<Lists>>) {
+        userListsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val tempList = ArrayList<Lists>()
+                for (snapshot in dataSnapshot.children) {
+                    val lists = snapshot.getValue(Lists::class.java)
+                    lists?.let {
+                        tempList.add(it)
+                    }
+                }
+                userList = tempList
+                callback.onDataReceived(userList)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback.onError(databaseError)
+                Log.e("Firebase", "Error retrieving user info: ${databaseError.message}")
+            }
+        })
+    }
+    fun getUserList(): List<Lists> {
+        return userList
+    }
+
+    fun setUserTask(callback: DataCallback<List<Task>>) {
+        userTasksRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val tempTask = ArrayList<Task>()
+                for (snapshot in dataSnapshot.children) {
+                    val task = snapshot.getValue(Task::class.java)
+                    task?.let {
+                        tempTask.add(it)
+                    }
+                }
+                userTask= tempTask
+                callback.onDataReceived(userTask)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback.onError(databaseError)
+                Log.e("Firebase", "Error retrieving user info: ${databaseError.message}")
+            }
+        })
+    }
+    fun getUserTask(): List<Task> {
+        return userTask
     }
 
 }

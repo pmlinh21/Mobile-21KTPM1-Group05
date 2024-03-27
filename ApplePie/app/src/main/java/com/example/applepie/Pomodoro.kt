@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 // TODO: Rename parameter arguments, choose names that match
@@ -43,6 +44,7 @@ class Pomodoro : Fragment() {
         playButton = rootView.findViewById(R.id.play_btn)
         forwardButton = rootView.findViewById(R.id.forward_btn)
         settingButton = rootView.findViewById(R.id.setting_btn)
+        pomodoroTimeText = rootView.findViewById(R.id.pomodoro_time_text)
 
         stopwatchButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
@@ -92,4 +94,5 @@ class Pomodoro : Fragment() {
     private lateinit var playButton: Button
     private lateinit var forwardButton: Button
     private lateinit var settingButton: Button
+    private lateinit var pomodoroTimeText: TextView
 }
