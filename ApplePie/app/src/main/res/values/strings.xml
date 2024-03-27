@@ -3,4 +3,7 @@
     <string name="placeholder">hint text</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="icon_search">magnifying-glass</string>
+    <string name="search_hint">Search</string>
+    <string name="dashboard">Dashboard</string>
 </resources>
