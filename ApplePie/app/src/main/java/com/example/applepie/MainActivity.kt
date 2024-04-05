@@ -1,6 +1,7 @@
 package com.example.applepie
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -22,6 +23,10 @@ import kotlin.properties.Delegates
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val registerActivity = Intent(this, RegisterActivity::class.java)
+        startActivity(registerActivity)
+
         setContentView(R.layout.activity_main)
 
         setLanguage()
