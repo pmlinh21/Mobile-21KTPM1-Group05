@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
 //        val registerActivity = Intent(this, RegisterActivity::class.java)
 //        startActivity(registerActivity)
 
-        val loginActivity = Intent(this, LoginActivity::class.java)
-        startActivity(loginActivity)
+//        val loginActivity = Intent(this, LoginActivity::class.java)
+//        startActivity(loginActivity)
 
         setContentView(R.layout.activity_main)
 
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         createTaskButton.setOnClickListener {
             handleNavbarClick(createTaskButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SearchFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
         }
 
         reportButton.setOnClickListener {
