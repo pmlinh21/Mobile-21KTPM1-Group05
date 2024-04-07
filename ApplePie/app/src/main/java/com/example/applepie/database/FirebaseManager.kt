@@ -16,15 +16,23 @@ object FirebaseManager {
     private lateinit var userInfoRef: DatabaseReference
     private lateinit var userListsRef: DatabaseReference
     private lateinit var userTasksRef: DatabaseReference
+    private lateinit var userPomodoroRef: DatabaseReference
+    private lateinit var userStopwatchRef: DatabaseReference
 
     private lateinit var userInfo: User
     private lateinit var userList: List<Lists>
     private lateinit var userTask: List<Task>
+    private lateinit var userPomodoro: List<DateTime>
+    private lateinit var userStopwatch: List<DateTime>
+    private lateinit var userStreak: List<DateTime>
 
     /*
 
-    setter : get data from firebase and set it to FirebaseDatabase
-    getter: get data from FirebaseDatabase
+    setter :
+        get ref/data from firebase and set it to FirebaseDatabase
+        if u want to use setter methods, init in Main Activity and follow the sample code in getInfoFromFirebase()
+    getter:
+        get data from FirebaseDatabase
 
     */
 
@@ -40,29 +48,25 @@ object FirebaseManager {
     fun setUserRef(index: Int) {
         userRef =  FirebaseDatabase.getInstance().getReference("users/$index")
     }
-    fun getUserRef() : DatabaseReference{
-        return userRef
-    }
 
     fun setUserInfoRef(index: Int) {
         userInfoRef =  FirebaseDatabase.getInstance().getReference("users/$index/info")
-    }
-    fun getUserInfoRef(): DatabaseReference {
-        return userInfoRef
     }
 
     fun setUserListsRef(index: Int) {
         userListsRef = FirebaseDatabase.getInstance().getReference("users/$index/lists")
     }
-    fun getUserListsRef(): DatabaseReference {
-        return userListsRef
-    }
 
     fun setUserTasksRef(index: Int) {
         userTasksRef = FirebaseDatabase.getInstance().getReference("users/$index/tasks")
     }
-    fun getUserTaskRef(): DatabaseReference {
-        return userTasksRef
+
+    fun setUserPomodoroRef(index: Int) {
+        userPomodoroRef = FirebaseDatabase.getInstance().getReference("users/$index/pomodoro")
+    }
+
+    fun setUserStopwatchRef(index: Int) {
+        userStopwatchRef = FirebaseDatabase.getInstance().getReference("users/$index/stopwatch")
     }
 
     fun setUserInfo(callback: DataCallback<User>) {

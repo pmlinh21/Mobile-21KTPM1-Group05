@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import PomodoroTimer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,9 +43,13 @@ class Pomodoro : Fragment() {
         stopwatchButton = rootView.findViewById(R.id.stopwatch_btn)
         undoButton = rootView.findViewById(R.id.undo_btn)
         playButton = rootView.findViewById(R.id.play_btn)
+        pauseButton = rootView.findViewById(R.id.pause_btn)
         forwardButton = rootView.findViewById(R.id.forward_btn)
         settingButton = rootView.findViewById(R.id.setting_btn)
         pomodoroTimeText = rootView.findViewById(R.id.pomodoro_time_text)
+
+        undoButton.visibility = View.GONE
+        pauseButton.visibility = View.GONE
 
         stopwatchButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
@@ -52,14 +57,30 @@ class Pomodoro : Fragment() {
 
         undoButton.setOnClickListener {
             // TODO:  add study timer to firebase, reset timer
+            stopwatchButton.isEnabled = true
         }
 
         playButton.setOnClickListener {
             // TODO:  start timer
+//            if (timerManager.getPause()){
+//                timerManager.resumeTimer()
+//            }
+            timerManager.startTimer()
+
+            undoButton.visibility = View.VISIBLE
+            playButton.visibility = View.GONE
+            pauseButton.visibility = View.VISIBLE
+
+            stopwatchButton.isEnabled = false
+
         }
 
         forwardButton.setOnClickListener {
             // TODO:  start timer for break or study
+        }
+
+        pauseButton.setOnClickListener {
+            // TODO:  pause timer for break or study
         }
 
         settingButton.setOnClickListener {
@@ -67,6 +88,24 @@ class Pomodoro : Fragment() {
         }
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        timerManager = PomodoroTimer()
+        timerManager.setUpdateCallback { updateTimeText() }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timerManager.resetTimer()
+    }
+
+    private fun updateTimeText() {
+        val formattedTime = timerManager.getFormattedTime()
+        // Update your UI with formattedTime
+        pomodoroTimeText.text = formattedTime
     }
 
     companion object {
@@ -95,4 +134,6 @@ class Pomodoro : Fragment() {
     private lateinit var forwardButton: Button
     private lateinit var settingButton: Button
     private lateinit var pomodoroTimeText: TextView
+    private lateinit var timerManager: PomodoroTimer
+    private lateinit var pauseButton: Button
 }

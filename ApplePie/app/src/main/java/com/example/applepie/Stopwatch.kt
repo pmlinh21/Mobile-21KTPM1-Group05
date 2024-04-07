@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import com.example.applepie.StopwatchTimer
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,75 +38,99 @@ class Stopwatch : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_stopwatch, container, false)
 
+        settingButton = rootView.findViewById(R.id.setting_btn)
+
+        studyToggle = rootView.findViewById(R.id.stopwatch_layout_2)
         pomodoroButton = rootView.findViewById(R.id.pomodoro_btn)
+
         undoButton = rootView.findViewById(R.id.undo_btn)
         playButton = rootView.findViewById(R.id.play_btn)
         pauseButton = rootView.findViewById(R.id.pause_btn)
-        settingButton = rootView.findViewById(R.id.setting_btn)
+
         stopwatchTimeText = rootView.findViewById(R.id.stopwatch_time_text)
 
-        undoButton.visibility = View.GONE
-        pauseButton.visibility = View.GONE
+        stopwatchTimeText.text = StopwatchTimer.getFormattedTime()
+        setUI()
+        handleButtonClick()
 
+        return rootView
+    }
+
+    fun setUI(){
+        if (StopwatchTimer.isRunning()) {
+            playButton.visibility = View.GONE
+            pauseButton.visibility = View.VISIBLE
+            undoButton.visibility = View.VISIBLE
+            pomodoroButton.isEnabled = false
+            return
+        }
+        if (StopwatchTimer.isPause()) {
+            playButton.visibility = View.VISIBLE
+            pauseButton.visibility = View.GONE
+            undoButton.visibility = View.VISIBLE
+            pomodoroButton.isEnabled = false
+            return
+        }
+        if (StopwatchTimer.isStop()){
+            playButton.visibility = View.VISIBLE
+            pauseButton.visibility = View.GONE
+            undoButton.visibility = View.GONE
+            pomodoroButton.isEnabled = true
+            return
+        }
+
+    }
+
+    fun handleButtonClick(){
         pomodoroButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
         }
 
         undoButton.setOnClickListener {
             // TODO:  add study timer to firebase, reset timer
-            timerManager.resetTimer()
-            timerManager.stopTimer()
-            updateTimeText()
-            
-            undoButton.visibility = View.GONE
+            StopwatchTimer.resetTimer()
+            StopwatchTimer.stopTimer()
+            setUI()
             playButton.visibility = View.VISIBLE
             pauseButton.visibility = View.GONE
+            undoButton.visibility = View.GONE
         }
 
         pauseButton.setOnClickListener {
             // TODO:  pause timer
-            timerManager.pauseTimer()
+            StopwatchTimer.pauseTimer()
 
             playButton.visibility = View.VISIBLE
             pauseButton.visibility = View.GONE
+            undoButton.visibility = View.VISIBLE
         }
 
         playButton.setOnClickListener {
             // TODO:  start timer
-            if (timerManager.getPause()){
-                timerManager.resumeTimer()
+            if (StopwatchTimer.isPause()) {
+                Log.i("d", "qbc")
+                StopwatchTimer.resumeTimer()
             }
-            timerManager.startTimer()
+                StopwatchTimer.startTimer()
 
-            undoButton.visibility = View.VISIBLE
             playButton.visibility = View.GONE
             pauseButton.visibility = View.VISIBLE
+            undoButton.visibility = View.VISIBLE
         }
 
         settingButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudySetting()).addToBackStack("study_setting").commit()
         }
-
-        timerManager = TimerManager()
-        timerManager.setUpdateCallback { updateTimeText() }
-
-        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        timerManager = TimerManager()
-        timerManager.setUpdateCallback { updateTimeText() }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        timerManager.stopTimer()
+        StopwatchTimer.setUpdateCallback { updateTimeText() }
     }
 
     private fun updateTimeText() {
-        val formattedTime = timerManager.getFormattedTime()
+        val formattedTime = StopwatchTimer.getFormattedTime()
         // Update your UI with formattedTime
         stopwatchTimeText.text = formattedTime
     }
@@ -132,13 +158,18 @@ class Stopwatch : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var settingButton: Button
+
+    private lateinit var studyToggle: LinearLayout
     private lateinit var pomodoroButton: Button
+
+    private lateinit var stopwatchTimeText: TextView
+
     private lateinit var undoButton: Button
     private lateinit var playButton: Button
     private lateinit var pauseButton: Button
-    private lateinit var settingButton: Button
-    private lateinit var stopwatchTimeText: TextView
-    private lateinit var timerManager: TimerManager
+
+
 }
 
 

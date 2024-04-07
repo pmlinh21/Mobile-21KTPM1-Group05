@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getInfoFromPreference(){
-// TODO: get index of the specific user in firebase from preference
+    // TODO: get index of the specific user in firebase from preference
     }
 
     fun getInfoFromFirebase(){
