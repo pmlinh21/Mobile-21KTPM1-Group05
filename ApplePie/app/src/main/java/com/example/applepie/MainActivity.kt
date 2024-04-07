@@ -1,6 +1,7 @@
 package com.example.applepie
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -22,6 +23,13 @@ import kotlin.properties.Delegates
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+//        val registerActivity = Intent(this, RegisterActivity::class.java)
+//        startActivity(registerActivity)
+
+//        val loginActivity = Intent(this, LoginActivity::class.java)
+//        startActivity(loginActivity)
+
         setContentView(R.layout.activity_main)
 
         setLanguage()
@@ -65,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         createTaskButton.setOnClickListener {
             handleNavbarClick(createTaskButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SearchFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
         }
 
         reportButton.setOnClickListener {
