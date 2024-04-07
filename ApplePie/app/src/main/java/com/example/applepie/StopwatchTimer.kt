@@ -10,6 +10,7 @@ object StopwatchTimer {
     private var handler: Handler? = null
     private var updateRunnable: Runnable? = null
     private var isPaused: Boolean = false
+    private var isStarted: Boolean = false
 
     // Start the timer
     fun startTimer() {
@@ -19,37 +20,38 @@ object StopwatchTimer {
                 override fun run() {
                     if (!isPaused) {
                         secondsElapsed++
-                        updateCallback?.invoke() // Invoke the callback to update UI
+                        updateTimeTextCallback?.invoke() // Update text here
                     }
-                    handler?.postDelayed(this, 1000) // Update every second
+
+                    handler?.postDelayed(this, 1000)
                 }
             }
             handler?.post(updateRunnable!!)
+            isStarted = true
             Log.i("Timer", "Timer started")
         } else{
             Log.i("Timer", "Timer already running")
         }
+        if (isStarted)
+            updateButtonCallback?.invoke()
     }
 
     fun isPause(): Boolean{
-//        Log.i("secondsElapsed1",secondsElapsed.toString())
-        return isPaused && secondsElapsed != 0
+        return isPaused && isStarted
     }
 
     fun isRunning(): Boolean{
-//        Log.i("secondsElapsed2",secondsElapsed.toString())
-        return !isPaused && secondsElapsed != 0
+        return !isPaused && isStarted
     }
 
     fun isStop(): Boolean{
-//        Log.i("secondsElapsed3",secondsElapsed.toString())
-        return secondsElapsed == 0
+        return !isStarted
     }
 
     // Pause the timer
     fun pauseTimer() {
         isPaused = true
-        startTimer()
+        updateButtonCallback?.invoke()
     }
 
     // Resume the timer
@@ -59,16 +61,16 @@ object StopwatchTimer {
 
     // Stop the timer
     fun stopTimer() {
+        isPaused = false
+        isStarted = false
+        secondsElapsed = 0
+
+        updateTimeTextCallback?.invoke()
+        updateButtonCallback?.invoke()
+
         updateRunnable?.let { handler?.removeCallbacks(it) }
         handler = null
-        secondsElapsed = 0
-        isPaused = false
-    }
 
-    // Reset the timer
-    fun resetTimer() {
-        secondsElapsed = 0
-        updateCallback?.invoke()
     }
 
     // Format the elapsed time in hh:mm:ss format
@@ -80,8 +82,13 @@ object StopwatchTimer {
     }
 
     // Set up callback for updating UI
-    private var updateCallback: (() -> Unit)? = null
-    fun setUpdateCallback(callback: () -> Unit) {
-        updateCallback = callback
+    private var updateTimeTextCallback: (() -> Unit)? = null
+    private var updateButtonCallback: (() -> Unit)? = null
+    fun setUpdateTimeTextCallback(callback: () -> Unit) {
+        updateTimeTextCallback = callback
+    }
+
+    fun setUpdateButtonTextCallback(callback: () -> Unit) {
+        updateButtonCallback = callback
     }
 }

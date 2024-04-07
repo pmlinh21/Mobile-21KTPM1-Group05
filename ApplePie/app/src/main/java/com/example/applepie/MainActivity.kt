@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import PomodoroTimer
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
@@ -68,7 +69,10 @@ class MainActivity : AppCompatActivity() {
 
         studyButton.setOnClickListener {
             handleNavbarClick(studyButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
+            if (!PomodoroTimer.isStop())
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
+            else
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
         }
 
         createTaskButton.setOnClickListener {

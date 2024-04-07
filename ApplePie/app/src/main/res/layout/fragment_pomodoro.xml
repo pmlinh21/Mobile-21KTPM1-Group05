@@ -157,7 +157,6 @@
                 android:id="@+id/forward_btn"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginEnd="23dp"
                 android:background="@drawable/ic_forward"
                 android:contentDescription=" "
 
@@ -184,8 +183,8 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="198dp"
-            android:layout_height="165dp"
+            android:layout_width="199dp"
+            android:layout_height="182dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/shape_progressbar"
             android:indeterminate="false"
@@ -196,10 +195,11 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="183dp"
-            android:layout_height="155dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="164dp"
+            android:layout_height="133dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/progressBar"
             app:srcCompat="@drawable/apple_image" />

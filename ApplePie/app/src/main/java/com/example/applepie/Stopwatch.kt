@@ -49,73 +49,36 @@ class Stopwatch : Fragment() {
 
         stopwatchTimeText = rootView.findViewById(R.id.stopwatch_time_text)
 
-        stopwatchTimeText.text = StopwatchTimer.getFormattedTime()
-        setUI()
+        updateTimeText()
+        updateButton()
         handleButtonClick()
 
         return rootView
     }
 
-    fun setUI(){
-        if (StopwatchTimer.isRunning()) {
-            playButton.visibility = View.GONE
-            pauseButton.visibility = View.VISIBLE
-            undoButton.visibility = View.VISIBLE
-            pomodoroButton.isEnabled = false
-            return
-        }
-        if (StopwatchTimer.isPause()) {
-            playButton.visibility = View.VISIBLE
-            pauseButton.visibility = View.GONE
-            undoButton.visibility = View.VISIBLE
-            pomodoroButton.isEnabled = false
-            return
-        }
-        if (StopwatchTimer.isStop()){
-            playButton.visibility = View.VISIBLE
-            pauseButton.visibility = View.GONE
-            undoButton.visibility = View.GONE
-            pomodoroButton.isEnabled = true
-            return
-        }
-
-    }
-
     fun handleButtonClick(){
+        Log.i("data",pomodoroButton.isEnabled.toString())
         pomodoroButton.setOnClickListener {
+
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
         }
 
         undoButton.setOnClickListener {
             // TODO:  add study timer to firebase, reset timer
-            StopwatchTimer.resetTimer()
             StopwatchTimer.stopTimer()
-            setUI()
-            playButton.visibility = View.VISIBLE
-            pauseButton.visibility = View.GONE
-            undoButton.visibility = View.GONE
         }
 
         pauseButton.setOnClickListener {
             // TODO:  pause timer
             StopwatchTimer.pauseTimer()
-
-            playButton.visibility = View.VISIBLE
-            pauseButton.visibility = View.GONE
-            undoButton.visibility = View.VISIBLE
         }
 
         playButton.setOnClickListener {
             // TODO:  start timer
             if (StopwatchTimer.isPause()) {
-                Log.i("d", "qbc")
                 StopwatchTimer.resumeTimer()
             }
-                StopwatchTimer.startTimer()
-
-            playButton.visibility = View.GONE
-            pauseButton.visibility = View.VISIBLE
-            undoButton.visibility = View.VISIBLE
+            StopwatchTimer.startTimer()
         }
 
         settingButton.setOnClickListener {
@@ -126,13 +89,43 @@ class Stopwatch : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        StopwatchTimer.setUpdateCallback { updateTimeText() }
+        StopwatchTimer.setUpdateTimeTextCallback {
+            updateTimeText()
+        }
+
+        StopwatchTimer.setUpdateButtonTextCallback {
+            updateButton()
+        }
     }
 
-    private fun updateTimeText() {
+    fun updateTimeText(){
         val formattedTime = StopwatchTimer.getFormattedTime()
-        // Update your UI with formattedTime
+
         stopwatchTimeText.text = formattedTime
+    }
+    fun updateButton(){
+        Log.i("timer","update btn")
+        if (StopwatchTimer.isStop()){
+            playButton.visibility = View.VISIBLE
+            pauseButton.visibility = View.GONE
+            undoButton.visibility = View.GONE
+            pomodoroButton.isEnabled = true
+            return
+        }
+        if (StopwatchTimer.isPause()) {
+            playButton.visibility = View.VISIBLE
+            pauseButton.visibility = View.GONE
+            undoButton.visibility = View.VISIBLE
+            pomodoroButton.isEnabled = false
+            return
+        }
+        if (StopwatchTimer.isRunning()) {
+            playButton.visibility = View.GONE
+            pauseButton.visibility = View.VISIBLE
+            undoButton.visibility = View.VISIBLE
+            pomodoroButton.isEnabled = false
+            return
+        }
     }
 
     companion object {
