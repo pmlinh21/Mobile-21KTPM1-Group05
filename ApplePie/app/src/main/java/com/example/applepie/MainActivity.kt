@@ -37,9 +37,9 @@ class MainActivity : AppCompatActivity() {
         username = preferenceManager.getUsername().toString()
 
         if (preferenceManager.isLogin() == false) {
-            val loginActivity = Intent(this, LoginActivity::class.java)
-            startActivity(loginActivity)
-            finish()
+//            val loginActivity = Intent(this, LoginActivity::class.java)
+//            startActivity(loginActivity)
+//            finish()
         }
 
 
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         reportButton.setOnClickListener {
             handleNavbarClick(reportButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FlashlightFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Report()).addToBackStack(null).commit()
         }
 
         accountButton.setOnClickListener {
