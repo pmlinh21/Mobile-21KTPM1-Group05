@@ -1,10 +1,13 @@
 package com.example.applepie
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +37,26 @@ class DailyReport : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_daily_report, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_daily_report, container, false)
+
+        progressBar = rootView.findViewById(R.id.progress_bar)
+        progressText = rootView.findViewById(R.id.progress_text)
+
+        val handler = Handler()
+        handler.postDelayed(object : Runnable {
+            override fun run() {
+                if (i <= 100) {
+                    progressText.text = "$i"
+                    progressBar.progress = i
+                    i++
+                    handler.postDelayed(this, 200)
+                } else {
+                    handler.removeCallbacks(this)
+                }
+            }
+        }, 200)
+
+        return rootView
     }
 
     companion object {
@@ -56,4 +78,9 @@ class DailyReport : Fragment() {
                 }
             }
     }
+
+    private lateinit var progressBar: ProgressBar
+    private lateinit var progressText: TextView
+    private var i = 0
+
 }
