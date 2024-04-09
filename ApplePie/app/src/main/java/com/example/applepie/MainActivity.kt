@@ -2,7 +2,9 @@ package com.example.applepie
 
 import PomodoroTimer
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -22,16 +24,30 @@ import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val SHARED_PREFS = "shared_prefs"
+        const val EMAIL_KEY = "email_key"
+        const val PASSWORD_KEY = "password_key"
+    }
+
+    private lateinit var preferenceManager: PreferenceManager
+    private lateinit var username: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val registerActivity = Intent(this, RegisterActivity::class.java)
-//        startActivity(registerActivity)
+        setContentView(R.layout.activity_main)
 
-        val loginActivity = Intent(this, LoginActivity::class.java)
-        startActivity(loginActivity)
+        preferenceManager = PreferenceManager(this)
+        username = preferenceManager.getUsername().toString()
 
-//        setContentView(R.layout.activity_main)
+        if (preferenceManager.isLogin() == false) {
+            val loginActivity = Intent(this, LoginActivity::class.java)
+            startActivity(loginActivity)
+            finish()
+        }
+
 
         setLanguage()
         setUI()

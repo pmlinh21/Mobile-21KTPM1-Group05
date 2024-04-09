@@ -21,6 +21,7 @@ class LoginActivity : ComponentActivity() {
         loginButton = findViewById(R.id.loginButton)
 
         auth = FirebaseAuth.getInstance()
+        preferenceManager = PreferenceManager(this)
 
         loginButton.setOnClickListener {
             val email = usernameInput.text.toString()
@@ -28,7 +29,15 @@ class LoginActivity : ComponentActivity() {
 
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) {
                 if (it.isSuccessful) {
-                    Toast.makeText(this, "Login successfully!", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Login successfully!", Toast.LENGTH_SHORT).show()
+
+                    preferenceManager.setLogin(true)
+                    preferenceManager.setUsername(email)
+
+                    val mainActivity = Intent(this, MainActivity::class.java)
+                    startActivity(mainActivity)
+
+                    finish()
                 } else {
                     Toast.makeText(this, "Login failed!", Toast.LENGTH_SHORT).show()
                 }
@@ -50,4 +59,5 @@ class LoginActivity : ComponentActivity() {
     private lateinit var signupText: MaterialTextView
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var preferenceManager: PreferenceManager
 }
