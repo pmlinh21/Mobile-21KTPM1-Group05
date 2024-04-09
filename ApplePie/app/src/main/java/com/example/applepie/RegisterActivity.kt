@@ -13,6 +13,7 @@ import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import es.dmoral.toasty.Toasty
 
 class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,21 +35,25 @@ class RegisterActivity : ComponentActivity() {
             val passwordConfirm = passwordConfirmInput.text.toString()
 
             if (username.isBlank() || email.isBlank() || password.isBlank() || passwordConfirm.isBlank()) {
-                Toast.makeText(this, "Username, Email and Password can't be blank", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Username, Email and Password can't be blank", Toast.LENGTH_SHORT).show()
+                Toasty.warning(this, "Username, Email and Password can't be blank", Toast.LENGTH_SHORT, true).show()
                 return@setOnClickListener
             }
 
             if (password != passwordConfirm) {
-                Toast.makeText(this, "Password and Confirm Password do not match", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Password and Confirm Password do not match", Toast.LENGTH_SHORT).show()
+                Toasty.error(this, "Password and Confirm Password do not match", Toast.LENGTH_SHORT, true).show()
                 return@setOnClickListener
             }
 
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) {
                 if (it.isSuccessful) {
-                    Toast.makeText(this, "Sign up successfully!", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Sign up successfully", Toast.LENGTH_SHORT).show()
+                    Toasty.success(this, "Sign up successfully", Toast.LENGTH_SHORT, true).show()
                     finish()
                 } else {
-                    Toast.makeText(this, "Sign up failed!", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Sign up failed", Toast.LENGTH_SHORT).show()
+                    Toasty.error(this, "Invalid email or password format", Toast.LENGTH_SHORT, true).show()
                 }
             }
         }

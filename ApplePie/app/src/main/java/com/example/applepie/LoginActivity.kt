@@ -10,6 +10,7 @@ import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import es.dmoral.toasty.Toasty
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +40,8 @@ class LoginActivity : ComponentActivity() {
 
                     finish()
                 } else {
-                    Toast.makeText(this, "Login failed!", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "Login failed!", Toast.LENGTH_SHORT).show()
+                    Toasty.error(this, "Username or password is incorrect", Toast.LENGTH_SHORT, true).show()
                 }
             }
         }
@@ -48,7 +50,7 @@ class LoginActivity : ComponentActivity() {
         signupText.setOnClickListener {
             val registerActivity = Intent(this, RegisterActivity::class.java)
             startActivity(registerActivity)
-            finish()
+//            finish()
         }
 
     }
