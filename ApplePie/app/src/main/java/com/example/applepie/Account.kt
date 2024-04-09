@@ -1,5 +1,7 @@
 package com.example.applepie
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -50,6 +52,8 @@ class Account : Fragment() {
         longestStreakText = rootView.findViewById(R.id.longest_streak_text)
         calendar = rootView.findViewById(R.id.calendarView)
 
+        preferenceManager = PreferenceManager(this.activity)
+
         setUI()
         handleEventListener()
 
@@ -72,6 +76,21 @@ class Account : Fragment() {
 
         logoutButton.setOnClickListener {
             // TODO:  delete index from preferences
+
+            val builder = AlertDialog.Builder(this.activity)
+            builder.setMessage("Are you sure you want to log out?")
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    preferenceManager.removeData()
+                    val loginActivity = Intent(this.activity, LoginActivity::class.java)
+                    startActivity(loginActivity)
+                }
+                .setNegativeButton("Cancel") { dialog, id ->
+                    // Dismiss the dialog
+                    dialog.dismiss()
+                }
+            val alert = builder.create()
+            alert.show()
         }
     }
 
@@ -106,4 +125,6 @@ class Account : Fragment() {
     private lateinit var longestStreakText: TextView
 
     private lateinit var calendar: CalendarView
+
+    private lateinit var preferenceManager: PreferenceManager
 }

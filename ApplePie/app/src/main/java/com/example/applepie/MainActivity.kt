@@ -25,12 +25,6 @@ import kotlin.properties.Delegates
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {
-        const val SHARED_PREFS = "shared_prefs"
-        const val EMAIL_KEY = "email_key"
-        const val PASSWORD_KEY = "password_key"
-    }
-
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var username: String
 
