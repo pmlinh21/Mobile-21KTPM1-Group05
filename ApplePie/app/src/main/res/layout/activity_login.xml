@@ -5,7 +5,7 @@
     android:background="@color/backgroundColor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity"
+    tools:context=".LoginActivity"
     android:orientation="vertical">
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -68,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="12dp" />
 
@@ -96,11 +96,12 @@
                 app:counterMaxLength="16">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:inputType="textPassword"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:fontFamily="sans-serif"
                     android:maxLength="16"
                     android:paddingHorizontal="8dp"
@@ -109,6 +110,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/loginButton"
                 style="@style/Widget.MaterialComponents.Button"
                 android:background="@drawable/roundstyle"
                 android:layout_width="match_parent"
@@ -182,6 +184,7 @@
                     android:text="Don't have an account?"/>
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/signupText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" Sign up"

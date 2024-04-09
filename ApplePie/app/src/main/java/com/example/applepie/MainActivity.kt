@@ -28,10 +28,10 @@ class MainActivity : AppCompatActivity() {
 //        val registerActivity = Intent(this, RegisterActivity::class.java)
 //        startActivity(registerActivity)
 
-//        val loginActivity = Intent(this, LoginActivity::class.java)
-//        startActivity(loginActivity)
+        val loginActivity = Intent(this, LoginActivity::class.java)
+        startActivity(loginActivity)
 
-        setContentView(R.layout.activity_main)
+//        setContentView(R.layout.activity_main)
 
         setLanguage()
         setUI()

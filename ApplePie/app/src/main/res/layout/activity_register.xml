@@ -67,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="12dp" />
 
@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:inputType="textEmailAddress"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="12dp" />
 
@@ -126,11 +126,12 @@
                 app:counterMaxLength="16">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:inputType="textPassword"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:fontFamily="sans-serif"
                     android:maxLength="16"
                     android:paddingHorizontal="8dp"
@@ -160,11 +161,12 @@
                 app:counterMaxLength="16">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/passwordConfirmInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:inputType="textPassword"
-                    android:textColor="@color/grey"
+                    android:textColor="@color/black"
                     android:fontFamily="sans-serif"
                     android:maxLength="16"
                     android:paddingHorizontal="8dp"
@@ -173,6 +175,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/signupButton"
                 style="@style/Widget.MaterialComponents.Button"
                 android:background="@drawable/roundstyle"
                 android:layout_width="match_parent"
@@ -246,6 +249,7 @@
                     android:text="Or ready have an account?"/>
 
                 <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/loginText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text=" Log in"
