@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F7F7F7"
-    tools:context=".DailyReport">
+    tools:context=".WeeklyReport">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,16 +26,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp">
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
 
                 <TextView
                     android:id="@+id/total_tasks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginTop="10dp"
-                    android:text="Total tasks: "
+                    android:layout_marginLeft="15dp"
+                    android:text="Tasks Progress "
                     android:textColor="@android:color/black"
                     android:textSize="22sp"
                     android:textStyle="bold"/>
@@ -96,8 +96,8 @@
                 android:background="@drawable/report_box"
                 android:elevation="2dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp">
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp">
 
                 <TextView
                     android:id="@+id/task_list"
@@ -107,8 +107,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginLeft="5dp"
-                    android:textStyle="bold"/>
+                    android:layout_marginLeft="5dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"

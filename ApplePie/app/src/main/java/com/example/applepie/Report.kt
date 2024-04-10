@@ -53,6 +53,9 @@ class Report : Fragment() {
                 if (selectedItem == "Daily Report") {
                     replaceFragment(DailyReport.newInstance("", ""))
                 }
+                else if (selectedItem == "Weekly Report") {
+                    replaceFragment(WeeklyReport.newInstance("", ""))
+                }
 
             }
 
