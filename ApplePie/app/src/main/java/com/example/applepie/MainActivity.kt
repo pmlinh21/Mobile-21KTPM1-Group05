@@ -69,6 +69,8 @@ class MainActivity : AppCompatActivity() {
         reportButton = findViewById(R.id.report_icon)
         accountButton = findViewById(R.id.account_icon)
 
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
+
         homeButton.setOnClickListener {
             handleNavbarClick(homeButton)
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
