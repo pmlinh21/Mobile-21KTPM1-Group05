@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.Lists
 import com.example.applepie.database.Task
 
 // TODO: Rename parameter arguments, choose names that match
@@ -60,10 +61,13 @@ class DailyReport : Fragment() {
         }, 200)
 
         taskRecyclerView = rootView.findViewById(R.id.recyclerView)
-        adapter = TaskListAdapter(requireContext(), tasksList)
+        adapter = TaskListAdapter(requireContext(), tasksList, lists)
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
+
+        lists.add(Lists(1, "", "", "Mobile"))
+        lists.add(Lists(2, "", "", "SoftwareDesign"))
 
         tasksList.add(Task("", "10:00 AM", 1, 1, false, "", "", "Project Proposal"))
         tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))
@@ -100,4 +104,5 @@ class DailyReport : Fragment() {
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter
     private val tasksList = ArrayList<Task>()
+    private val lists = ArrayList<Lists>()
 }
