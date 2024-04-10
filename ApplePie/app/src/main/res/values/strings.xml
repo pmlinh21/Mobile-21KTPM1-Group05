@@ -6,4 +6,8 @@
     <string name="icon_search">magnifying-glass</string>
     <string name="search_hint">Search</string>
     <string name="dashboard">Dashboard</string>
+    <string name="description">
+        Introduce the app: Briefly describe the purpose and objectives of the app.\n\nDetailed features: Develop main feature screens
+    </string>
+    <string name="select_report">Select Report</string>
 </resources>

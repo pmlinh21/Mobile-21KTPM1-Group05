@@ -1,6 +1,10 @@
 package com.example.applepie
 
+import PomodoroTimer
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -11,14 +15,33 @@ import androidx.core.content.ContextCompat
 import android.graphics.drawable.Drawable;
 import android.util.Log
 import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.Lists
+import com.example.applepie.database.Task
+import com.example.applepie.database.User
+import com.google.firebase.database.DatabaseError
 import java.util.Locale
 import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var preferenceManager: PreferenceManager
+    private lateinit var username: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
+        preferenceManager = PreferenceManager(this)
+        username = preferenceManager.getUsername().toString()
+
+        if (preferenceManager.isLogin() == false) {
+//            val loginActivity = Intent(this, LoginActivity::class.java)
+//            startActivity(loginActivity)
+//            finish()
+        }
+
 
         setLanguage()
         setUI()
@@ -30,27 +53,7 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     fun handleNavbarClick(button: Button){
 
-        // Change the button icon
-//        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_home)
-//        val newColor = ContextCompat.getColor(this, R.color.green)
-//        drawable!!.setColorFilter(newColor, PorterDuff.Mode.SRC_IN)
-//        button.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getDrawable(R.drawable.ic_home))
-//
-//        if (button == homeButton) {
-//            homeButton.background = getDrawable(R.drawable.bg_button_active)
-//        }
-//        else if (button == studyButton) {
-//            studyButton.background = getDrawable(R.drawable.bg_button_active)
-//        }
-//        else if (button == createTaskButton) {
-//            createTaskButton.background = getDrawable(R.drawable.bg_button_active)
-//        }
-//        else if (button == reportButton) {
-//            reportButton.background = getDrawable(R.drawable.ic_report)
-//        }
-//        else if (button == accountButton) {
-//            accountButton.background = getDrawable(R.drawable.ic_account)
-//        }
+        // TODO: Change the button icon to @color/green
 
         // Change the button background
         homeButton.setBackgroundColor(Color.TRANSPARENT)
@@ -78,17 +81,20 @@ class MainActivity : AppCompatActivity() {
 
         studyButton.setOnClickListener {
             handleNavbarClick(studyButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
+            if (!PomodoroTimer.isStop())
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
+            else
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
         }
 
         createTaskButton.setOnClickListener {
             handleNavbarClick(createTaskButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SearchFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
         }
 
         reportButton.setOnClickListener {
             handleNavbarClick(reportButton)
-//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, FlashlightFragment()).addToBackStack(null).commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Report()).addToBackStack(null).commit()
         }
 
         accountButton.setOnClickListener {
@@ -98,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getInfoFromPreference(){
-// TODO: get index of the specific user in firebase from preference
+    // TODO: get index of the specific user in firebase from preference
     }
 
     fun getInfoFromFirebase(){
@@ -111,7 +117,38 @@ class MainActivity : AppCompatActivity() {
             FirebaseManager.setUserListsRef(0)
             FirebaseManager.setUserTasksRef(0)
 
-            FirebaseManager.setUserInfo()
+            FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<Lists>> {
+                override fun onDataReceived(data: List<Lists>) {
+                    // Handle received user list data
+                    Log.i("data", FirebaseManager.getUserList().toString())
+                }
+
+                override fun onError(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+
+            FirebaseManager.setUserInfo(object : FirebaseManager.DataCallback<User> {
+                override fun onDataReceived(data: User) {
+                    // Handle received user list data
+                    Log.i("data", FirebaseManager.getUserInfo().toString())
+                }
+
+                override fun onError(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+
+            FirebaseManager.setUserTask(object : FirebaseManager.DataCallback<List<Task>> {
+                override fun onDataReceived(data: List<Task>) {
+                    // Handle received user list data
+                    Log.i("data", FirebaseManager.getUserTask().toString())
+                }
+
+                override fun onError(error: DatabaseError) {
+                    // Handle error
+                }
+            })
         }
     }
 
