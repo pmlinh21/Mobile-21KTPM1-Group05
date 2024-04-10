@@ -5,6 +5,8 @@
     <color name="light_green">#CAE6A2</color>
     <color name="light_light_green">#EFF9E1</color>
 
+    <color name="light_green_transparent">#55CAE6A2</color>
+
     <color name="black">#484C52</color>
     <color name="light_grey">#DADDE1</color>
     <color name="grey">#949494</color>
