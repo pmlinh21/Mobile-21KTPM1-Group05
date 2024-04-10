@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.Task
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,7 +49,7 @@ class DailyReport : Fragment() {
         handler.postDelayed(object : Runnable {
             override fun run() {
                 if (i <= 100) {
-                    progressText.text = "$i"
+                    progressText.text = "$i%"
                     progressBar.progress = i
                     i++
                     handler.postDelayed(this, 200)
@@ -55,6 +58,18 @@ class DailyReport : Fragment() {
                 }
             }
         }, 200)
+
+        taskRecyclerView = rootView.findViewById(R.id.recyclerView)
+        adapter = TaskListAdapter(requireContext(), tasksList)
+
+        taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        taskRecyclerView.adapter = adapter
+
+        tasksList.add(Task("", "10:00 AM", 1, 1, false, "", "", "Project Proposal"))
+        tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))
+        tasksList.add(Task("", "11:59 AM", 1, 3, false,"", "", "W03 - UI + Auto layout"))
+        tasksList.add(Task("", "8:00 PM", 2, 3, false,"", "", "Design Layout"))
+        tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle Login Logic"))
 
         return rootView
     }
@@ -82,5 +97,7 @@ class DailyReport : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var progressText: TextView
     private var i = 0
-
+    private lateinit var taskRecyclerView: RecyclerView
+    private lateinit var adapter: TaskListAdapter
+    private val tasksList = ArrayList<Task>()
 }

@@ -50,7 +50,9 @@ class Report : Fragment() {
         reportTitle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = typeList[position]
-                // Xử lý logic dựa trên mục đã chọn (ví dụ: mở fragment tương ứng)
+                if (selectedItem == "Daily Report") {
+                    replaceFragment(DailyReport.newInstance("", ""))
+                }
 
             }
 
@@ -60,6 +62,12 @@ class Report : Fragment() {
         }
 
         return rootView
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.container_report, fragment)
+            .commit()
     }
 
     companion object {
