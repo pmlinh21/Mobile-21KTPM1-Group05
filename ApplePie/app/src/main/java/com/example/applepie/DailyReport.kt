@@ -52,14 +52,6 @@ class DailyReport : Fragment() {
                 val percentageDone = adapter.getPercentageDone().toInt()
                 progressBar.progress = percentageDone
                 progressText.text = "$percentageDone%"
-//                if (i <= 100) {
-//                    progressText.text = "$i%"
-//                    progressBar.progress = i
-//                    i++
-//                    handler.postDelayed(this, 200)
-//                } else {
-//                    handler.removeCallbacks(this)
-//                }
             }
         }, 200)
 
@@ -76,7 +68,7 @@ class DailyReport : Fragment() {
         tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))
         tasksList.add(Task("", "11:59 AM", 1, 3, false,"", "", "W03 - UI + Auto layout"))
         tasksList.add(Task("", "8:00 PM", 2, 3, false,"", "", "Design Layout"))
-        tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle Login Logic"))
+        tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle login function"))
 
         val totalTasks = tasksList.size
 
