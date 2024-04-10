@@ -6,11 +6,14 @@
     <color name="light_light_green">#EFF9E1</color>
 
     <color name="light_green_transparent">#55CAE6A2</color>
+    <color name="price_green">#608925</color>
 
     <color name="black">#484C52</color>
     <color name="light_grey">#DADDE1</color>
     <color name="grey">#949494</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="yellow">#E2DB3B</color>
+
     <color name="backgroundColor">#F2F5F9</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/black</color>
 </resources>
