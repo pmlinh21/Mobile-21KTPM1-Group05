@@ -49,14 +49,17 @@ class DailyReport : Fragment() {
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
-                if (i <= 100) {
-                    progressText.text = "$i%"
-                    progressBar.progress = i
-                    i++
-                    handler.postDelayed(this, 200)
-                } else {
-                    handler.removeCallbacks(this)
-                }
+                val percentageDone = adapter.getPercentageDone().toInt()
+                progressBar.progress = percentageDone
+                progressText.text = "$percentageDone%"
+//                if (i <= 100) {
+//                    progressText.text = "$i%"
+//                    progressBar.progress = i
+//                    i++
+//                    handler.postDelayed(this, 200)
+//                } else {
+//                    handler.removeCallbacks(this)
+//                }
             }
         }, 200)
 
@@ -75,6 +78,10 @@ class DailyReport : Fragment() {
         tasksList.add(Task("", "8:00 PM", 2, 3, false,"", "", "Design Layout"))
         tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle Login Logic"))
 
+        val totalTasks = tasksList.size
+
+        total_tasks = rootView.findViewById(R.id.total_tasks)
+        total_tasks.text = "Total tasks: $totalTasks"
         return rootView
     }
 
@@ -105,4 +112,5 @@ class DailyReport : Fragment() {
     private lateinit var adapter: TaskListAdapter
     private val tasksList = ArrayList<Task>()
     private val lists = ArrayList<Lists>()
+    private lateinit var total_tasks: TextView
 }
