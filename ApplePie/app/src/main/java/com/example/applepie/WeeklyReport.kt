@@ -17,7 +17,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.utils.ColorTemplate
+import com.github.mikephil.charting.formatter.ValueFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,29 +72,43 @@ class WeeklyReport : Fragment() {
         barChart.xAxis.setDrawGridLines(false)
 
         val entries = ArrayList<BarEntry>()
-        entries.add(BarEntry(0f, 45f))
-        entries.add(BarEntry(1f, 80f))
-        entries.add(BarEntry(2f, 65f))
-        entries.add(BarEntry(3f, 90f))
-        entries.add(BarEntry(4f, 95f))
-        entries.add(BarEntry(5f, 80f))
-        entries.add(BarEntry(6f, 60f))
+        entries.add(BarEntry(0f, 10f))
+        entries.add(BarEntry(1f, 14f))
+        entries.add(BarEntry(2f, 8f))
+        entries.add(BarEntry(3f, 18f))
+        entries.add(BarEntry(4f, 10f))
+        entries.add(BarEntry(5f, 8f))
+        entries.add(BarEntry(6f, 6f))
+
+        barChart.xAxis.textSize = 13f
+        barChart.axisLeft.textSize = 12f
+
 
         val yAxis: YAxis = barChart.axisLeft
+        yAxis.setDrawGridLines(false)
         yAxis.axisMaximum = 0f
-        yAxis.axisMaximum = 100f
-        yAxis.axisLineWidth = 2f
-        yAxis.axisLineColor = Color.BLACK
+        yAxis.axisMaximum = 20f
         yAxis.setLabelCount(10)
+        yAxis.valueFormatter = IntValueFormatter()
 
         val dataSet = BarDataSet(entries, "Day of the week")
-        val colorsList = ColorTemplate.MATERIAL_COLORS.toList()
+
+        val colorsList = listOf(Color.parseColor("#319F43"), Color.parseColor("#C6E9C7"))
         dataSet.colors = colorsList
 
         val barData = BarData(dataSet)
+        barData.barWidth = 0.8f
         barChart.data = barData
+        barData.setValueTextSize(12f)
+
+        barData.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString()
+            }
+        })
 
         barChart.description.isEnabled = false
+        barChart.legend.isEnabled = false;
         barChart.invalidate()
 
         barChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
@@ -102,6 +116,7 @@ class WeeklyReport : Fragment() {
         barChart.xAxis.granularity = 1f
         barChart.xAxis.isGranularityEnabled = true
 
+        barChart.renderer = RoundedBarChart(barChart, barChart.animator, barChart.viewPortHandler)
         return rootView
     }
 
@@ -130,4 +145,10 @@ class WeeklyReport : Fragment() {
     private val tasksList = ArrayList<Task>()
     private val lists = ArrayList<Lists>()
     private val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+}
+
+class IntValueFormatter : ValueFormatter() {
+    override fun getFormattedValue(value: Float): String {
+        return value.toInt().toString()
+    }
 }
