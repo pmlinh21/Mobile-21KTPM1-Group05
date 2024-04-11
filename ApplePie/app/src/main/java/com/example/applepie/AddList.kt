@@ -36,8 +36,6 @@ class AddList : Fragment() {
 
     private lateinit var chosenColorButton: Button
     private lateinit var chosenIconButton: Button
-    private lateinit var listColors: MutableList<Int>
-    private lateinit var listIcons: MutableList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +58,10 @@ class AddList : Fragment() {
 
         setupUI(view)
         setupListColorButtons()
+        setupListIconButtons()
         setupBackButton()
         setupDoneButton()
+
     }
 
     private fun setupUI(view: View) {
@@ -84,20 +84,6 @@ class AddList : Fragment() {
         listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_10))
         listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_11))
         listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_12))
-
-        listColors = mutableListOf()
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_1, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_2, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_3, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_4, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_5, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_6, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_7, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_8, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_9, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_10, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_11, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_12, null))
 
         listIconButtons = mutableListOf()
         listIconButtons.add(view.findViewById<Button>(R.id.list_icon_button_1))
@@ -131,38 +117,6 @@ class AddList : Fragment() {
         listIconButtons.add(view.findViewById<Button>(R.id.list_icon_button_29))
         listIconButtons.add(view.findViewById<Button>(R.id.list_icon_button_30))
 
-        listIcons = mutableListOf()
-        listIcons.add(R.string.list_icon_1.toString())
-        listIcons.add(R.string.list_icon_2.toString())
-        listIcons.add(R.string.list_icon_3.toString())
-        listIcons.add(R.string.list_icon_4.toString())
-        listIcons.add(R.string.list_icon_5.toString())
-        listIcons.add(R.string.list_icon_6.toString())
-        listIcons.add(R.string.list_icon_7.toString())
-        listIcons.add(R.string.list_icon_8.toString())
-        listIcons.add(R.string.list_icon_9.toString())
-        listIcons.add(R.string.list_icon_10.toString())
-        listIcons.add(R.string.list_icon_11.toString())
-        listIcons.add(R.string.list_icon_12.toString())
-        listIcons.add(R.string.list_icon_13.toString())
-        listIcons.add(R.string.list_icon_14.toString())
-        listIcons.add(R.string.list_icon_15.toString())
-        listIcons.add(R.string.list_icon_16.toString())
-        listIcons.add(R.string.list_icon_17.toString())
-        listIcons.add(R.string.list_icon_18.toString())
-        listIcons.add(R.string.list_icon_19.toString())
-        listIcons.add(R.string.list_icon_20.toString())
-        listIcons.add(R.string.list_icon_21.toString())
-        listIcons.add(R.string.list_icon_22.toString())
-        listIcons.add(R.string.list_icon_23.toString())
-        listIcons.add(R.string.list_icon_24.toString())
-        listIcons.add(R.string.list_icon_25.toString())
-        listIcons.add(R.string.list_icon_26.toString())
-        listIcons.add(R.string.list_icon_27.toString())
-        listIcons.add(R.string.list_icon_28.toString())
-        listIcons.add(R.string.list_icon_29.toString())
-        listIcons.add(R.string.list_icon_30.toString())
-
         chosenColorButton = listColorButtons[3]
         chosenIconButton = listIconButtons[0]
     }
@@ -189,7 +143,7 @@ class AddList : Fragment() {
                     chosenColorButton = button
                     chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle_border, null)
                     chosenColorButton.backgroundTintMode = PorterDuff.Mode.SCREEN
-                    listIconTV.setTextColor(listColors[listColorButtons.indexOf(button)])
+                    listIconTV.setTextColor(chosenColorButton.backgroundTintList)
                 }
             }
         }
@@ -197,7 +151,16 @@ class AddList : Fragment() {
 
     private fun setupListIconButtons() {
         for (button in listIconButtons) {
-
+            button.setOnClickListener {
+                if (chosenIconButton != button) {
+                    chosenIconButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle, null)
+                    chosenIconButton.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                    chosenIconButton = button
+                    chosenIconButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle_border, null)
+                    chosenIconButton.backgroundTintMode = PorterDuff.Mode.SCREEN
+                    listIconTV.text = chosenIconButton.text
+                }
+            }
         }
     }
 
