@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
+import com.example.applepie.model.TaskList
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -57,12 +57,60 @@ class WeeklyReport : Fragment() {
 
         lists.add(TaskList(1, "", "", "Mobile"))
         lists.add(TaskList(2, "", "", "SoftwareDesign"))
+        lists.add(TaskList(3, "", "", "IELTS"))
+        lists.add(TaskList(4, "", "", "ML"))
 
-        tasksList.add(Task("", "10:00 AM Saturday", 1, 1, false, "", "", "Project Proposal"))
-        tasksList.add(Task("", "10:00 PM Saturday", 1, 2, true, "", "", "W01 - Kotlin"))
-        tasksList.add(Task("", "11:59 AM Friday", 1, 3, false,"", "", "W03 - UI + Auto layout"))
-        tasksList.add(Task("", "8:00 PM Monday", 2, 3, false,"", "", "Design Layout"))
-        tasksList.add(Task("", "9:00 PM Monday", 2, 3, true,"", "", "Handle login function"))
+        tasksList.add(Task("", "10:00 PM Sunday", 1, 45, false, "", "", "Project proposal"))
+        tasksList.add(Task("", "9:00 PM Sunday", 1, 44, false, "", "", "Writing report"))
+        tasksList.add(Task("", "7:00 PM Sunday", 3, 43, false, "", "", "IELTS Writing"))
+        tasksList.add(Task("", "5:00 PM Sunday", 4, 42, true, "", "", "Exercise4"))
+        tasksList.add(Task("", "11:00 AM Sunday", 1, 41, true, "", "", "Fix errors"))
+        tasksList.add(Task("", "10:00 AM Sunday", 1, 40, false, "", "", "Handle signup logic"))
+        tasksList.add(Task("", "10:00 AM Sunday", 1, 39, false, "", "", "Handle login logic"))
+        tasksList.add(Task("", "10:00 AM Sunday", 1, 38, true, "", "", "Design signup UI"))
+        tasksList.add(Task("", "10:00 AM Sunday", 1, 37, true, "", "", "Design login UI"))
+        tasksList.add(Task("", "10:00 AM Sunday", 1, 36, true, "", "", "Design homepage UI"))
+
+        tasksList.add(Task("", "11:59 PM Saturday", 1, 35, true, "", "", "W01 - Kotlin"))
+        tasksList.add(Task("", "10:00 PM Saturday", 1, 34, true, "", "", "UI Learning"))
+        tasksList.add(Task("", "10:00 PM Saturday", 1, 33, true, "", "", "Menu demo"))
+        tasksList.add(Task("", "07:00 PM Saturday", 1, 32, true, "", "", "Action bar"))
+        tasksList.add(Task("", "12:00 AM Saturday", 1, 31, true, "", "", "Activity learning"))
+        tasksList.add(Task("", "12:00 AM Saturday", 1, 30, true, "", "", "Fragment learning"))
+
+        tasksList.add(Task("", "11:59 PM Friday", 1, 29, true,"", "", "W03 - UI + Auto layout"))
+        tasksList.add(Task("", "11:59 AM Friday", 3, 28, true,"", "", "IELTS Writing"))
+        tasksList.add(Task("", "11:59 AM Friday", 3, 27, false,"", "", "IELTS Speaking"))
+
+        tasksList.add(Task("", "11:59 PM Thursday", 3, 26, true,"", "", "IELTS Listening ex1"))
+        tasksList.add(Task("", "11:59 PM Thursday", 3, 25, true,"", "", "IELTS Listening ex2"))
+        tasksList.add(Task("", "11:59 PM Thursday", 3, 24, true,"", "", "IELTS Listening ex3"))
+        tasksList.add(Task("", "11:59 PM Thursday", 3, 23, true,"", "", "IELTS Listening ex4"))
+        tasksList.add(Task("", "11:59 PM Thursday", 3, 22, true,"", "", "IELTS Reading ex1"))
+        tasksList.add(Task("", "11:59 PM Thursday", 3, 21, true,"", "", "IELTS Reading ex2"))
+        tasksList.add(Task("", "11:59 PM Thursday", 3, 20, true,"", "", "IELTS Reading ex3"))
+
+        tasksList.add(Task("", "11:59 PM Wednesday", 3, 19, true,"", "", "IELTS Speaking ex1"))
+        tasksList.add(Task("", "11:59 PM Wednesday", 3, 18, true,"", "", "IELTS Speaking ex2"))
+
+        tasksList.add(Task("", "10:00 PM Tuesday", 4, 17, true,"", "", "Exercise3"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 4, 16, true,"", "", "Homework3"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 15, true,"", "", "Report SD1"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 14, true,"", "", "Report SD2"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 13, false,"", "", "Report SD3"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 12, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 11, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 10, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 9, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 8, false,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 7, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM Tuesday", 2, 6, true,"", "", "Design Layout"))
+
+        tasksList.add(Task("", "10:00 PM Monday", 2, 5, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "9:00 PM Monday", 2, 4, false,"", "", "Handle login with google function"))
+        tasksList.add(Task("", "9:00 PM Monday", 2, 3, true,"", "", "Handle signup function"))
+        tasksList.add(Task("", "9:00 PM Monday", 2, 2, true,"", "", "Handle login function"))
+        tasksList.add(Task("", "9:00 PM Monday", 2, 1, true,"", "", "Handle popup function"))
 
         val barChart: BarChart = rootView.findViewById(R.id.barChart)
         barChart.axisRight.setDrawLabels(false)
@@ -71,14 +119,28 @@ class WeeklyReport : Fragment() {
         barChart.axisRight.setDrawGridLines(false)
         barChart.xAxis.setDrawGridLines(false)
 
+        val taskCountByDay = mutableMapOf<String, Float>()
+
+        for (day in xValues) {
+            taskCountByDay[day] = 0f
+        }
+
+        // Đếm số lượng task cho mỗi ngày
+        for (task in tasksList) {
+            val dueDateTime = task.due_datetime
+            for (day in xValues) {
+                if (dueDateTime.contains(day)) {
+                    taskCountByDay[day] = taskCountByDay.getValue(day) + 1
+                }
+            }
+        }
+
+        // Tạo danh sách các BarEntry từ số lượng task theo ngày
         val entries = ArrayList<BarEntry>()
-        entries.add(BarEntry(0f, 10f))
-        entries.add(BarEntry(1f, 14f))
-        entries.add(BarEntry(2f, 8f))
-        entries.add(BarEntry(3f, 18f))
-        entries.add(BarEntry(4f, 10f))
-        entries.add(BarEntry(5f, 8f))
-        entries.add(BarEntry(6f, 6f))
+        for ((index, day) in xValues.withIndex()) {
+            val taskCount = taskCountByDay.getValue(day)
+            entries.add(BarEntry(index.toFloat(), taskCount))
+        }
 
         barChart.xAxis.textSize = 13f
         barChart.axisLeft.textSize = 12f
@@ -86,8 +148,9 @@ class WeeklyReport : Fragment() {
 
         val yAxis: YAxis = barChart.axisLeft
         yAxis.setDrawGridLines(false)
+        yAxis.setDrawAxisLine(false)
         yAxis.axisMaximum = 0f
-        yAxis.axisMaximum = 20f
+        yAxis.axisMaximum = 18f
         yAxis.setLabelCount(10)
         yAxis.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -121,6 +184,92 @@ class WeeklyReport : Fragment() {
         barChart.xAxis.isGranularityEnabled = true
 
         barChart.renderer = RoundedBarChart(barChart, barChart.animator, barChart.viewPortHandler)
+
+        val barChartDone: BarChart = rootView.findViewById(R.id.barChart_1)
+        barChartDone.axisRight.setDrawLabels(false)
+
+        barChartDone.axisLeft.setDrawGridLines(false)
+        barChartDone.axisRight.setDrawGridLines(false)
+        barChartDone.xAxis.setDrawGridLines(false)
+
+        val doneTaskCountByDay = mutableMapOf<String, Float>()
+
+        for (day in xValues) {
+            doneTaskCountByDay[day] = 0f
+        }
+
+        // Đếm số lượng task done cho mỗi ngày
+        for (task in tasksList) {
+            val dueDateTime = task.due_datetime
+            for (day in xValues) {
+                if (dueDateTime.contains(day)) {
+                    if (task.isDone) {
+                        doneTaskCountByDay[day] = doneTaskCountByDay.getValue(day) + 1
+                    }
+                }
+            }
+        }
+
+        // Tạo danh sách các BarEntry từ số lượng task done theo ngày
+        val percentages = mutableListOf<Float>()
+        for (day in xValues) {
+            val doneTaskCount = doneTaskCountByDay.getValue(day)
+            val totalTaskCount = taskCountByDay.getValue(day)
+            val percentage = if (totalTaskCount != 0f) {
+                (doneTaskCount / totalTaskCount) * 100
+            } else {
+                0f
+            }
+            percentages.add(percentage)
+        }
+
+        val entriesDone = ArrayList<BarEntry>()
+        for ((index, percentage) in percentages.withIndex()) {
+            entriesDone.add(BarEntry(index.toFloat(), percentage))
+        }
+
+        barChartDone.xAxis.textSize = 13f
+        barChartDone.axisLeft.textSize = 12f
+
+        val yAxis_1: YAxis = barChartDone.axisLeft
+        yAxis_1.setDrawGridLines(false)
+        yAxis_1.setDrawAxisLine(false)
+        yAxis_1.axisMaximum = 0f
+        yAxis_1.axisMaximum = 100f
+        yAxis_1.setLabelCount(10)
+        yAxis_1.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString()
+            }
+        })
+
+        val dataSetDone = BarDataSet(entriesDone, "Completed Tasks")
+
+        val colorsListDone = listOf(Color.parseColor("#C6E9C7"), Color.parseColor("#C6E9C7"))
+        dataSetDone.colors = colorsListDone
+
+        val barDataDone = BarData(dataSetDone)
+        barDataDone.barWidth = 0.8f
+        barChartDone.data = barDataDone
+        barDataDone.setValueTextSize(12f)
+
+        barDataDone.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString() + "%"
+            }
+        })
+
+        barChartDone.description.isEnabled = false
+        barChartDone.legend.isEnabled = false;
+        barChartDone.invalidate()
+
+        barChartDone.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
+        barChartDone.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        barChartDone.xAxis.granularity = 1f
+        barChartDone.xAxis.isGranularityEnabled = true
+
+        barChartDone.renderer = RoundedBarChart(barChartDone, barChartDone.animator, barChartDone.viewPortHandler)
+
         return rootView
     }
 
