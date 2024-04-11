@@ -43,6 +43,21 @@ class LoginActivity : ComponentActivity() {
             if (username.contains('@')) {
                 auth.signInWithEmailAndPassword(username, password).addOnCompleteListener(this) {
                     if (it.isSuccessful) {
+                        databaseReference.orderByChild("info/email").equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if (snapshot.exists()) {
+                                    for (userSnapshot in snapshot.children) {
+                                        val userIndex = userSnapshot.key!!.toInt()
+                                        preferenceManager.setIndex(userIndex)
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+
+                            }
+                        })
+
                         preferenceManager.setLogin(true)
                         preferenceManager.setUsername(username)
 
@@ -65,6 +80,8 @@ class LoginActivity : ComponentActivity() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             for (userSnapshot in snapshot.children) {
+                                val userIndex = userSnapshot.key!!.toInt()
+
                                 val user = userSnapshot.child("info").getValue(User::class.java)
 
                                 if (user != null) {
@@ -72,6 +89,7 @@ class LoginActivity : ComponentActivity() {
                                     if (user.password == password) {
                                         preferenceManager.setLogin(true)
                                         preferenceManager.setUsername(username)
+                                        preferenceManager.setIndex(userIndex)
 
                                         val mainActivity = Intent(this@LoginActivity, MainActivity::class.java)
                                         startActivity(mainActivity)
