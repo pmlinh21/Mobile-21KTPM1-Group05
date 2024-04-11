@@ -61,8 +61,8 @@ class DailyReport : Fragment() {
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
 
-        lists.add(TaskList(1, "", "", "Mobile"))
-        lists.add(TaskList(2, "", "", "SoftwareDesign"))
+        lists.add(TaskList(1, 0, "", "Mobile"))
+        lists.add(TaskList(2, 0, "", "SoftwareDesign"))
 
         tasksList.add(Task("", "10:00 AM", 1, 1, false, "", "", "Project Proposal"))
         tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))

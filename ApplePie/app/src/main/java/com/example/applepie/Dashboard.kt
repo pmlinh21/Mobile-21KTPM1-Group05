@@ -2,6 +2,7 @@ package com.example.applepie
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
 import com.example.studentmanagementv4.ListRecyclerAdapter
 
@@ -55,10 +57,7 @@ class Dashboard : Fragment() {
     }
 
     private fun setupListRV() {
-        val list1 = TaskList(1, "list_color_4", "briefcase", "Mobile")
-        val list2 = TaskList(2, "list_color_3", "briefcase", "Physics")
-        val list3 = TaskList(3, "list_color_2", "briefcase", "Math")
-        val taskLists = listOf(list1, list2, list3)
+        val taskLists = FirebaseManager.getUserList()
         val adapter = ListRecyclerAdapter(requireContext(), taskLists)
         listRV.adapter = adapter
         listRV.layoutManager = LinearLayoutManager(requireContext())
@@ -72,6 +71,13 @@ class Dashboard : Fragment() {
 //            startActivity(intent)
         }
     }
+
+     fun updateTaskLists() {
+        val taskLists = FirebaseManager.getUserList()?: listOf()
+        val adapter = listRV.adapter as ListRecyclerAdapter
+        adapter.setLists(taskLists)
+    }
+
 
     private fun setupAddListTV() {
         addListTV.setOnClickListener {
