@@ -55,15 +55,15 @@ class MonthlyReport : Fragment() {
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
 
-        lists.add(TaskList(1, 0, "", "Mobile"))
+        lists.add(TaskList(1, 0, "", "mobile"))
         lists.add(TaskList(2, 0, "", "SoftwareDesign"))
-        lists.add(TaskList(3, 0, "", "IELTS"))
-        lists.add(TaskList(4, 0, "", "ML"))
+        lists.add(TaskList(3, 0, "", "web"))
+        lists.add(TaskList(4, 0, "", "java"))
 
         //W1
         tasksList.add(Task("", "10:00 PM Week1", 1, 45, false, "", "", "Project proposal"))
         tasksList.add(Task("", "9:00 PM Week1", 1, 44, false, "", "", "Writing report"))
-        tasksList.add(Task("", "7:00 PM Week1", 3, 43, false, "", "", "IELTS Writing"))
+        tasksList.add(Task("", "7:00 PM Week1", 3, 43, false, "", "", "Fix popup errors"))
         tasksList.add(Task("", "5:00 PM Week1", 4, 42, true, "", "", "Exercise4"))
         tasksList.add(Task("", "11:00 AM Week1", 1, 41, true, "", "", "Fix errors"))
         tasksList.add(Task("", "10:00 AM Week1", 1, 40, false, "", "", "Handle signup logic"))
@@ -81,20 +81,20 @@ class MonthlyReport : Fragment() {
         tasksList.add(Task("", "12:00 AM Week2", 1, 30, true, "", "", "Fragment learning"))
 
         tasksList.add(Task("", "11:59 PM Week2", 1, 29, true,"", "", "W03 - UI + Auto layout"))
-        tasksList.add(Task("", "11:59 AM Week2", 3, 28, true,"", "", "IELTS Writing"))
-        tasksList.add(Task("", "11:59 AM Week2", 3, 27, false,"", "", "IELTS Speaking"))
+        tasksList.add(Task("", "11:59 AM Week2", 3, 28, true,"", "", "Writing doc"))
+        tasksList.add(Task("", "11:59 AM Week2", 3, 27, false,"", "", "Representation"))
 
         // W3
-        tasksList.add(Task("", "11:59 PM Week3", 3, 26, true,"", "", "IELTS Listening ex1"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 25, true,"", "", "IELTS Listening ex2"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 24, true,"", "", "IELTS Listening ex3"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 23, true,"", "", "IELTS Listening ex4"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 22, true,"", "", "IELTS Reading ex1"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 21, true,"", "", "IELTS Reading ex2"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 20, true,"", "", "IELTS Reading ex3"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 26, true,"", "", "Doing ex1"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 25, true,"", "", "Doing ex2"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 24, true,"", "", "Doing ex3"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 23, true,"", "", "Doing ex4"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 22, true,"", "", "Report ex1"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 21, true,"", "", "Report ex2"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 20, true,"", "", "Report ex3"))
 
-        tasksList.add(Task("", "11:59 PM Week3", 3, 19, true,"", "", "IELTS Speaking ex1"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 18, true,"", "", "IELTS Speaking ex2"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 19, true,"", "", "Report ex1"))
+        tasksList.add(Task("", "11:59 PM Week3", 3, 18, true,"", "", "Report ex2"))
 
         // W4
         tasksList.add(Task("", "10:00 PM Week4", 4, 17, true,"", "", "Exercise3"))
@@ -153,8 +153,8 @@ class MonthlyReport : Fragment() {
         val yAxis: YAxis = barChart.axisLeft
         yAxis.setDrawGridLines(false)
         yAxis.setDrawAxisLine(false)
-        yAxis.axisMaximum = 0f
-        yAxis.axisMaximum = 30f
+        yAxis.axisMinimum = 0f
+        yAxis.axisMaximum = 20f
         yAxis.setLabelCount(8)
         yAxis.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -238,7 +238,7 @@ class MonthlyReport : Fragment() {
         val yAxis_1: YAxis = barChartDone.axisLeft
         yAxis_1.setDrawGridLines(false)
         yAxis_1.setDrawAxisLine(false)
-        yAxis_1.axisMaximum = 0f
+        yAxis_1.axisMinimum = 0f
         yAxis_1.axisMaximum = 100f
         yAxis_1.setLabelCount(5)
         yAxis_1.setValueFormatter(object : ValueFormatter() {
