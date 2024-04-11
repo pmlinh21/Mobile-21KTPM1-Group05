@@ -45,30 +45,30 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total tasks"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"/>
 
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/barChart"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="250dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp" />
 
                 <TextView
                     android:id="@+id/yAxisLabel_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="% Tasks Done"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="5dp"/>
 
                 <com.github.mikephil.charting.charts.BarChart
@@ -77,7 +77,7 @@
                     android:layout_height="250dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="15dp"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp"/>
             </LinearLayout>
 
             <LinearLayout

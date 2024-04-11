@@ -151,7 +151,7 @@ class WeeklyReport : Fragment() {
         yAxis.setDrawAxisLine(false)
         yAxis.axisMaximum = 0f
         yAxis.axisMaximum = 18f
-        yAxis.setLabelCount(10)
+        yAxis.setLabelCount(6)
         yAxis.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
