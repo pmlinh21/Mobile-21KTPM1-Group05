@@ -2,6 +2,7 @@ package com.example.applepie
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -62,11 +63,14 @@ class WeeklyReport : Fragment() {
         // Lấy những task chưa quá hạn trong tuần
         val calendar = Calendar.getInstance()
         calendar.time = sdf.parse(appDate)
+
+        calendar.setFirstDayOfWeek(Calendar.MONDAY)
+
         calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
-        val firstDayOfWeek = calendar.time // Ngày đầu tiên của tuần
+        val firstDayOfWeek = calendar.time
 
         calendar.add(Calendar.DAY_OF_WEEK, 6)
-        val lastDayOfWeek = calendar.time // Ngày cuối cùng của tuần
+        val lastDayOfWeek = calendar.time
 
         tasksList = tasksList.filter { task ->
             val taskDueDate = sdf.parse(task.due_datetime)
@@ -148,15 +152,22 @@ class WeeklyReport : Fragment() {
 
         val taskCountByDay = mutableMapOf<String, Float>()
 
-        for (day in xValues) {
+        val daysOfWeek = mutableListOf<String>()
+        calendar.time = firstDayOfWeek
+        while (calendar.time <= lastDayOfWeek) {
+            daysOfWeek.add(sdf.format(calendar.time))
+            calendar.add(Calendar.DAY_OF_WEEK, 1)
+        }
+
+        for (day in daysOfWeek) {
             taskCountByDay[day] = 0f
         }
 
         // Đếm số lượng task cho mỗi ngày
         for (task in tasksList) {
-            val dueDateTime = task.due_datetime
-            for (day in xValues) {
-                if (dueDateTime.contains(day)) {
+            val dueDateTime = task.due_datetime.substring(0, 10)
+            for (day in daysOfWeek) {
+                if (dueDateTime == day) {
                     taskCountByDay[day] = taskCountByDay.getValue(day) + 1
                 }
             }
@@ -164,14 +175,13 @@ class WeeklyReport : Fragment() {
 
         // Tạo danh sách các BarEntry từ số lượng task theo ngày
         val entries = ArrayList<BarEntry>()
-        for ((index, day) in xValues.withIndex()) {
+        for ((index, day) in daysOfWeek.withIndex()) {
             val taskCount = taskCountByDay.getValue(day)
             entries.add(BarEntry(index.toFloat(), taskCount))
         }
 
         barChart.xAxis.textSize = 13f
         barChart.axisLeft.textSize = 12f
-
 
         val yAxis: YAxis = barChart.axisLeft
         yAxis.setDrawGridLines(false)
@@ -221,14 +231,14 @@ class WeeklyReport : Fragment() {
 
         val doneTaskCountByDay = mutableMapOf<String, Float>()
 
-        for (day in xValues) {
+        for (day in daysOfWeek) {
             doneTaskCountByDay[day] = 0f
         }
 
         // Đếm số lượng task done cho mỗi ngày
         for (task in tasksList) {
             val dueDateTime = task.due_datetime
-            for (day in xValues) {
+            for (day in daysOfWeek) {
                 if (dueDateTime.contains(day)) {
                     if (task.isDone) {
                         doneTaskCountByDay[day] = doneTaskCountByDay.getValue(day) + 1
@@ -239,7 +249,7 @@ class WeeklyReport : Fragment() {
 
         // Tạo danh sách các BarEntry từ số lượng task done theo ngày
         val percentages = mutableListOf<Float>()
-        for (day in xValues) {
+        for (day in daysOfWeek) {
             val doneTaskCount = doneTaskCountByDay.getValue(day)
             val totalTaskCount = taskCountByDay.getValue(day)
             val percentage = if (totalTaskCount != 0f) {
