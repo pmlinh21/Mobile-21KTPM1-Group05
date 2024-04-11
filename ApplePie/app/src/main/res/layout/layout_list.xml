@@ -2,23 +2,20 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/bg_task"
-    android:paddingHorizontal="15dp"
-    android:paddingVertical="10dp"
-    android:elevation="6dp"
-    android:layout_marginTop="10dp"
-    android:layout_marginHorizontal="20dp"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp"
     android:layout_width="match_parent"
-    android:layout_height="40dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/list_icon_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="38dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_awesome_solid"
         android:text="rectangle-list"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:textColor="@color/green"
+        android:textAlignment="viewStart"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -28,19 +25,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Task Name"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textColor="@color/black"
-        android:layout_marginStart="30dp"
+        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/list_icon_text_view" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/font_awesome_solid"
         android:text="chevron-right"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

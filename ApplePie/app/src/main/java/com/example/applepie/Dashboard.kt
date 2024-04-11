@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.model.TaskList
 import com.example.studentmanagementv4.ListRecyclerAdapter
 
@@ -60,6 +62,9 @@ class Dashboard : Fragment() {
         val adapter = ListRecyclerAdapter(requireContext(), taskLists)
         listRV.adapter = adapter
         listRV.layoutManager = LinearLayoutManager(requireContext())
+
+        val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        listRV.addItemDecoration(itemDecoration)
 
         adapter.onItemClick = { taskList ->
 //            val intent = Intent(this, EditActivity::class.java)
