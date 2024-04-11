@@ -25,8 +25,6 @@ object FirebaseManager {
     private lateinit var userInfoRef: DatabaseReference
     private lateinit var userListsRef: DatabaseReference
     private lateinit var userTasksRef: DatabaseReference
-    private lateinit var userPomodoroRef: DatabaseReference
-    private lateinit var userStopwatchRef: DatabaseReference
 
     private lateinit var userInfo: User
     private lateinit var userList: List<TaskList>
@@ -69,14 +67,6 @@ object FirebaseManager {
 
     fun setUserTasksRef(index: Int) {
         userTasksRef = FirebaseDatabase.getInstance().getReference("users/$index/tasks")
-    }
-
-    fun setUserPomodoroRef(index: Int) {
-        userPomodoroRef = FirebaseDatabase.getInstance().getReference("users/$index/pomodoro")
-    }
-
-    fun setUserStopwatchRef(index: Int) {
-        userStopwatchRef = FirebaseDatabase.getInstance().getReference("users/$index/stopwatch")
     }
 
     fun setUserInfo(callback: DataCallback<User>) {
@@ -301,6 +291,41 @@ object FirebaseManager {
 
         val userStopwatchRef =  FirebaseDatabase.getInstance().getReference("users/$index/stopwatch")
         userStopwatchRef.setValue(mutableStopwatchList.toList())
+    }
+
+    fun setUserPomodoro(index: Int) {
+        val userPomodoroRef = FirebaseDatabase.getInstance().getReference("users/$index/pomodoro")
+
+        userPomodoroRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val tempList = ArrayList<DateTime>()
+                for (snapshot in dataSnapshot.children) {
+                    val datetime = snapshot.getValue(DateTime::class.java)
+                    datetime?.let {
+                        tempList.add(it)
+                    }
+                }
+                userPomodoro = tempList
+                Log.i("firebase", userPomodoro.toString())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("Firebase", "Error retrieving user info: ${databaseError.message}")
+            }
+        })
+    }
+
+    fun getUserPomodoro(): List<DateTime>{
+        return userPomodoro
+    }
+
+    fun updatePomodoro(index: Int, newPomodoro: DateTime){
+        val mutablePomodoroList = userPomodoro.toMutableList()
+
+        mutablePomodoroList.add(newPomodoro)
+
+        val userPomodoroRef =  FirebaseDatabase.getInstance().getReference("users/$index/pomodoro")
+        userPomodoroRef.setValue(mutablePomodoroList.toList())
     }
 
     fun addUserList(taskList: TaskList) {

@@ -91,7 +91,6 @@ class StudyMusic : Fragment() {
         val rawClass = R.raw::class.java
         val fields = rawClass.fields
         for (field in fields) {
-            val fieldName = field.name
             val fieldResourceType = field.type
 
             // Check if the field type is int (resource ID)

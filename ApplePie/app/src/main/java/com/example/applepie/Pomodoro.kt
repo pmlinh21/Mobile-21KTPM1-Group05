@@ -1,7 +1,9 @@
 package com.example.applepie
 
 import PomodoroTimer
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +11,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
+import com.example.applepie.model.DateTime
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,8 +40,11 @@ class Pomodoro : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        preferenceManager = PreferenceManager(requireContext())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,9 +61,20 @@ class Pomodoro : Fragment() {
         pomodoroTimeText = rootView.findViewById(R.id.pomodoro_time_text)
         pomodoroModeText = rootView.findViewById(R.id.pomodoro_mode_text)
         progressBar = rootView.findViewById(R.id.progressBar)
-//        progressBar.progress = 100
         progressBar.max = 100
 
+        start_time = preferenceManager.getStartTime()!!
+
+        updateTimeText()
+        updateModeText()
+        updateButton()
+        handleButtonClick()
+
+        return rootView
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun handleButtonClick(){
         stopwatchButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
         }
@@ -63,6 +85,7 @@ class Pomodoro : Fragment() {
 
         undoButton.setOnClickListener {
             // TODO: save firebase, reset timer
+            storeTimeInFirebase()
             PomodoroTimer.stopTimer()
         }
 
@@ -71,25 +94,42 @@ class Pomodoro : Fragment() {
             if (PomodoroTimer.isPause())
                 PomodoroTimer.resumeTimer()
 
+            setStartTime()
             PomodoroTimer.startTimer()
         }
 
         forwardButton.setOnClickListener {
             // TODO:  start timer for break or study, save firebase
+            storeTimeInFirebase()
             PomodoroTimer.switchMinute()
             PomodoroTimer.stopTimer()
         }
 
         pauseButton.setOnClickListener {
             // TODO:  pause timer for break or study
+            storeTimeInFirebase()
             PomodoroTimer.pauseTimer()
         }
+    }
 
-        updateTimeText()
-        updateModeText()
-        updateButton()
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun setStartTime(){
+        if (PomodoroTimer.getMode() == "Focus"){
+            start_time = getCurrentDateTime()
+            preferenceManager.setStartTime(start_time)
+        }
+    }
 
-        return rootView
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun storeTimeInFirebase(){
+        if (PomodoroTimer.getMode() == "Focus"){
+            val index = preferenceManager.getIndex()
+
+            end_time = getCurrentDateTime()
+
+            Log.i("pomodoro", "$start_time $end_time")
+            FirebaseManager.updatePomodoro(index, DateTime(end_time, start_time))
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -100,7 +140,13 @@ class Pomodoro : Fragment() {
         PomodoroTimer.setUpdateModeTextCallback (::updateModeText)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentDateTime(): String {
 
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return currentDateTime.format(formatter)
+    }
     private fun updateTimeText() {
         val formattedTime = PomodoroTimer.getFormattedTime()
         pomodoroTimeText.text = formattedTime
@@ -168,6 +214,8 @@ class Pomodoro : Fragment() {
             }
     }
 
+    private lateinit var preferenceManager: PreferenceManager
+
     private lateinit var stopwatchButton: Button
     private lateinit var undoButton: Button
     private lateinit var playButton: Button
@@ -177,4 +225,7 @@ class Pomodoro : Fragment() {
     private lateinit var pomodoroModeText: TextView
     private lateinit var pauseButton: Button
     private lateinit var progressBar: ProgressBar
+
+    private lateinit var start_time: String
+    private lateinit var end_time: String
 }

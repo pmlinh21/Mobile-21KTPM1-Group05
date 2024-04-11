@@ -9,6 +9,7 @@ class PreferenceManager(context: Context?) {
     private val PREF_NAME = "SharedPreferences"
     private val IS_LOGIN = "is_login"
     private val MUSIC_STATUS = "music_status"
+    private val START_TIME = "start_time"
 
     val pref: SharedPreferences? = context?.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
     val editor: SharedPreferences.Editor? = pref?.edit()
@@ -33,6 +34,11 @@ class PreferenceManager(context: Context?) {
         editor?.commit()
     }
 
+    fun setStartTime(start_time: String) {
+        editor?.putString(START_TIME, start_time)
+        editor?.commit()
+    }
+
     fun isLogin() : Boolean? {
         return pref?.getBoolean(IS_LOGIN, false)
     }
@@ -47,6 +53,10 @@ class PreferenceManager(context: Context?) {
     
     fun getIndex(): Int {
         return pref?.getInt("index", 0) ?: 0
+    }
+
+    fun getStartTime(): String? {
+        return pref?.getString(START_TIME, "")
     }
 
     fun removeData() {

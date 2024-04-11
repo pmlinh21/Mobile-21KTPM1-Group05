@@ -36,8 +36,11 @@ class Stopwatch : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+        preferenceManager = PreferenceManager(requireContext())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -56,6 +59,8 @@ class Stopwatch : Fragment() {
 
         stopwatchTimeText = rootView.findViewById(R.id.stopwatch_time_text)
 
+        start_time = preferenceManager.getStartTime()!!
+
         updateTimeText()
         updateButton()
         handleButtonClick()
@@ -73,19 +78,13 @@ class Stopwatch : Fragment() {
 
         undoButton.setOnClickListener {
             // TODO:  add study timer to firebase, reset timer
+            storeTimeInFirebase()
             StopwatchTimer.stopTimer()
-
-            end_time = getCurrentDateTime()
-
-            val preferenceManager = PreferenceManager(requireContext())
-            val index = preferenceManager.getIndex()!!
-
-//            Log.i("stopwatch", "$start_time $end_time")
-//            FirebaseManager.updateStopwatch(index, DateTime(end_time, start_time))
         }
 
         pauseButton.setOnClickListener {
             // TODO:  pause timer
+            storeTimeInFirebase()
             StopwatchTimer.pauseTimer()
         }
 
@@ -93,15 +92,26 @@ class Stopwatch : Fragment() {
             // TODO:  start timer
             if (StopwatchTimer.isPause()) {
                 StopwatchTimer.resumeTimer()
-            } else{
-                 start_time = getCurrentDateTime()
             }
+
+            start_time = getCurrentDateTime()
+            preferenceManager.setStartTime(start_time)
             StopwatchTimer.startTimer()
         }
 
         settingButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudySetting()).addToBackStack("study_setting").commit()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun storeTimeInFirebase(){
+        val index = preferenceManager.getIndex()
+
+        end_time = getCurrentDateTime()
+
+        Log.i("stopwatch", "$start_time $end_time")
+        FirebaseManager.updateStopwatch(index, DateTime(end_time, start_time))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -176,6 +186,8 @@ class Stopwatch : Fragment() {
 
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var preferenceManager: PreferenceManager
 
     private lateinit var settingButton: Button
 
