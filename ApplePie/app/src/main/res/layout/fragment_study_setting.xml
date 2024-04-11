@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Study Space"
+                android:text="Study Setting"
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:textStyle="bold" />
@@ -81,7 +81,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="You can turn on/off notification from the other apps."
                 android:textColor="@color/grey"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/notification_btn"
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="White noise"
+                android:text="Music"
                 android:textColor="@color/black"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -121,7 +121,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="You can select the sound and music from the list and then listen to them when starting the study session."
                 android:textColor="@color/grey"
-                android:textSize="20dp" />
+                android:textSize="16dp" />
 
             <Button
                 android:id="@+id/whitenoise_btn"

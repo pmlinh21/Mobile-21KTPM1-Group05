@@ -149,6 +149,8 @@ class MainActivity : AppCompatActivity() {
                     // Handle error
                 }
             })
+
+            FirebaseManager.setUserAllowedNotiApp(0)
         }
     }
 

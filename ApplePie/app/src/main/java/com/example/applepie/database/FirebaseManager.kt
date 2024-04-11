@@ -25,6 +25,7 @@ object FirebaseManager {
     private lateinit var userPomodoro: List<DateTime>
     private lateinit var userStopwatch: List<DateTime>
     private lateinit var userStreak: List<DateTime>
+    private lateinit var userAllowedNotiApp: List<String>
 
     /*
 
@@ -138,6 +139,44 @@ object FirebaseManager {
     }
     fun getUserTask(): List<Task> {
         return userTask
+    }
+
+    fun setUserAllowedNotiApp(index: Int) {
+        val userAllowedNotiAppRef = FirebaseDatabase.getInstance().getReference("users/$index/allowed_noti_app")
+        val allowedPackageNames = mutableListOf<String>()
+
+        userAllowedNotiAppRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Clear the list to avoid duplicates
+                allowedPackageNames.clear()
+
+                // Retrieve the list of allowed package names
+                for (packageNameSnapshot in dataSnapshot.children) {
+                    val packageName = packageNameSnapshot.getValue(String::class.java)
+                    if (packageName != null) {
+                        allowedPackageNames.add(packageName)
+                    }
+                }
+
+                Log.i("notiapp1",allowedPackageNames.toString())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle the error case
+                // ...
+            }
+        })
+
+        userAllowedNotiApp = allowedPackageNames
+    }
+
+    fun getUserAllowedNotiApp(): List<String>{
+        return userAllowedNotiApp
+    }
+    fun updateUserAllowedNotiApp(index: Int, allowedPackageNames: List<String>) {
+        val userAllowedNotiAppRef =  FirebaseDatabase.getInstance().getReference("users/$index/allowed_noti_app")
+
+        userAllowedNotiAppRef.setValue(allowedPackageNames)
     }
 
 }

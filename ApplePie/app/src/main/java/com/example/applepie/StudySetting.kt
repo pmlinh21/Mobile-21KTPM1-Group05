@@ -1,5 +1,11 @@
 package com.example.applepie
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +14,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
+import com.example.applepie.database.FirebaseManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,21 +55,49 @@ class StudySetting : Fragment() {
 
         notificationButton.setOnClickListener {
             // TODO: show list app to manage noti
+            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyNotification()).addToBackStack("study_notification").commit()
         }
 
         whitenoiseButton.setOnClickListener {
             // TODO:  show list music
+            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyNotification()).addToBackStack("study_white_noise").commit()
         }
 
-        soundmusicSwitch.setOnClickListener {
-            // TODO:  turn on/off sound in app
+        soundmusicSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // Turn on music
+                startSoundMusic()
+            } else {
+                // Turn off music
+                stopSoundMusic()
+            }
         }
 
         backButton.setOnClickListener {
             previousRedFragment()
         }
 
+
+
         return rootView
+    }
+
+    private fun startSoundMusic(){
+        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true)
+
+        if (mediaPlayer == null) {
+//            mediaPlayer = MediaPlayer.create(this, R.raw.your_music_file)
+            mediaPlayer?.isLooping = true // Set to true if you want the music to loop
+        }
+        mediaPlayer?.start()
+    }
+
+    private fun stopSoundMusic(){
+        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false)
+
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
     private fun previousRedFragment(){
@@ -71,6 +107,8 @@ class StudySetting : Fragment() {
         fragmentManager.popBackStackImmediate()
         transaction?.commit()
     }
+
+
 
     companion object {
         /**
@@ -92,8 +130,16 @@ class StudySetting : Fragment() {
             }
     }
 
+
     private lateinit var notificationButton: Button
+
+    private val audioManager: AudioManager by lazy {
+        val context = requireContext()
+        context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    }
+    private var mediaPlayer: MediaPlayer? = null
     private lateinit var whitenoiseButton: Button
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var soundmusicSwitch: Switch
     private lateinit var backButton: Button
 }

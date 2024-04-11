@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.Lists
 import com.example.applepie.database.Task
+import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,6 +64,43 @@ class WeeklyReport : Fragment() {
         tasksList.add(Task("", "8:00 PM Monday", 2, 3, false,"", "", "Design Layout"))
         tasksList.add(Task("", "9:00 PM Monday", 2, 3, true,"", "", "Handle login function"))
 
+        val barChart: BarChart = rootView.findViewById(R.id.barChart)
+        barChart.axisRight.setDrawLabels(false)
+
+        barChart.axisLeft.setDrawGridLines(false)
+        barChart.axisRight.setDrawGridLines(false)
+        barChart.xAxis.setDrawGridLines(false)
+
+        val entries = ArrayList<BarEntry>()
+        entries.add(BarEntry(0f, 45f))
+        entries.add(BarEntry(1f, 80f))
+        entries.add(BarEntry(2f, 65f))
+        entries.add(BarEntry(3f, 90f))
+        entries.add(BarEntry(4f, 95f))
+        entries.add(BarEntry(5f, 80f))
+        entries.add(BarEntry(6f, 60f))
+
+        val yAxis: YAxis = barChart.axisLeft
+        yAxis.axisMaximum = 0f
+        yAxis.axisMaximum = 100f
+        yAxis.axisLineWidth = 2f
+        yAxis.axisLineColor = Color.BLACK
+        yAxis.setLabelCount(10)
+
+        val dataSet = BarDataSet(entries, "Day of the week")
+        val colorsList = ColorTemplate.MATERIAL_COLORS.toList()
+        dataSet.colors = colorsList
+
+        val barData = BarData(dataSet)
+        barChart.data = barData
+
+        barChart.description.isEnabled = false
+        barChart.invalidate()
+
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
+        barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        barChart.xAxis.granularity = 1f
+        barChart.xAxis.isGranularityEnabled = true
 
         return rootView
     }
@@ -83,4 +129,5 @@ class WeeklyReport : Fragment() {
     private lateinit var adapter: TaskListAdapter
     private val tasksList = ArrayList<Task>()
     private val lists = ArrayList<Lists>()
+    private val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 }
