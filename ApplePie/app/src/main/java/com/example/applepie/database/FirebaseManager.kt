@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.applepie.database.FirebaseManager.userList
 import com.example.applepie.model.DateTime
+import com.example.applepie.model.Music
 import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 import com.example.applepie.model.User
@@ -33,8 +34,8 @@ object FirebaseManager {
     private lateinit var userPomodoro: List<DateTime>
     private lateinit var userStopwatch: List<DateTime>
     private lateinit var userStreak: List<DateTime>
-    private lateinit var userAllowedNotiApp: List<String>
-
+    private lateinit var userBlockNotiApp: List<String>
+    private lateinit var userMusic: Music
     /*
 
     setter :
@@ -79,7 +80,7 @@ object FirebaseManager {
     }
 
     fun setUserInfo(callback: DataCallback<User>) {
-        userInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        userInfoRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     userInfo = dataSnapshot.getValue(User::class.java)!!
@@ -102,7 +103,7 @@ object FirebaseManager {
     }
 
     fun setUserList(callback: DataCallback<List<TaskList>>) {
-        userListsRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        userListsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val tempList = ArrayList<TaskList>()
                 for (snapshot in dataSnapshot.children) {
@@ -171,7 +172,7 @@ object FirebaseManager {
     }
 
     fun setUserTask(callback: DataCallback<List<Task>>) {
-        userTasksRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        userTasksRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val tempTask = ArrayList<Task>()
                 for (snapshot in dataSnapshot.children) {
@@ -194,24 +195,24 @@ object FirebaseManager {
         return userTask
     }
 
-    fun setUserAllowedNotiApp(index: Int) {
-        val userAllowedNotiAppRef = FirebaseDatabase.getInstance().getReference("users/$index/allowed_noti_app")
-        val allowedPackageNames = mutableListOf<String>()
+    fun setUserBlockNotiApp(index: Int) {
+        val userBlockNotiAppRef = FirebaseDatabase.getInstance().getReference("users/$index/block_noti_app")
+        val blockPackageNames = mutableListOf<String>()
 
-        userAllowedNotiAppRef.addListenerForSingleValueEvent(object : ValueEventListener {
+        userBlockNotiAppRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Clear the list to avoid duplicates
-                allowedPackageNames.clear()
+                blockPackageNames.clear()
 
                 // Retrieve the list of allowed package names
                 for (packageNameSnapshot in dataSnapshot.children) {
                     val packageName = packageNameSnapshot.getValue(String::class.java)
                     if (packageName != null) {
-                        allowedPackageNames.add(packageName)
+                        blockPackageNames.add(packageName)
                     }
                 }
 
-                Log.i("notiapp1",allowedPackageNames.toString())
+                Log.i("data",blockPackageNames.toString())
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -220,16 +221,51 @@ object FirebaseManager {
             }
         })
 
-        userAllowedNotiApp = allowedPackageNames
+        userBlockNotiApp = blockPackageNames
     }
 
-    fun getUserAllowedNotiApp(): List<String>{
-        return userAllowedNotiApp
+    fun getUserBlockNotiApp(): List<String>{
+        return userBlockNotiApp
     }
-    fun updateUserAllowedNotiApp(index: Int, allowedPackageNames: List<String>) {
-        val userAllowedNotiAppRef =  FirebaseDatabase.getInstance().getReference("users/$index/allowed_noti_app")
+    fun updateUserBlockNotiApp(index: Int, blockPackageNames: List<String>) {
+        val userBlockNotiApp =  FirebaseDatabase.getInstance().getReference("users/$index/block_noti_app")
 
-        userAllowedNotiAppRef.setValue(allowedPackageNames)
+        userBlockNotiApp.setValue(blockPackageNames)
+    }
+
+    fun setUserMusic(index: Int) {
+        val userMusicRef = FirebaseDatabase.getInstance().getReference("users/$index/music")
+
+        userMusicRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                if (dataSnapshot.exists()) {
+                    val musicData = dataSnapshot.getValue(Music::class.java)
+                    if (musicData != null) {
+                        userMusic = musicData
+                        Log.i("data", "Name: ${userMusic.name}, URL: ${userMusic.resourceId}")
+                    } else {
+                        Log.i("data", "No music data found")
+                    }
+                } else {
+                    userMusic = Music("", 0)
+                    Log.i("data", "No music data found")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("data",databaseError.message)
+            }
+        })
+    }
+
+    fun getUserMusic(): Music{
+        return userMusic
+    }
+    fun updateUserMusic(index: Int, music: Music) {
+        val userMusic =  FirebaseDatabase.getInstance().getReference("users/$index/music")
+
+        userMusic.setValue(music)
     }
 
     fun addUserList(taskList: TaskList) {

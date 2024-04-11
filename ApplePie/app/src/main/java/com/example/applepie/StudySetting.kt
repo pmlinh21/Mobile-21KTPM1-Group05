@@ -2,8 +2,6 @@ package com.example.applepie
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -14,8 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
-import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,13 +42,16 @@ class StudySetting : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         val rootView = inflater.inflate(R.layout.fragment_study_setting, container, false)
 
         notificationButton = rootView.findViewById(R.id.notification_btn)
         whitenoiseButton = rootView.findViewById(R.id.whitenoise_btn)
         soundmusicSwitch = rootView.findViewById(R.id.soundmusic_switch)
         backButton = rootView.findViewById(R.id.back_btn)
+
+        val preferenceManager = PreferenceManager(requireContext())
+        soundmusicSwitch.isChecked = preferenceManager.getMusicStatus() == true
+        controlMusic(soundmusicSwitch.isChecked, preferenceManager)
 
         notificationButton.setOnClickListener {
             // TODO: show list app to manage noti
@@ -60,35 +60,40 @@ class StudySetting : Fragment() {
 
         whitenoiseButton.setOnClickListener {
             // TODO:  show list music
-            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyNotification()).addToBackStack("study_white_noise").commit()
+            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyMusic()).addToBackStack("study_white_noise").commit()
         }
 
         soundmusicSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Turn on music
-                startSoundMusic()
-            } else {
-                // Turn off music
-                stopSoundMusic()
-            }
+            controlMusic(isChecked, preferenceManager)
         }
 
         backButton.setOnClickListener {
             previousRedFragment()
         }
 
-
-
         return rootView
+    }
+
+    private fun controlMusic(isChecked: Boolean, preferenceManager: PreferenceManager){
+        if (isChecked) {
+            // Turn on music
+            startSoundMusic()
+            preferenceManager.setMusicStatus(true)
+        } else {
+            // Turn off music
+            stopSoundMusic()
+            preferenceManager.setMusicStatus(false)
+        }
     }
 
     private fun startSoundMusic(){
         audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true)
 
         if (mediaPlayer == null) {
-//            mediaPlayer = MediaPlayer.create(this, R.raw.your_music_file)
-            mediaPlayer?.isLooping = true // Set to true if you want the music to loop
+            mediaPlayer = MediaPlayer.create(requireContext(), R.raw.music_1)
+            mediaPlayer?.isLooping = true
         }
+
         mediaPlayer?.start()
     }
 
@@ -99,6 +104,8 @@ class StudySetting : Fragment() {
         mediaPlayer?.release()
         mediaPlayer = null
     }
+
+
 
     private fun previousRedFragment(){
         val transaction = activity?.supportFragmentManager?.beginTransaction()

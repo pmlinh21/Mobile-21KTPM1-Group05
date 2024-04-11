@@ -106,10 +106,10 @@ class MainActivity : AppCompatActivity() {
 
         if (index != -1){
             Log.i("UserInfo","0")
-            FirebaseManager.setUserRef(0)
-            FirebaseManager.setUserInfoRef(0)
-            FirebaseManager.setUserListsRef(0)
-            FirebaseManager.setUserTasksRef(0)
+            FirebaseManager.setUserRef(index)
+            FirebaseManager.setUserInfoRef(index)
+            FirebaseManager.setUserListsRef(index)
+            FirebaseManager.setUserTasksRef(index)
 
             FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<TaskList>> {
                 override fun onDataReceived(data: List<TaskList>) {
@@ -146,7 +146,8 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-            FirebaseManager.setUserAllowedNotiApp(0)
+            FirebaseManager.setUserBlockNotiApp(index)
+            FirebaseManager.setUserMusic(index)
         }
     }
 
