@@ -129,7 +129,7 @@
                 android:layout_marginEnd="5dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_1"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_weight="1"/>
 
             <Button
@@ -138,7 +138,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_2"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"/>
 
@@ -148,7 +148,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_3"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"/>
 
@@ -168,7 +168,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_5"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"/>
 
@@ -178,7 +178,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_6"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"/>
 
@@ -197,9 +197,10 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_7"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"/>
+
             <Button
                 android:id="@+id/list_color_button_8"
                 android:layout_width="42dp"
@@ -207,7 +208,7 @@
                 android:layout_marginHorizontal="5dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_8"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_weight="1"/>
 
             <Button
@@ -216,7 +217,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_9"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"/>
 
@@ -226,7 +227,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_10"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"/>
 
@@ -236,7 +237,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_11"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="1"/>
 
@@ -246,7 +247,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@color/list_color_12"
-                android:backgroundTintMode="screen"
+                android:backgroundTintMode="src_atop"
                 android:layout_marginStart="5dp"
                 android:layout_weight="1"/>
 
@@ -254,7 +255,7 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/icon_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -263,11 +264,504 @@
         android:background="@drawable/bg_task"
         android:elevation="6dp"
         android:padding="20dp"
+        android:orientation="vertical"
+        android:weightSum="5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/color_layout">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6">
 
+            <Button
+                android:id="@+id/list_icon_button_1"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle_border"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="screen"
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_1"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/list_icon_button_2"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
 
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_2"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_3"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_3"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_4"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle_border"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_4"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_5"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_5"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_6"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_6"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <Button
+                android:id="@+id/list_icon_button_7"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_7"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_8"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_8"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_9"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_9"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_10"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_10"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_11"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_11"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_12"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_12"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <Button
+                android:id="@+id/list_icon_button_13"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_13"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_14"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_14"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_15"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_15"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_16"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_16"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_17"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_17"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_18"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_18"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <Button
+                android:id="@+id/list_icon_button_19"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_19"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_20"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_20"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_21"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_21"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_22"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_22"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_23"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_23"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_24"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_24"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="6">
+
+            <Button
+                android:id="@+id/list_icon_button_25"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_25"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_26"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_26"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_27"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_27"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_28"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_28"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_29"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_29"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="1"/>
+
+            <Button
+                android:id="@+id/list_icon_button_30"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/shape_circle_border"
+                android:backgroundTint="@color/light_greyer"
+                android:backgroundTintMode="src_atop"
+
+                android:fontFamily="@font/font_awesome_solid"
+                android:text="@string/list_icon_30"
+                android:textColor="@color/dark_grey"
+                android:textSize="18sp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

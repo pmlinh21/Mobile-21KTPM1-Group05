@@ -20,4 +20,37 @@
     <string name="feature_3">Monthly reports</string>
     <string name="new_list">New List</string>
     <string name="list_name">List Name</string>
+
+    <string name="list_icon_1">list-alt</string>
+    <string name="list_icon_2">bookmark</string>
+    <string name="list_icon_3">map-pin</string>
+    <string name="list_icon_4">home</string>
+    <string name="list_icon_5">birthday-cake</string>
+    <string name="list_icon_6">book</string>
+    <string name="list_icon_7">briefcase</string>
+    <string name="list_icon_8">money-bill-wave</string>
+    <string name="list_icon_9">dumbbell</string>
+    <string name="list_icon_10">utensils</string>
+    <string name="list_icon_11">running</string>
+    <string name="list_icon_12">pills</string>
+    <string name="list_icon_13">stethoscope</string>
+    <string name="list_icon_14">building</string>
+    <string name="list_icon_15">university</string>
+    <string name="list_icon_16">campground</string>
+    <string name="list_icon_17">desktop</string>
+    <string name="list_icon_18">gamepad</string>
+    <string name="list_icon_19">headphones-alt</string>
+    <string name="list_icon_20">music</string>
+    <string name="list_icon_21">leaf</string>
+    <string name="list_icon_22">tree</string>
+    <string name="list_icon_23">map-marked-alt</string>
+    <string name="list_icon_24">shopping-basket</string>
+    <string name="list_icon_25">shopping-cart</string>
+    <string name="list_icon_26">cat</string>
+    <string name="list_icon_27">dog</string>
+    <string name="list_icon_28">football-ball</string>
+    <string name="list_icon_29">heart</string>
+    <string name="list_icon_30">star</string>
+
+
 </resources>
