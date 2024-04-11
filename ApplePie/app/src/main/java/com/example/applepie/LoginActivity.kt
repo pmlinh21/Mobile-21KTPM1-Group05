@@ -2,13 +2,20 @@ package com.example.applepie
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.applepie.database.PreferenceManager
+import com.example.applepie.model.User
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import es.dmoral.toasty.Toasty
 
 class LoginActivity : ComponentActivity() {
@@ -20,28 +27,103 @@ class LoginActivity : ComponentActivity() {
         passwordInput = findViewById(R.id.passwordInput)
         loginButton = findViewById(R.id.loginButton)
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()
         preferenceManager = PreferenceManager(this)
 
         loginButton.setOnClickListener {
-            val email = usernameInput.text.toString()
+            val username = usernameInput.text.toString()
             val password = passwordInput.text.toString()
 
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) {
-                if (it.isSuccessful) {
-//                    Toast.makeText(this, "Login successfully!", Toast.LENGTH_SHORT).show()
+            if (username.isBlank() || password.isBlank()) {
+                Toasty.warning(this, "Email and Password can't be blank", Toast.LENGTH_SHORT, true).show()
+                return@setOnClickListener
+            }
 
-                    preferenceManager.setLogin(true)
-                    preferenceManager.setUsername(email)
+            if (username.contains('@')) {
+                auth.signInWithEmailAndPassword(username, password).addOnCompleteListener(this) {
+                    if (it.isSuccessful) {
+                        databaseReference.orderByChild("info/email").equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if (snapshot.exists()) {
+                                    for (userSnapshot in snapshot.children) {
+                                        val userIndex = userSnapshot.key!!.toInt()
+                                        preferenceManager.setIndex(userIndex)
+                                    }
+                                }
+                            }
 
-                    val mainActivity = Intent(this, MainActivity::class.java)
-                    startActivity(mainActivity)
+                            override fun onCancelled(error: DatabaseError) {
 
-                    finish()
-                } else {
-//                    Toast.makeText(this, "Login failed!", Toast.LENGTH_SHORT).show()
-                    Toasty.error(this, "Username or password is incorrect", Toast.LENGTH_SHORT, true).show()
+                            }
+                        })
+
+                        preferenceManager.setLogin(true)
+                        preferenceManager.setUsername(username)
+
+                        val mainActivity = Intent(this, MainActivity::class.java)
+                        startActivity(mainActivity)
+
+                        finish()
+                    } else {
+                        Toasty.error(
+                            this,
+                            "Username or password is incorrect 1",
+                            Toast.LENGTH_SHORT,
+                            true
+                        ).show()
+                    }
                 }
+            }
+            else {
+                databaseReference.orderByChild("info/username").equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            for (userSnapshot in snapshot.children) {
+                                val userIndex = userSnapshot.key!!.toInt()
+
+                                val user = userSnapshot.child("info").getValue(User::class.java)
+
+                                if (user != null) {
+//                                    Log.i("nqlog", userSnapshot.toString())
+                                    if (user.password == password) {
+                                        preferenceManager.setLogin(true)
+                                        preferenceManager.setUsername(username)
+                                        preferenceManager.setIndex(userIndex)
+
+                                        val mainActivity = Intent(this@LoginActivity, MainActivity::class.java)
+                                        startActivity(mainActivity)
+
+                                        finish()
+                                    } else {
+                                        Toasty.error(
+                                            this@LoginActivity,
+                                            "Username or password is incorrect 2",
+                                            Toast.LENGTH_SHORT,
+                                            true
+                                        ).show()
+                                    }
+                                }
+                            }
+                        } else {
+                            Toasty.error(
+                                this@LoginActivity,
+                                "Username or password is incorrect 3",
+                                Toast.LENGTH_SHORT,
+                                true
+                            ).show()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toasty.error(
+                            this@LoginActivity,
+                            error.message,
+                            Toast.LENGTH_SHORT,
+                            true
+                        ).show()
+                    }
+                })
             }
         }
 
@@ -59,6 +141,7 @@ class LoginActivity : ComponentActivity() {
     private lateinit var loginButton: MaterialButton
     private lateinit var signupText: MaterialTextView
 
+    private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
     private lateinit var preferenceManager: PreferenceManager
 }

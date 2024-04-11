@@ -12,6 +12,7 @@ class SubscribeActivity : AppCompatActivity() {
         val intent = intent
         closeButton = findViewById<Button>(R.id.close_button)
 
+        handleEventListener()
     }
 
     private fun handleEventListener() {

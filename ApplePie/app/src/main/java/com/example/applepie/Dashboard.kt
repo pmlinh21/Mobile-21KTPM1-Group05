@@ -2,12 +2,16 @@ package com.example.applepie
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
 import com.example.studentmanagementv4.ListRecyclerAdapter
 
@@ -50,16 +54,24 @@ class Dashboard : Fragment() {
 
         setupListRV()
         setupAddListTV()
+
+        val viewTodayTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewTodayTask)
+        viewTodayTask.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ViewTodayTasks.newInstance("", ""))
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun setupListRV() {
-        val list1 = TaskList(1, 0, "briefcase", "Mobile")
-        val list2 = TaskList(2, 0, "briefcase", "Physics")
-        val list3 = TaskList(3, 0, "briefcase", "Math")
-        val taskLists = listOf(list1, list2, list3)
+        val taskLists = FirebaseManager.getUserList()
         val adapter = ListRecyclerAdapter(requireContext(), taskLists)
         listRV.adapter = adapter
         listRV.layoutManager = LinearLayoutManager(requireContext())
+
+        val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        listRV.addItemDecoration(itemDecoration)
 
         adapter.onItemClick = { taskList ->
 //            val intent = Intent(this, EditActivity::class.java)
@@ -67,6 +79,13 @@ class Dashboard : Fragment() {
 //            startActivity(intent)
         }
     }
+
+     fun updateTaskLists() {
+        val taskLists = FirebaseManager.getUserList()?: listOf()
+        val adapter = listRV.adapter as ListRecyclerAdapter
+        adapter.setLists(taskLists)
+    }
+
 
     private fun setupAddListTV() {
         addListTV.setOnClickListener {

@@ -31,18 +31,17 @@ class MainActivity : AppCompatActivity() {
         preferenceManager = PreferenceManager(this)
         username = preferenceManager.getUsername().toString()
 
-        if (preferenceManager.isLogin() == false) {
-//            val loginActivity = Intent(this, LoginActivity::class.java)
-//            startActivity(loginActivity)
-//            finish()
-        }
-
-
-        setLanguage()
-        setUI()
-
         getInfoFromPreference()
         getInfoFromFirebase()
+
+        if (preferenceManager.isLogin() == false) {
+            val loginActivity = Intent(this, LoginActivity::class.java)
+            startActivity(loginActivity)
+            finish()
+        }
+
+        setLanguage()
+//        setUI()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -116,6 +115,8 @@ class MainActivity : AppCompatActivity() {
                 override fun onDataReceived(data: List<TaskList>) {
                     // Handle received user list data
                     Log.i("data", FirebaseManager.getUserList().toString())
+
+                    setUI()
                 }
 
                 override fun onError(error: DatabaseError) {

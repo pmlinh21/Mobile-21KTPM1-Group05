@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 
 class PreferenceManager(context: Context?) {
     val PRIVATE_MODE = 0
+    private val PREF_INDEX = 0
     private val PREF_NAME = "SharedPreferences"
     private val IS_LOGIN = "is_login"
     private val MUSIC_STATUS = "music_status"
@@ -26,6 +27,11 @@ class PreferenceManager(context: Context?) {
         editor?.putBoolean(MUSIC_STATUS, music)
         editor?.commit()
     }
+    
+    fun setIndex(index: Int) {
+        editor?.putInt("index", index)
+        editor?.commit()
+    }
 
     fun isLogin() : Boolean? {
         return pref?.getBoolean(IS_LOGIN, false)
@@ -37,6 +43,10 @@ class PreferenceManager(context: Context?) {
 
     fun getMusicStatus(): Boolean? {
         return pref?.getBoolean(MUSIC_STATUS, false)
+    }
+    
+    fun getIndex(): Int? {
+        return pref?.getInt("index", 0)
     }
 
     fun removeData() {

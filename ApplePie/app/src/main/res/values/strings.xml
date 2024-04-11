@@ -20,6 +20,7 @@
     <string name="feature_3">Monthly reports</string>
     <string name="new_list">New List</string>
     <string name="list_name">List Name</string>
+    <string name="add_list"><u>Add list</u></string>
 
     <string name="list_icon_1">list-alt</string>
     <string name="list_icon_2">bookmark</string>
@@ -51,6 +52,5 @@
     <string name="list_icon_28">football-ball</string>
     <string name="list_icon_29">heart</string>
     <string name="list_icon_30">star</string>
-
 
 </resources>

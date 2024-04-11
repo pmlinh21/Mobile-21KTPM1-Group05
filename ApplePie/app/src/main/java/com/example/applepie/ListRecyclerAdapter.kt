@@ -7,9 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.graphics.toColor
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.R
 import com.example.applepie.model.TaskList
+import com.google.common.io.Resources.getResource
 
 class ListRecyclerAdapter(private val context: Context, private var taskLists: List<TaskList>): RecyclerView.Adapter<ListRecyclerAdapter.ViewHolder>() {
 //    private val db: SMDatabase = SMDatabase.getInstance(context)
@@ -41,6 +45,15 @@ class ListRecyclerAdapter(private val context: Context, private var taskLists: L
         val taskList = taskLists[position]
         holder.nameTV.text = taskList.list_name
         holder.iconTV.text = taskList.list_icon
+
+//        val color = try {
+//            taskList.list_color.toColor()
+//        } catch (e: IllegalArgumentException) {
+//            // Handle potential conversion errors (e.g., invalid color value)
+//            ContextCompat.getColor(context, R.color.green) // Use a default color
+//        }
+
+        holder.iconTV.setTextColor(ContextCompat.getColor(context, R.color.green))
     }
 
     @SuppressLint("NotifyDataSetChanged")
