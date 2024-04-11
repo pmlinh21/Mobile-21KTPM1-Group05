@@ -12,7 +12,7 @@
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="106dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         app:srcCompat="@drawable/logo_applepie"/>
 
     <TextView
@@ -109,9 +109,8 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/loginButton"
-                style="@style/Widget.MaterialComponents.Button"
                 android:background="@drawable/roundstyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -122,51 +121,50 @@
                 android:text="LOG IN"
                 android:letterSpacing="0"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:textStyle="bold"/>
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:textSize="16dp"
+                android:textSize="16sp"
                 android:text="or log in with"/>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:weightSum="2"
                 android:orientation="horizontal"
                 android:layout_marginTop="30dp">
 
-
-                <ImageButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:background="@drawable/roundstyle"
-                    android:backgroundTint="#3D5A98"
-                    android:src="@drawable/logo_facebook"
+                <Button
+                    android:background="@drawable/facebook_button"
+                    android:fontFamily="@font/font_awesome_brand"
+                    android:text="facebook-f"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:scaleType="fitCenter"
                     android:layout_weight="1"
                     android:layout_marginEnd="15dp">
 
-                </ImageButton>
+                </Button>
 
-                <ImageButton
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:background="@drawable/roundstyle"
-                    android:backgroundTint="#DE5246"
-                    android:src="@drawable/logo_google"
+                <Button
+                    android:background="@drawable/google_button"
+                    android:fontFamily="@font/font_awesome_brand"
+                    android:text="google"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:scaleType="fitCenter"
-                    android:padding="13dp"
                     android:layout_weight="1"
                     android:layout_marginStart="15dp">
 
-                </ImageButton>
+                </Button>
 
             </LinearLayout>
 
