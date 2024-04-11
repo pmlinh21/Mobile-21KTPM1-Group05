@@ -72,7 +72,7 @@ class DailyReport : Fragment() {
             val taskDueDate = sdf.parse(task.due_datetime)
             val appDateTime = sdf.parse(appDate)
             val taskDueDate_1 = task.due_datetime.substring(0, 10)
-            taskDueDate?.before(appDateTime) ?: false || taskDueDate_1 == appDate
+            taskDueDate?.after(appDateTime) ?: false || taskDueDate_1 == appDate
         }.sortedByDescending { task ->
             sdf.parse(task.due_datetime)
         }

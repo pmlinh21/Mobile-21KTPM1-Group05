@@ -26,8 +26,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp">
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp">
 
                 <TextView
                     android:id="@+id/total_tasks"
@@ -42,8 +42,8 @@
 
                 <RelativeLayout
                     android:id="@+id/progress_layout_1"
-                    android:layout_width="220dp"
-                    android:layout_height="220dp"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
                     android:layout_gravity="center_horizontal">
 
                     <ProgressBar
@@ -96,8 +96,8 @@
                 android:background="@drawable/report_box"
                 android:elevation="2dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginRight="40dp"
-                android:layout_marginLeft="40dp">
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="20dp">
 
                 <TextView
                     android:id="@+id/task_list"
@@ -115,7 +115,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="23dp"
                     android:layout_marginBottom="20dp" />
             </LinearLayout>
 
