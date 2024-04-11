@@ -67,7 +67,9 @@ class Account : Fragment() {
 
     fun handleEventListener(){
         subscriptionButton.setOnClickListener {
-            // TODO: go to subscription fragment
+            // TODO: go to subscription activity
+            val subscribeActivity = Intent(this.activity, SubscribeActivity::class.java)
+            startActivity(subscribeActivity)
         }
 
         reminderButton.setOnClickListener {

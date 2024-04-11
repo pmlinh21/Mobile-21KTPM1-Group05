@@ -78,6 +78,7 @@ dependencies {
 
     implementation("com.github.GrenderG:Toasty:1.5.2")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")

@@ -8,6 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.Lists
+import com.example.applepie.database.Task
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -45,17 +49,31 @@ class DailyReport : Fragment() {
         val handler = Handler()
         handler.postDelayed(object : Runnable {
             override fun run() {
-                if (i <= 100) {
-                    progressText.text = "$i"
-                    progressBar.progress = i
-                    i++
-                    handler.postDelayed(this, 200)
-                } else {
-                    handler.removeCallbacks(this)
-                }
+                val percentageDone = adapter.getPercentageDone().toInt()
+                progressBar.progress = percentageDone
+                progressText.text = "$percentageDone%"
             }
         }, 200)
 
+        taskRecyclerView = rootView.findViewById(R.id.recyclerView)
+        adapter = TaskListAdapter(requireContext(), tasksList, lists)
+
+        taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        taskRecyclerView.adapter = adapter
+
+        lists.add(Lists(1, "", "", "Mobile"))
+        lists.add(Lists(2, "", "", "SoftwareDesign"))
+
+        tasksList.add(Task("", "10:00 AM", 1, 1, false, "", "", "Project Proposal"))
+        tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))
+        tasksList.add(Task("", "11:59 AM", 1, 3, false,"", "", "W03 - UI + Auto layout"))
+        tasksList.add(Task("", "8:00 PM", 2, 3, false,"", "", "Design Layout"))
+        tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle login function"))
+
+        val totalTasks = tasksList.size
+
+        total_tasks = rootView.findViewById(R.id.total_tasks)
+        total_tasks.text = "Total tasks: $totalTasks"
         return rootView
     }
 
@@ -81,6 +99,9 @@ class DailyReport : Fragment() {
 
     private lateinit var progressBar: ProgressBar
     private lateinit var progressText: TextView
-    private var i = 0
-
+    private lateinit var taskRecyclerView: RecyclerView
+    private lateinit var adapter: TaskListAdapter
+    private val tasksList = ArrayList<Task>()
+    private val lists = ArrayList<Lists>()
+    private lateinit var total_tasks: TextView
 }

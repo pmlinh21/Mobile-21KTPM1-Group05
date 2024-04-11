@@ -14,7 +14,7 @@
 
 
         <LinearLayout
-            android:id="@+id/report_layout_1"
+            android:id="@+id/report_layout"
             android:layout_width="match_parent"
             android:layout_height="79dp"
             android:background="@color/green"
@@ -44,6 +44,14 @@
                 android:backgroundTint="@color/white"
                 />
         </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/container_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/report_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
