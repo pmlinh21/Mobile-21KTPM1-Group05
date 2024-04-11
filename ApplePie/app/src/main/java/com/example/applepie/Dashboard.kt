@@ -54,6 +54,14 @@ class Dashboard : Fragment() {
 
         setupListRV()
         setupAddListTV()
+
+        val viewTodayTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewTodayTask)
+        viewTodayTask.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ViewTodayTasks.newInstance("", ""))
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun setupListRV() {
