@@ -269,7 +269,7 @@ object FirebaseManager {
     }
 
     fun addUserList(taskList: TaskList) {
-        val newListId = userList.size + 1
+        val newListId = userList.size
         val newList = TaskList(
             newListId,
             taskList.list_color,

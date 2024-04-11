@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         preferenceManager = PreferenceManager(this)
         username = preferenceManager.getUsername().toString()
+        index = preferenceManager.getIndex()
 
         getInfoFromPreference()
         getInfoFromFirebase()
@@ -102,10 +103,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getInfoFromFirebase(){
-        index = 0
-
         if (index != -1){
-            Log.i("UserInfo","0")
+            Log.i("UserInfo",index.toString())
             FirebaseManager.setUserRef(index)
             FirebaseManager.setUserInfoRef(index)
             FirebaseManager.setUserListsRef(index)

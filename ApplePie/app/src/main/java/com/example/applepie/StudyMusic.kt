@@ -38,9 +38,8 @@ class StudyMusic : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-    selectedMusic = FirebaseManager.getUserMusic()
-    handler = Handler()
-
+        selectedMusic = FirebaseManager.getUserMusic()
+        handler = Handler()
     }
 
     override fun onCreateView(

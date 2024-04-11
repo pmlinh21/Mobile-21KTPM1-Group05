@@ -45,8 +45,8 @@ class PreferenceManager(context: Context?) {
         return pref?.getBoolean(MUSIC_STATUS, false)
     }
     
-    fun getIndex(): Int? {
-        return pref?.getInt("index", 0)
+    fun getIndex(): Int {
+        return pref?.getInt("index", 0) ?: 0
     }
 
     fun removeData() {

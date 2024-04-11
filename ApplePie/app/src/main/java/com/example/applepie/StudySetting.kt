@@ -2,6 +2,7 @@ package com.example.applepie
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
+import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 
 // TODO: Rename parameter arguments, choose names that match
@@ -55,12 +57,22 @@ class StudySetting : Fragment() {
 
         notificationButton.setOnClickListener {
             // TODO: show list app to manage noti
-            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyNotification()).addToBackStack("study_notification").commit()
+            if (FirebaseManager.getUserInfo().isPremium) {
+                (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyNotification()).addToBackStack("study_notification").commit()
+            } else {
+                val subscribeActivity = Intent(this.activity, SubscribeActivity::class.java)
+                startActivity(subscribeActivity)
+            }
         }
 
         whitenoiseButton.setOnClickListener {
             // TODO:  show list music
-            (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyMusic()).addToBackStack("study_white_noise").commit()
+            if (FirebaseManager.getUserInfo().isPremium) {
+                (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, StudyMusic()).addToBackStack("study_white_noise").commit()
+            } else {
+                val subscribeActivity = Intent(this.activity, SubscribeActivity::class.java)
+                startActivity(subscribeActivity)
+            }
         }
 
         soundmusicSwitch.setOnCheckedChangeListener { _, isChecked ->
