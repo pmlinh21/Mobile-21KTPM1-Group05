@@ -2,6 +2,7 @@ package com.example.applepie
 
 import PomodoroTimer
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
