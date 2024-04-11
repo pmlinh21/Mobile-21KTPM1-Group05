@@ -7,12 +7,16 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import com.example.applepie.database.FirebaseManager
+import com.example.applepie.model.User
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import es.dmoral.toasty.Toasty
 
 class RegisterActivity : ComponentActivity() {
@@ -26,6 +30,8 @@ class RegisterActivity : ComponentActivity() {
         passwordConfirmInput = findViewById(R.id.passwordConfirmInput)
         signupButton = findViewById(R.id.signupButton)
 
+        firebaseDatabase = FirebaseDatabase.getInstance()
+        databaseReference = firebaseDatabase.getReference("users")
         auth = Firebase.auth
 
         signupButton.setOnClickListener {
@@ -40,6 +46,10 @@ class RegisterActivity : ComponentActivity() {
                 return@setOnClickListener
             }
 
+            if (password.length < 6) {
+                Toasty.error(this, "Passwords must be at least 6 characters", Toast.LENGTH_SHORT, true).show()
+            }
+
             if (password != passwordConfirm) {
 //                Toast.makeText(this, "Password and Confirm Password do not match", Toast.LENGTH_SHORT).show()
                 Toasty.error(this, "Password and Confirm Password do not match", Toast.LENGTH_SHORT, true).show()
@@ -48,7 +58,10 @@ class RegisterActivity : ComponentActivity() {
 
             auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) {
                 if (it.isSuccessful) {
-//                    Toast.makeText(this, "Sign up successfully", Toast.LENGTH_SHORT).show()
+                    val userId = databaseReference.push().key
+                    val user = User(email = email, password = password, username = username)
+                    databaseReference.child(userId!!).setValue(user)
+
                     Toasty.success(this, "Sign up successfully", Toast.LENGTH_SHORT, true).show()
                     finish()
                 } else {
@@ -72,5 +85,7 @@ class RegisterActivity : ComponentActivity() {
     private lateinit var signupButton: MaterialButton
     private lateinit var loginText: MaterialTextView
 
+    private lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
 }

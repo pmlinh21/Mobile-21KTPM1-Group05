@@ -26,10 +26,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [WeeklyReport.newInstance] factory method to
+ * Use the [MonthlyReport.newInstance] factory method to
  * create an instance of this fragment.
  */
-class WeeklyReport : Fragment() {
+class MonthlyReport : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -47,7 +47,7 @@ class WeeklyReport : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_weekly_report, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_monthly_report, container, false)
 
         taskRecyclerView = rootView.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter(requireContext(), tasksList, lists)
@@ -280,12 +280,12 @@ class WeeklyReport : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment WeeklyReport.
+         * @return A new instance of fragment MonthlyReport.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            WeeklyReport().apply {
+            MonthlyReport().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
@@ -299,4 +299,3 @@ class WeeklyReport : Fragment() {
     private val lists = ArrayList<TaskList>()
     private val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 }
-
