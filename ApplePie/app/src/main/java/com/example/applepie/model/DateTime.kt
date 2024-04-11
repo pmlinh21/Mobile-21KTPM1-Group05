@@ -1,4 +1,4 @@
-package com.example.applepie.database
+package com.example.applepie.model
 
 data class DateTime(
     val end_time: String = "",

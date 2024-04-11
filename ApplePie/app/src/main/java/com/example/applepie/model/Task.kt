@@ -1,4 +1,4 @@
-package com.example.applepie.database
+package com.example.applepie.model
 
 import com.google.firebase.database.PropertyName
 

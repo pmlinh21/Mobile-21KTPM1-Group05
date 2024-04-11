@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.applepie.database.Lists
-import com.example.applepie.database.Task
+import com.example.applepie.model.Lists
+import com.example.applepie.model.Task
 
 class TaskListAdapter(context: Context, tasks: ArrayList<Task>, lists: ArrayList<Lists>):
     RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {

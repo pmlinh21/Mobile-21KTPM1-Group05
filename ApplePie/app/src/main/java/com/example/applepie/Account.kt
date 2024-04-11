@@ -12,6 +12,7 @@ import android.widget.CalendarView
 import android.widget.EditText
 import android.widget.TextView
 import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

@@ -1,4 +1,4 @@
-package com.example.applepie
+package com.example.applepie.database
 
 import android.content.Context
 import android.content.SharedPreferences

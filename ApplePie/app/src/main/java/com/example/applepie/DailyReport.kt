@@ -10,8 +10,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.applepie.database.Lists
-import com.example.applepie.database.Task
+import com.example.applepie.model.Lists
+import com.example.applepie.model.Task
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

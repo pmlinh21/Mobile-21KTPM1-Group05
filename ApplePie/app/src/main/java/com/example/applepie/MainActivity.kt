@@ -2,25 +2,19 @@ package com.example.applepie
 
 import PomodoroTimer
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import android.graphics.drawable.Drawable;
 import android.util.Log
 import com.example.applepie.database.FirebaseManager
-import com.example.applepie.database.Lists
-import com.example.applepie.database.Task
-import com.example.applepie.database.User
+import com.example.applepie.database.PreferenceManager
+import com.example.applepie.model.Lists
+import com.example.applepie.model.Task
+import com.example.applepie.model.User
 import com.google.firebase.database.DatabaseError
 import java.util.Locale
-import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() {
