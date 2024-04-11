@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 
-class TaskListAdapter1(context: Context, tasks: ArrayList<Task>, lists: ArrayList<TaskList>):
+class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList>):
     RecyclerView.Adapter<TaskListAdapter1.ViewHolder>() {
     private val context: Context = context
-    private val tasks: ArrayList<Task> = tasks
-    private val lists: ArrayList<TaskList> = lists
+    private val tasks: List<Task> = tasks
+    private val lists: List<TaskList> = lists
     interface OnItemClickListener{
         fun onItemClick(task: Task)
     }

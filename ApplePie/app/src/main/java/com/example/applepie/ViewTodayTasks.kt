@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 import com.example.applepie.model.TaskList
 import java.text.SimpleDateFormat
@@ -52,20 +53,36 @@ class ViewTodayTasks : Fragment() {
 
         today.text = formattedTime
 
+        val lists = FirebaseManager.getUserList()?: listOf()
+        var tasksList = FirebaseManager.getUserTask()?: listOf()
+
+        val sdf_1 = SimpleDateFormat("yyyy-MM-dd")
+        val appDate = sdf_1.format(currentTime)
+
+        // Lấy những task có due_datetime sau hoặc bằng today (task chưa quá hạn)
+        tasksList = tasksList.filter { task ->
+            val taskDueDate = sdf_1.parse(task.due_datetime)
+            val appDateTime = sdf_1.parse(appDate)
+            val taskDueDate_1 = task.due_datetime.substring(0, 10)
+            taskDueDate?.after(appDateTime) ?: false || taskDueDate_1 == appDate
+        }.sortedByDescending { task ->
+            sdf_1.parse(task.due_datetime)
+        }
+
         taskRecyclerView = rootView.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter1(requireContext(), tasksList, lists)
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
 
-        lists.add(TaskList(1, 0, "", "Mobile"))
-        lists.add(TaskList(2, 0, "", "SoftwareDesign"))
-
-        tasksList.add(Task("", "10:00 AM", 1, 1, false, "", "", "Project Proposal"))
-        tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))
-        tasksList.add(Task("", "11:59 AM", 1, 3, false,"", "", "W03 - UI + Auto layout"))
-        tasksList.add(Task("", "8:00 PM", 2, 3, false,"", "", "Design Layout"))
-        tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle login function"))
+//        lists.add(TaskList(1, 0, "", "Mobile"))
+//        lists.add(TaskList(2, 0, "", "SoftwareDesign"))
+//
+//        tasksList.add(Task("", "10:00 AM", 1, 1, false, "", "", "Project Proposal"))
+//        tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))
+//        tasksList.add(Task("", "11:59 AM", 1, 3, false,"", "", "W03 - UI + Auto layout"))
+//        tasksList.add(Task("", "8:00 PM", 2, 3, false,"", "", "Design Layout"))
+//        tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle login function"))
 
 
         return rootView
@@ -94,6 +111,6 @@ class ViewTodayTasks : Fragment() {
     private lateinit var today: TextView
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter1
-    private val tasksList = ArrayList<Task>()
-    private val lists = ArrayList<TaskList>()
+//    private val tasksList = ArrayList<Task>()
+//    private val lists = ArrayList<TaskList>()
 }
