@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.applepie.model.TaskList
+import com.example.studentmanagementv4.ListRecyclerAdapter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,15 +45,20 @@ class Dashboard : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
-//        val adapter = StudentRecyclerAdapter(this, students)
-//        studentRV.adapter = adapter
-//        studentRV.layoutManager = LinearLayoutManager(this)
-//
-//        adapter.onItemClick = { student ->
+
+        val list1 = TaskList(1, "list_color_4", "briefcase", "Mobile")
+        val list2 = TaskList(2, "list_color_3", "briefcase", "Physics")
+        val list3 = TaskList(3, "list_color_2", "briefcase", "Math")
+        val taskLists = listOf(list1, list2, list3)
+        val adapter = ListRecyclerAdapter(requireContext(), taskLists)
+        listRV.adapter = adapter
+        listRV.layoutManager = LinearLayoutManager(requireContext())
+
+        adapter.onItemClick = { taskList ->
 //            val intent = Intent(this, EditActivity::class.java)
 //            intent.putExtra("id", student.id)
 //            startActivity(intent)
-//        }
+        }
     }
 
     companion object {

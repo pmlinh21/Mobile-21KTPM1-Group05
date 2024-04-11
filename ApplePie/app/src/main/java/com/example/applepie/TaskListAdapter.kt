@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.applepie.model.Lists
+import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 
-class TaskListAdapter(context: Context, tasks: ArrayList<Task>, lists: ArrayList<Lists>):
+class TaskListAdapter(context: Context, tasks: ArrayList<Task>, lists: ArrayList<TaskList>):
     RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
         private val context: Context = context
         private val tasks: ArrayList<Task> = tasks
-        private val lists: ArrayList<Lists> = lists
+        private val lists: ArrayList<TaskList> = lists
         interface OnItemClickListener{
             fun onItemClick(task: Task)
         }
