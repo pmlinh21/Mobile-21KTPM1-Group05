@@ -14,6 +14,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#E2DB3B</color>
 
+    <color name="transparent">#00000000</color>
+
     <color name="backgroundColor">#F2F5F9</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/black</color>
 </resources>
