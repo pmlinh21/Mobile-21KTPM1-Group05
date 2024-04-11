@@ -1,10 +1,12 @@
 package com.example.applepie
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +37,21 @@ class Dashboard : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
+//        val adapter = StudentRecyclerAdapter(this, students)
+//        studentRV.adapter = adapter
+//        studentRV.layoutManager = LinearLayoutManager(this)
+//
+//        adapter.onItemClick = { student ->
+//            val intent = Intent(this, EditActivity::class.java)
+//            intent.putExtra("id", student.id)
+//            startActivity(intent)
+//        }
     }
 
     companion object {
