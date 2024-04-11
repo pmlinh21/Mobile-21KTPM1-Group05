@@ -219,4 +219,39 @@ object FirebaseManager {
         userMusic.setValue(music)
     }
 
+    fun setUserStopwatch(index: Int) {
+        val userStopwatchRef = FirebaseDatabase.getInstance().getReference("users/$index/stopwatch")
+
+        userStopwatchRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val tempList = ArrayList<DateTime>()
+                for (snapshot in dataSnapshot.children) {
+                    val datetime = snapshot.getValue(DateTime::class.java)
+                    datetime?.let {
+                        tempList.add(it)
+                    }
+                }
+                userStopwatch = tempList
+                Log.i("firebase", userStopwatch.toString())
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("Firebase", "Error retrieving user info: ${databaseError.message}")
+            }
+        })
+    }
+
+    fun getUserStopwatch(): List<DateTime>{
+        return userStopwatch
+    }
+
+    fun updateStopwatch(index: Int, newStopwatch: DateTime){
+        val mutableStopwatchList = userStopwatch.toMutableList()
+
+        mutableStopwatchList.add(newStopwatch)
+
+        val userStopwatchRef =  FirebaseDatabase.getInstance().getReference("users/$index/stopwatch")
+        userStopwatchRef.setValue(mutableStopwatchList.toList())
+    }
+
 }

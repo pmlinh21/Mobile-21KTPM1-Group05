@@ -30,6 +30,7 @@ object PomodoroTimer {
                         updateTimeTextCallback?.invoke() // Invoke the callback to update UI
                     }
                     else if (secondsRemaining == 0){
+                        secondsRemaining--
                         updateButtonCallback?.invoke()
                     }
                     handler?.postDelayed(this, 1000) // Update every second
@@ -70,7 +71,8 @@ object PomodoroTimer {
     }
 
     fun isTimeOver(): Boolean{
-        return isStarted && !isPaused && secondsRemaining == 0
+        Log.i("pomodoro", secondsRemaining.toString())
+        return isStarted && !isPaused && secondsRemaining < 0
     }
 
     // Pause the timer

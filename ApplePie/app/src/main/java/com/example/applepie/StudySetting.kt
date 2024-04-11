@@ -105,8 +105,6 @@ class StudySetting : Fragment() {
         mediaPlayer = null
     }
 
-
-
     private fun previousRedFragment(){
         val transaction = activity?.supportFragmentManager?.beginTransaction()
         val fragmentManager = activity?.supportFragmentManager
@@ -114,8 +112,6 @@ class StudySetting : Fragment() {
         fragmentManager.popBackStackImmediate()
         transaction?.commit()
     }
-
-
 
     companion object {
         /**

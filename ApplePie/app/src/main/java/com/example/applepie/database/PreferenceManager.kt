@@ -46,7 +46,7 @@ class PreferenceManager(context: Context?) {
     }
     
     fun getIndex(): Int? {
-        return pref?.getInt("index", 0)
+        return pref?.getInt("index", -1)
     }
 
     fun removeData() {

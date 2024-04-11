@@ -31,17 +31,18 @@ class MainActivity : AppCompatActivity() {
         preferenceManager = PreferenceManager(this)
         username = preferenceManager.getUsername().toString()
 
-        getInfoFromPreference()
-        getInfoFromFirebase()
-
-        if (preferenceManager.isLogin() == false) {
+        if (preferenceManager.isLogin() == false ) {
             val loginActivity = Intent(this, LoginActivity::class.java)
             startActivity(loginActivity)
             finish()
         }
 
+        index = preferenceManager.getIndex()!!
+        Log.i("index",index.toString())
+
+        getInfoFromFirebase()
+
         setLanguage()
-//        setUI()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -60,69 +61,53 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun setUI(){
-        homeButton = findViewById(R.id.home_icon)
-        studyButton = findViewById(R.id.study_icon)
-        createTaskButton = findViewById(R.id.create_task_icon)
-        reportButton = findViewById(R.id.report_icon)
-        accountButton = findViewById(R.id.account_icon)
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
+        if (isUserListDataReceived && isUserTaskDataReceived) {
+            homeButton = findViewById(R.id.home_icon)
+            studyButton = findViewById(R.id.study_icon)
+            createTaskButton = findViewById(R.id.create_task_icon)
+            reportButton = findViewById(R.id.report_icon)
+            accountButton = findViewById(R.id.account_icon)
 
-        homeButton.setOnClickListener {
-            handleNavbarClick(homeButton)
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
-        }
 
-        studyButton.setOnClickListener {
-            handleNavbarClick(studyButton)
-            if (!PomodoroTimer.isStop())
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
-            else
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
-        }
+            homeButton.setOnClickListener {
+                handleNavbarClick(homeButton)
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
+            }
 
-        createTaskButton.setOnClickListener {
-            handleNavbarClick(createTaskButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
-        }
+            studyButton.setOnClickListener {
+                handleNavbarClick(studyButton)
+                if (!PomodoroTimer.isStop())
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
+                else
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
+            }
 
-        reportButton.setOnClickListener {
-            handleNavbarClick(reportButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Report()).addToBackStack(null).commit()
-        }
+            createTaskButton.setOnClickListener {
+                handleNavbarClick(createTaskButton)
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
+            }
 
-        accountButton.setOnClickListener {
-            handleNavbarClick(accountButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Account()).addToBackStack(null).commit()
-        }
-    }
+            reportButton.setOnClickListener {
+                handleNavbarClick(reportButton)
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Report()).addToBackStack(null).commit()
+            }
 
-    fun getInfoFromPreference(){
-    // TODO: get index of the specific user in firebase from preference
+            accountButton.setOnClickListener {
+                handleNavbarClick(accountButton)
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Account()).addToBackStack(null).commit()
+            }
+        }
     }
 
     fun getInfoFromFirebase(){
-        index = 0
-
         if (index != -1){
             Log.i("UserInfo","0")
             FirebaseManager.setUserRef(index)
             FirebaseManager.setUserInfoRef(index)
             FirebaseManager.setUserListsRef(index)
             FirebaseManager.setUserTasksRef(index)
-
-            FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<TaskList>> {
-                override fun onDataReceived(data: List<TaskList>) {
-                    // Handle received user list data
-                    Log.i("data", FirebaseManager.getUserList().toString())
-
-                    setUI()
-                }
-
-                override fun onError(error: DatabaseError) {
-                    // Handle error
-                }
-            })
 
             FirebaseManager.setUserInfo(object : FirebaseManager.DataCallback<User> {
                 override fun onDataReceived(data: User) {
@@ -135,10 +120,27 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
+            FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<TaskList>> {
+                override fun onDataReceived(data: List<TaskList>) {
+                    // Handle received user list data
+                    Log.i("data", FirebaseManager.getUserList().toString())
+
+                    isUserListDataReceived = true
+                    setUI()
+                }
+
+                override fun onError(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+
             FirebaseManager.setUserTask(object : FirebaseManager.DataCallback<List<Task>> {
                 override fun onDataReceived(data: List<Task>) {
                     // Handle received user list data
                     Log.i("data", FirebaseManager.getUserTask().toString())
+
+                    isUserTaskDataReceived = true
+                    setUI()
                 }
 
                 override fun onError(error: DatabaseError) {
@@ -159,6 +161,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var index: Int = -1
+    private var isUserListDataReceived = false
+    private var isUserTaskDataReceived = false
 
     private lateinit var homeButton: Button
     private lateinit var studyButton: Button

@@ -64,6 +64,8 @@ class Account : Fragment() {
     fun setUI(){
         usernameInput.setText(FirebaseManager.getUserInfo().username)
         emailInput.setText(FirebaseManager.getUserInfo().email)
+        currentStreakText.setText(FirebaseManager.getUserInfo().current_streak)
+        longestStreakText.setText(FirebaseManager.getUserInfo().longest_streak)
     }
 
     fun handleEventListener(){

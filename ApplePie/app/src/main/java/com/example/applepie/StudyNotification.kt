@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -77,7 +78,9 @@ class StudyNotification : Fragment() {
     }
 
     private fun updateBlockNotiApp(){
-        FirebaseManager.updateUserBlockNotiApp(0, selectedApps)
+        val preferenceManager = PreferenceManager(requireContext())
+        val index = preferenceManager.getIndex()!!
+        FirebaseManager.updateUserBlockNotiApp(index, selectedApps)
     }
     private fun previousRedFragment(){
         val transaction = activity?.supportFragmentManager?.beginTransaction()

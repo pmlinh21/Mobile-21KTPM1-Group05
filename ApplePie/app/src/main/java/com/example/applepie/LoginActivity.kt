@@ -43,11 +43,13 @@ class LoginActivity : ComponentActivity() {
             if (username.contains('@')) {
                 auth.signInWithEmailAndPassword(username, password).addOnCompleteListener(this) {
                     if (it.isSuccessful) {
+                        Log.d("login","ok")
                         databaseReference.orderByChild("info/email").equalTo(username).addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 if (snapshot.exists()) {
                                     for (userSnapshot in snapshot.children) {
                                         val userIndex = userSnapshot.key!!.toInt()
+                                        Log.i("loginactivity", userIndex.toString())
                                         preferenceManager.setIndex(userIndex)
                                     }
                                 }

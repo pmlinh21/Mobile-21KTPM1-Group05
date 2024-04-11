@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,7 +11,13 @@ import android.widget.Button
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import com.example.applepie.StopwatchTimer
+import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
+import com.example.applepie.model.DateTime
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -56,6 +63,7 @@ class Stopwatch : Fragment() {
         return rootView
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun handleButtonClick(){
         Log.i("data",pomodoroButton.isEnabled.toString())
         pomodoroButton.setOnClickListener {
@@ -66,6 +74,14 @@ class Stopwatch : Fragment() {
         undoButton.setOnClickListener {
             // TODO:  add study timer to firebase, reset timer
             StopwatchTimer.stopTimer()
+
+            end_time = getCurrentDateTime()
+
+            val preferenceManager = PreferenceManager(requireContext())
+            val index = preferenceManager.getIndex()!!
+
+//            Log.i("stopwatch", "$start_time $end_time")
+//            FirebaseManager.updateStopwatch(index, DateTime(end_time, start_time))
         }
 
         pauseButton.setOnClickListener {
@@ -77,6 +93,8 @@ class Stopwatch : Fragment() {
             // TODO:  start timer
             if (StopwatchTimer.isPause()) {
                 StopwatchTimer.resumeTimer()
+            } else{
+                 start_time = getCurrentDateTime()
             }
             StopwatchTimer.startTimer()
         }
@@ -128,6 +146,14 @@ class Stopwatch : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentDateTime(): String {
+
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return currentDateTime.format(formatter)
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -162,7 +188,8 @@ class Stopwatch : Fragment() {
     private lateinit var playButton: Button
     private lateinit var pauseButton: Button
 
-
+    private lateinit var start_time: String
+    private lateinit var end_time: String
 }
 
 

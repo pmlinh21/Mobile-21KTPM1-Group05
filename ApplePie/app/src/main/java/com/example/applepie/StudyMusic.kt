@@ -14,6 +14,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Music
 
 // TODO: Rename parameter arguments, choose names that match
@@ -115,7 +116,9 @@ class StudyMusic : Fragment() {
     }
 
     private fun updateMusic(){
-        FirebaseManager.updateUserMusic(0, selectedMusic)
+        val preferenceManager = PreferenceManager(requireContext())
+        val index = preferenceManager.getIndex()!!
+        FirebaseManager.updateUserMusic(index, selectedMusic)
     }
     private fun previousRedFragment(){
         val transaction = activity?.supportFragmentManager?.beginTransaction()

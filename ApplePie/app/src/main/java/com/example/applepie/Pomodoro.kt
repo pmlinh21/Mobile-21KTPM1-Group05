@@ -113,6 +113,14 @@ class Pomodoro : Fragment() {
         pomodoroModeText.text = mode
     }
     private fun updateButton(){
+        if (PomodoroTimer.isTimeOver()){
+            undoButton.visibility = View.VISIBLE
+            playButton.visibility = View.GONE
+            pauseButton.visibility = View.GONE
+            forwardButton.visibility = View.VISIBLE
+            stopwatchButton.isEnabled = true
+            return
+        }
         if (PomodoroTimer.isRunning()){
             undoButton.visibility = View.VISIBLE
             playButton.visibility = View.GONE
@@ -137,14 +145,7 @@ class Pomodoro : Fragment() {
             stopwatchButton.isEnabled = true
             return
         }
-        if (PomodoroTimer.isTimeOver()){
-            undoButton.visibility = View.VISIBLE
-            playButton.visibility = View.GONE
-            pauseButton.visibility = View.GONE
-            forwardButton.visibility = View.VISIBLE
-            stopwatchButton.isEnabled = true
-            return
-        }
+
     }
 
     companion object {
