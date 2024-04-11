@@ -2,16 +2,20 @@ package com.example.applepie.database
 //import com.google.firebase.auth.FirebaseAuth
 
 import android.util.Log
+import android.widget.Toast
+import com.example.applepie.database.FirebaseManager.userList
 import com.example.applepie.model.DateTime
 import com.example.applepie.model.Music
 import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 import com.example.applepie.model.User
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import org.w3c.dom.Comment
 
 
 object FirebaseManager {
@@ -118,6 +122,51 @@ object FirebaseManager {
             }
         })
     }
+
+    fun setUserList_(callback: DataCallback<List<TaskList>>) {
+        userListsRef.addChildEventListener(object: ChildEventListener {
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                val tempList = userList.toMutableList()
+                val list = snapshot.getValue(TaskList::class.java)
+                list?.let {
+                    tempList.add(it)
+                }
+                userList = tempList
+                callback.onDataReceived(userList)
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                val tempList = userList.toMutableList()
+                val list = snapshot.getValue(TaskList::class.java)
+                list?.let {
+                    val index:Int = userList.indexOfFirst { it.id_list == list.id_list }
+                    tempList[index] = list
+                }
+                userList = tempList
+                callback.onDataReceived(userList)
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+                val tempList = userList.toMutableList()
+                val list = snapshot.getValue(TaskList::class.java)
+                list?.let {
+                    tempList.remove(list)
+                }
+                userList = tempList
+                callback.onDataReceived(userList)
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                // This method is not needed for this app
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                callback.onError(error)
+                Log.e("Firebase", "Error retrieving user info: ${error.message}")
+            }
+        })
+    }
+
     fun getUserList(): List<TaskList> {
         return userList
     }
@@ -254,4 +303,14 @@ object FirebaseManager {
         userStopwatchRef.setValue(mutableStopwatchList.toList())
     }
 
+    fun addUserList(taskList: TaskList) {
+        val newListId = userList.size
+        val newList = TaskList(
+            newListId,
+            taskList.list_color,
+            taskList.list_icon,
+            taskList.list_name
+        )
+        userListsRef.child(newListId.toString()).setValue(newList)
+    }
 }

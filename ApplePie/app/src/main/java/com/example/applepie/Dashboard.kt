@@ -1,8 +1,6 @@
 package com.example.applepie
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +10,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
-import com.example.applepie.model.TaskList
 import com.example.studentmanagementv4.ListRecyclerAdapter
 
 // TODO: Rename parameter arguments, choose names that match
@@ -74,9 +71,10 @@ class Dashboard : Fragment() {
         listRV.addItemDecoration(itemDecoration)
 
         adapter.onItemClick = { taskList ->
-//            val intent = Intent(this, EditActivity::class.java)
-//            intent.putExtra("id", student.id)
-//            startActivity(intent)
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ListOfTasks.newInstance(taskLists.indexOf(taskList)))
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -94,6 +92,11 @@ class Dashboard : Fragment() {
                 .addToBackStack(null) // Optional: Add transaction to back stack for navigation back
                 .commit()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateTaskLists()
     }
 
     companion object {

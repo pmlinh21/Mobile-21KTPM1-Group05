@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         preferenceManager = PreferenceManager(this)
         username = preferenceManager.getUsername().toString()
+        index = preferenceManager.getIndex()
 
         if (preferenceManager.isLogin() == false ) {
             val loginActivity = Intent(this, LoginActivity::class.java)
@@ -103,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
     fun getInfoFromFirebase(){
         if (index != -1){
-            Log.i("UserInfo","0")
+            Log.i("UserInfo",index.toString())
             FirebaseManager.setUserRef(index)
             FirebaseManager.setUserInfoRef(index)
             FirebaseManager.setUserListsRef(index)

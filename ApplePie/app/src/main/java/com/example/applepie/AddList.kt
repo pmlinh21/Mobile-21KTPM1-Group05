@@ -2,6 +2,7 @@ package com.example.applepie
 
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
+import com.example.applepie.model.TaskList
+import com.example.applepie.model.User
+import com.google.firebase.database.DatabaseError
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +44,8 @@ class AddList : Fragment() {
     private lateinit var chosenColorButton: Button
     private lateinit var chosenIconButton: Button
 
+    private lateinit var preferenceManager: PreferenceManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -56,12 +65,13 @@ class AddList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        preferenceManager = PreferenceManager(requireContext())
+
         setupUI(view)
         setupListColorButtons()
         setupListIconButtons()
         setupBackButton()
         setupDoneButton()
-
     }
 
     private fun setupUI(view: View) {
@@ -130,6 +140,19 @@ class AddList : Fragment() {
     private fun setupDoneButton() {
         doneButton.setOnClickListener {
             // TODO: add list to database
+            if (listNameET.text.isEmpty()) {
+                Toast.makeText(context, "List name required", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else {
+                val newList = TaskList(
+                    -1,
+                    chosenColorButton.backgroundTintList!!.defaultColor,
+                    chosenIconButton.text.toString(),
+                    listNameET.text.toString()
+                )
+                FirebaseManager.addUserList(newList)
+            }
+
             parentFragmentManager.popBackStack()
         }
     }
