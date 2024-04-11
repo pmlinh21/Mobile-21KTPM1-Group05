@@ -7,6 +7,7 @@ class PreferenceManager(context: Context?) {
     val PRIVATE_MODE = 0
     private val PREF_NAME = "SharedPreferences"
     private val IS_LOGIN = "is_login"
+    private val MUSIC_STATUS = "music_status"
 
     val pref: SharedPreferences? = context?.getSharedPreferences(PREF_NAME, PRIVATE_MODE)
     val editor: SharedPreferences.Editor? = pref?.edit()
@@ -21,12 +22,21 @@ class PreferenceManager(context: Context?) {
         editor?.commit()
     }
 
+    fun setMusicStatus(music: Boolean) {
+        editor?.putBoolean(MUSIC_STATUS, music)
+        editor?.commit()
+    }
+
     fun isLogin() : Boolean? {
         return pref?.getBoolean(IS_LOGIN, false)
     }
 
     fun getUsername(): String? {
         return pref?.getString("username", "")
+    }
+
+    fun getMusicStatus(): Boolean? {
+        return pref?.getBoolean(MUSIC_STATUS, false)
     }
 
     fun removeData() {

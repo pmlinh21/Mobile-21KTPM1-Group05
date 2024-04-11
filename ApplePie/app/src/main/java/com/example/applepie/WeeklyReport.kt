@@ -55,10 +55,10 @@ class WeeklyReport : Fragment() {
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
 
-        lists.add(TaskList(1, "", "", "Mobile"))
-        lists.add(TaskList(2, "", "", "SoftwareDesign"))
-        lists.add(TaskList(3, "", "", "IELTS"))
-        lists.add(TaskList(4, "", "", "ML"))
+        lists.add(TaskList(1, 0, "", "Mobile"))
+        lists.add(TaskList(2, 0, "", "SoftwareDesign"))
+        lists.add(TaskList(3, 0, "", "IELTS"))
+        lists.add(TaskList(4, 0, "", "ML"))
 
         tasksList.add(Task("", "10:00 PM Sunday", 1, 45, false, "", "", "Project proposal"))
         tasksList.add(Task("", "9:00 PM Sunday", 1, 44, false, "", "", "Writing report"))

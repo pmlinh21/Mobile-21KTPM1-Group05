@@ -48,7 +48,7 @@ class StudyNotification : Fragment() {
         backButton = rootView.findViewById(R.id.back_btn)
         appListView = rootView.findViewById(R.id.app_list_view)
 
-        selectedApps = FirebaseManager.getUserAllowedNotiApp().toMutableList()
+        selectedApps = FirebaseManager.getUserBlockNotiApp().toMutableList()
         Log.i("notiapp",selectedApps.toString())
 
         val appList = getInstalledApps()
@@ -58,7 +58,7 @@ class StudyNotification : Fragment() {
         appListView.layoutManager = LinearLayoutManager(requireContext())
 
         backButton.setOnClickListener {
-            updateAllowedNotiApp()
+            updateBlockNotiApp()
             previousRedFragment()
         }
 
@@ -76,8 +76,8 @@ class StudyNotification : Fragment() {
         return (applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == ApplicationInfo.FLAG_SYSTEM)
     }
 
-    private fun updateAllowedNotiApp(){
-        FirebaseManager.updateUserAllowedNotiApp(0, selectedApps)
+    private fun updateBlockNotiApp(){
+        FirebaseManager.updateUserBlockNotiApp(0, selectedApps)
     }
     private fun previousRedFragment(){
         val transaction = activity?.supportFragmentManager?.beginTransaction()

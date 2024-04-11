@@ -53,9 +53,9 @@ class Dashboard : Fragment() {
     }
 
     private fun setupListRV() {
-        val list1 = TaskList(1, "list_color_4", "briefcase", "Mobile")
-        val list2 = TaskList(2, "list_color_3", "briefcase", "Physics")
-        val list3 = TaskList(3, "list_color_2", "briefcase", "Math")
+        val list1 = TaskList(1, 0, "briefcase", "Mobile")
+        val list2 = TaskList(2, 0, "briefcase", "Physics")
+        val list3 = TaskList(3, 0, "briefcase", "Math")
         val taskLists = listOf(list1, list2, list3)
         val adapter = ListRecyclerAdapter(requireContext(), taskLists)
         listRV.adapter = adapter
