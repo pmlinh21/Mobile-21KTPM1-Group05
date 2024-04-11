@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.applepie.model.Lists
+import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -55,8 +55,8 @@ class WeeklyReport : Fragment() {
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
 
-        lists.add(Lists(1, "", "", "Mobile"))
-        lists.add(Lists(2, "", "", "SoftwareDesign"))
+        lists.add(TaskList(1, "", "", "Mobile"))
+        lists.add(TaskList(2, "", "", "SoftwareDesign"))
 
         tasksList.add(Task("", "10:00 AM Saturday", 1, 1, false, "", "", "Project Proposal"))
         tasksList.add(Task("", "10:00 PM Saturday", 1, 2, true, "", "", "W01 - Kotlin"))
@@ -147,7 +147,7 @@ class WeeklyReport : Fragment() {
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter
     private val tasksList = ArrayList<Task>()
-    private val lists = ArrayList<Lists>()
+    private val lists = ArrayList<TaskList>()
     private val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 }
 

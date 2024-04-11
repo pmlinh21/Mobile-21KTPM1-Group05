@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
-import com.example.applepie.model.Lists
+import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 import com.example.applepie.model.User
 import com.google.firebase.database.DatabaseError
@@ -111,8 +111,8 @@ class MainActivity : AppCompatActivity() {
             FirebaseManager.setUserListsRef(0)
             FirebaseManager.setUserTasksRef(0)
 
-            FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<Lists>> {
-                override fun onDataReceived(data: List<Lists>) {
+            FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<TaskList>> {
+                override fun onDataReceived(data: List<TaskList>) {
                     // Handle received user list data
                     Log.i("data", FirebaseManager.getUserList().toString())
                 }

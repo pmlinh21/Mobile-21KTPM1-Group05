@@ -8,9 +8,9 @@
     <color name="price_green">#608925</color>
 
     <color name="black">#484C52</color>
+    <color name="white">#FFFFFFFF</color>
     <color name="light_grey">#DADDE1</color>
     <color name="grey">#949494</color>
-    <color name="white">#FFFFFFFF</color>
     <color name="yellow">#E2DB3B</color>
 
     <color name="transparent">#00000000</color>
@@ -20,5 +20,20 @@
 
     <color name="facebook_color">#3B5998</color>
     <color name="google_color">#DB4437</color>
+
+    <color name="list_color_1">#FF4C4C</color>
+    <color name="list_color_2">#FFB74C</color>
+    <color name="list_color_3">#FFE141</color>
+    <color name="list_color_4">#80B435</color>
+    <color name="list_color_5">#63BEFF</color>
+    <color name="list_color_6">#4C7EFF</color>
+    <color name="list_color_7">#4B4FBC</color>
+    <color name="list_color_8">#B6AAFE</color>
+    <color name="list_color_9">#E890CF</color>
+    <color name="list_color_10">#99705E</color>
+    <color name="list_color_11">#F39A9A</color>
+    <color name="list_color_12">#787B89</color>
+    <color name="list_color_13">#D7B2CD</color>
+    <color name="list_color_14">#E890CF</color>
 
 </resources>

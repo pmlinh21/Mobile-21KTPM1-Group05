@@ -3,7 +3,7 @@ package com.example.applepie.database
 
 import android.util.Log
 import com.example.applepie.model.DateTime
-import com.example.applepie.model.Lists
+import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 import com.example.applepie.model.User
 import com.google.firebase.database.DataSnapshot
@@ -24,7 +24,7 @@ object FirebaseManager {
     private lateinit var userStopwatchRef: DatabaseReference
 
     private lateinit var userInfo: User
-    private lateinit var userList: List<Lists>
+    private lateinit var userList: List<TaskList>
     private lateinit var userTask: List<Task>
     private lateinit var userPomodoro: List<DateTime>
     private lateinit var userStopwatch: List<DateTime>
@@ -97,12 +97,12 @@ object FirebaseManager {
         return userInfo
     }
 
-    fun setUserList(callback: DataCallback<List<Lists>>) {
+    fun setUserList(callback: DataCallback<List<TaskList>>) {
         userListsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val tempList = ArrayList<Lists>()
+                val tempList = ArrayList<TaskList>()
                 for (snapshot in dataSnapshot.children) {
-                    val lists = snapshot.getValue(Lists::class.java)
+                    val lists = snapshot.getValue(TaskList::class.java)
                     lists?.let {
                         tempList.add(it)
                     }
@@ -117,7 +117,7 @@ object FirebaseManager {
             }
         })
     }
-    fun getUserList(): List<Lists> {
+    fun getUserList(): List<TaskList> {
         return userList
     }
 
