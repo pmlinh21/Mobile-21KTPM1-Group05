@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -48,6 +49,9 @@ class Pomodoro : Fragment() {
         settingButton = rootView.findViewById(R.id.setting_btn)
         pomodoroTimeText = rootView.findViewById(R.id.pomodoro_time_text)
         pomodoroModeText = rootView.findViewById(R.id.pomodoro_mode_text)
+        progressBar = rootView.findViewById(R.id.progressBar)
+//        progressBar.progress = 100
+        progressBar.max = 100
 
         stopwatchButton.setOnClickListener {
             (activity as AppCompatActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
@@ -58,7 +62,7 @@ class Pomodoro : Fragment() {
         }
 
         undoButton.setOnClickListener {
-            // TODO:  add study timer to firebase, reset timer
+            // TODO: save firebase, reset timer
             PomodoroTimer.stopTimer()
         }
 
@@ -71,7 +75,7 @@ class Pomodoro : Fragment() {
         }
 
         forwardButton.setOnClickListener {
-            // TODO:  start timer for break or study
+            // TODO:  start timer for break or study, save firebase
             PomodoroTimer.switchMinute()
             PomodoroTimer.stopTimer()
         }
@@ -100,6 +104,8 @@ class Pomodoro : Fragment() {
     private fun updateTimeText() {
         val formattedTime = PomodoroTimer.getFormattedTime()
         pomodoroTimeText.text = formattedTime
+
+        progressBar.progress = PomodoroTimer.getProgressValue()
     }
 
     private fun updateModeText() {
@@ -126,6 +132,14 @@ class Pomodoro : Fragment() {
         if (PomodoroTimer.isStop()){
             undoButton.visibility = View.GONE
             playButton.visibility = View.VISIBLE
+            pauseButton.visibility = View.GONE
+            forwardButton.visibility = View.VISIBLE
+            stopwatchButton.isEnabled = true
+            return
+        }
+        if (PomodoroTimer.isTimeOver()){
+            undoButton.visibility = View.VISIBLE
+            playButton.visibility = View.GONE
             pauseButton.visibility = View.GONE
             forwardButton.visibility = View.VISIBLE
             stopwatchButton.isEnabled = true
@@ -161,4 +175,5 @@ class Pomodoro : Fragment() {
     private lateinit var pomodoroTimeText: TextView
     private lateinit var pomodoroModeText: TextView
     private lateinit var pauseButton: Button
+    private lateinit var progressBar: ProgressBar
 }

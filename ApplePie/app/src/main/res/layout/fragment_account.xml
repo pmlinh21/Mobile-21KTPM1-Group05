@@ -183,7 +183,7 @@
                         android:paddingStart="20dp"
                         android:text="username"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
+                        android:textSize="16dp"
                         android:textStyle="bold"
                         tools:ignore="Deprecated" />
 
@@ -209,7 +209,7 @@
                         android:paddingStart="20dp"
                         android:text="email@gmail.com"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
+                        android:textSize="16dp"
                         android:textStyle="bold"
                         tools:ignore="Deprecated" />
 
@@ -231,7 +231,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="Your account are free. Buy Premium to use advanced features."
                         android:textColor="@color/grey"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <Button
                         android:id="@+id/subscription_btn"
@@ -251,7 +251,7 @@
                         android:layout_marginBottom="5dp"
                         android:text="Reminder"
                         android:textColor="@color/black"
-                        android:textSize="20dp"
+                        android:textSize="16dp"
                         android:textStyle="bold" />
 
                     <TextView
@@ -261,7 +261,7 @@
                         android:layout_marginBottom="10dp"
                         android:text="You will receive a notification from the app when a task is approaching its deadline within a set duration, with the default being 1 hour."
                         android:textColor="@color/grey"
-                        android:textSize="20dp" />
+                        android:textSize="16dp" />
 
                     <Button
                         android:id="@+id/reminder_btn"

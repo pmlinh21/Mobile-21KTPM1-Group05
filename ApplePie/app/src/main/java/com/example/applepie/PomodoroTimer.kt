@@ -1,10 +1,11 @@
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.example.applepie.StopwatchTimer
 
 object PomodoroTimer {
-    private const val STUDY_MINUTE = 25
-    private const val BREAK_MINUTE = 5
+    private const val STUDY_MINUTE = 5
+    private const val BREAK_MINUTE = 1
 
     private const val STUDY_MODE = "Focus"
     private const val BREAK_MODE = "Break"
@@ -28,7 +29,9 @@ object PomodoroTimer {
                         secondsRemaining--
                         updateTimeTextCallback?.invoke() // Invoke the callback to update UI
                     }
-                    // hết giờ
+                    else if (secondsRemaining == 0){
+                        updateButtonCallback?.invoke()
+                    }
                     handler?.postDelayed(this, 1000) // Update every second
                 }
             }
@@ -66,6 +69,10 @@ object PomodoroTimer {
         return !isStarted
     }
 
+    fun isTimeOver(): Boolean{
+        return isStarted && !isPaused && secondsRemaining == 0
+    }
+
     // Pause the timer
     fun pauseTimer() {
         isPaused = true
@@ -87,6 +94,11 @@ object PomodoroTimer {
 
         updateRunnable?.let { handler?.removeCallbacks(it) }
         handler = null
+    }
+
+    fun getProgressValue(): Int{
+        Log.i("timer", (secondsRemaining * 100 / (minute * 60)).toString())
+        return secondsRemaining * 100 / (minute * 60)
     }
 
     fun getFormattedTime(): String {
