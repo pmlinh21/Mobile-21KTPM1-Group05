@@ -56,7 +56,9 @@ class Report : Fragment() {
                 else if (selectedItem == "Weekly Report") {
                     replaceFragment(WeeklyReport.newInstance("", ""))
                 }
-
+                else if (selectedItem == "Monthly Report") {
+                    replaceFragment(MonthlyReport.newInstance("", ""))
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
