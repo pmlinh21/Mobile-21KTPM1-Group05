@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/search_bar_layout"
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="79dp"
         android:background="@color/green"
@@ -66,150 +66,173 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/group_container"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/search_bar_layout"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:weightSum="2"
-        android:baselineAligned="false">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/bg_task"
-            android:layout_marginVertical="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="5dp"
-            android:elevation="6dp"
-            android:padding="15dp">
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/header">
 
-            <TextView
-                android:id="@+id/icon_today"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/group_container"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/font_awesome_solid"
-                android:text="list-check"
-                android:textSize="20sp"
-                android:textColor="@color/green"
+                android:orientation="horizontal"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:weightSum="2"
+                android:baselineAligned="false">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_task"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="5dp"
+                    android:elevation="6dp"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:id="@+id/icon_today"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_awesome_solid"
+                        android:text="list-check"
+                        android:textSize="20sp"
+                        android:textColor="@color/green"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/today_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today"
+                        android:textSize="20sp"
+                        android:textColor="@color/grey"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintTop_toBottomOf="@id/icon_today"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/today_count_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginVertical="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/bg_task"
+                    android:elevation="6dp"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:id="@+id/icon_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/font_awesome_solid"
+                        android:text="calendar-alt"
+                        android:textSize="20sp"
+                        android:textColor="@color/green"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/all_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="All"
+                        android:textSize="20sp"
+                        android:textColor="@color/grey"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp"
+                        app:layout_constraintTop_toBottomOf="@id/icon_all"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:id="@+id/all_count_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/today_title"
+                android:id="@+id/my_lists_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Today"
-                android:textSize="20sp"
+                android:text="My lists"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/group_container"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="20dp" />
+
+            <TextView
+                android:id="@+id/add_list_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_list"
+                android:textSize="16sp"
                 android:textColor="@color/grey"
                 android:textStyle="bold"
-                android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@id/icon_today"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/my_lists_title"
+                app:layout_constraintBottom_toBottomOf="@id/my_lists_title"
+                android:layout_marginEnd="20dp"/>
 
-            <TextView
-                android:id="@+id/today_count_text_view"
-                android:layout_width="wrap_content"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_recycler_view"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="5"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:background="@drawable/bg_task"
+                android:elevation="6dp"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintTop_toBottomOf="@id/my_lists_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginVertical="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="5dp"
-            android:background="@drawable/bg_task"
-            android:elevation="6dp"
-            android:padding="15dp">
+    </ScrollView>
 
-            <TextView
-                android:id="@+id/icon_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/font_awesome_solid"
-                android:text="calendar-alt"
-                android:textSize="20sp"
-                android:textColor="@color/green"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/all_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All"
-                android:textSize="20sp"
-                android:textColor="@color/grey"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@id/icon_all"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <TextView
-                android:id="@+id/all_count_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/my_lists_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My lists"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/group_container"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="20dp" />
-
-    <TextView
-        android:id="@+id/add_list_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_list"
-        android:textSize="16sp"
-        android:textColor="@color/grey"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/my_lists_title"
-        app:layout_constraintBottom_toBottomOf="@id/my_lists_title"
-        android:layout_marginEnd="20dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_recycler_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_task"
-        android:elevation="6dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/my_lists_title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-    </androidx.recyclerview.widget.RecyclerView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

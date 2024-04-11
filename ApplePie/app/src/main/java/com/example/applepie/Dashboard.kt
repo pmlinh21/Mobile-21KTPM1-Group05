@@ -88,6 +88,11 @@ class Dashboard : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateTaskLists()
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
