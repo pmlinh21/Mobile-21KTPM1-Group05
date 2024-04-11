@@ -29,11 +29,9 @@
     <color name="list_color_6">#4C7EFF</color>
     <color name="list_color_7">#4B4FBC</color>
     <color name="list_color_8">#B6AAFE</color>
-    <color name="list_color_9">#E890CF</color>
-    <color name="list_color_10">#99705E</color>
-    <color name="list_color_11">#F39A9A</color>
-    <color name="list_color_12">#787B89</color>
-    <color name="list_color_13">#D7B2CD</color>
-    <color name="list_color_14">#E890CF</color>
+    <color name="list_color_9">#99705E</color>
+    <color name="list_color_10">#F39A9A</color>
+    <color name="list_color_11">#787B89</color>
+    <color name="list_color_12">#E890CF</color>
 
 </resources>

@@ -26,6 +26,9 @@ class AddList : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var backButton: Button
+    private lateinit var doneButton: Button
+
     private lateinit var listIconTV: TextView
     private lateinit var listNameET: EditText
     private lateinit var listColorButtons: MutableList<Button>
@@ -51,6 +54,16 @@ class AddList : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupUI(view)
+        setupListColorButtons()
+        setupBackButton()
+        setupDoneButton()
+    }
+
+    private fun setupUI(view: View) {
+        backButton = view.findViewById<Button>(R.id.back_button)
+        doneButton = view.findViewById<Button>(R.id.done_button)
+
         listIconTV = view.findViewById<TextView>(R.id.list_icon_text_view)
         listNameET = view.findViewById<EditText>(R.id.list_name_edit_text)
 
@@ -67,8 +80,6 @@ class AddList : Fragment() {
         listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_10))
         listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_11))
         listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_12))
-        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_13))
-        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_14))
 
         listColors = mutableListOf()
         listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_1, null))
@@ -83,12 +94,22 @@ class AddList : Fragment() {
         listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_10, null))
         listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_11, null))
         listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_12, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_13, null))
-        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_14, null))
 
         chosenColorButton = listColorButtons[3]
 
-        setupListColorButtons()
+    }
+
+    private fun setupBackButton() {
+        backButton.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
+    }
+
+    private fun setupDoneButton() {
+        doneButton.setOnClickListener {
+            // TODO: add list to database
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun setupListColorButtons() {
