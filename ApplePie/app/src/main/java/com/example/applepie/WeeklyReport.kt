@@ -89,7 +89,11 @@ class WeeklyReport : Fragment() {
         yAxis.axisMaximum = 0f
         yAxis.axisMaximum = 20f
         yAxis.setLabelCount(10)
-        yAxis.valueFormatter = IntValueFormatter()
+        yAxis.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString()
+            }
+        })
 
         val dataSet = BarDataSet(entries, "Day of the week")
 
@@ -147,8 +151,3 @@ class WeeklyReport : Fragment() {
     private val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 }
 
-class IntValueFormatter : ValueFormatter() {
-    override fun getFormattedValue(value: Float): String {
-        return value.toInt().toString()
-    }
-}
