@@ -153,6 +153,7 @@ class MainActivity : AppCompatActivity() {
             FirebaseManager.setUserStopwatch(index)
             FirebaseManager.setUserBlockNotiApp(index)
             FirebaseManager.setUserMusic(index)
+            FirebaseManager.setUserReminder(index)
         }
     }
 

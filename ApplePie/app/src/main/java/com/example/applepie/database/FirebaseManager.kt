@@ -34,6 +34,7 @@ object FirebaseManager {
     private lateinit var userStreak: List<DateTime>
     private lateinit var userBlockNotiApp: List<String>
     private lateinit var userMusic: Music
+    private var userReminder: Int = 1
     /*
 
     setter :
@@ -326,6 +327,36 @@ object FirebaseManager {
 
         val userPomodoroRef =  FirebaseDatabase.getInstance().getReference("users/$index/pomodoro")
         userPomodoroRef.setValue(mutablePomodoroList.toList())
+    }
+
+    fun setUserReminder(index: Int) {
+        val userReminderRef = FirebaseDatabase.getInstance().getReference("users/$index/reminder")
+
+        userReminderRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val reminderValue = dataSnapshot.getValue(Int::class.java)
+                if (reminderValue != null) {
+                    userReminder = reminderValue
+                    Log.d("Firebase", "Reminder value: $reminderValue")
+                } else {
+                    Log.d("Firebase", "Reminder value is null")
+                }
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("Firebase",databaseError.message)
+            }
+        })
+    }
+
+    fun getUserReminder(): Int{
+        return userReminder
+    }
+    fun updateUserReminder(index: Int, duration: Int) {
+        val userReminder =  FirebaseDatabase.getInstance().getReference("users/$index/reminder")
+
+        userReminder.setValue(duration)
     }
 
     fun addUserList(taskList: TaskList) {

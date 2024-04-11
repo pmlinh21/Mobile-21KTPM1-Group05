@@ -3,6 +3,7 @@ package com.example.applepie
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.EditText
+import android.widget.NumberPicker
 import android.widget.TextView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
+import kotlin.properties.Delegates
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +38,7 @@ class Account : Fragment() {
             indexUser = it.getInt(ARG_INDEX_USER)
             param2 = it.getString(ARG_PARAM2)
         }
+        reminder = FirebaseManager.getUserReminder()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,6 +81,7 @@ class Account : Fragment() {
 
         reminderButton.setOnClickListener {
             // TODO:  pop up input field for user to change
+            showTimePickerDialog()
         }
 
         logoutButton.setOnClickListener {
@@ -97,6 +102,43 @@ class Account : Fragment() {
             val alert = builder.create()
             alert.show()
         }
+    }
+
+    private fun showTimePickerDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_time_picker, null)
+        val hourPicker = dialogView.findViewById<NumberPicker>(R.id.hourPicker)
+        val minutePicker = dialogView.findViewById<NumberPicker>(R.id.minutePicker)
+
+        hourPicker.minValue = 0
+        hourPicker.maxValue = 23
+
+        minutePicker.minValue = 0
+        minutePicker.maxValue = 59
+
+        Log.i("account", (reminder/60).toString())
+        Log.i("account", (reminder%60).toString())
+        hourPicker.value = reminder / 60
+        minutePicker.value = reminder % 60
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(dialogView)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            val selectedHour = hourPicker.value
+            val selectedMinute = minutePicker.value
+            val duration = selectedHour * 60 + selectedMinute
+
+            Log.i("account", duration.toString())
+
+            val index = preferenceManager.getIndex()
+            FirebaseManager.updateUserReminder(index, duration)
+
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
     }
 
     companion object {
@@ -130,6 +172,8 @@ class Account : Fragment() {
     private lateinit var longestStreakText: TextView
 
     private lateinit var calendar: CalendarView
+
+    private var reminder by Delegates.notNull<Int>()
 
     private lateinit var preferenceManager: PreferenceManager
 }

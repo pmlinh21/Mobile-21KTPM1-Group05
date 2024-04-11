@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Music"
+                android:text="Music and White noise"
                 android:textColor="@color/white"
                 android:textSize="24dp"
                 android:textStyle="bold" />
