@@ -32,9 +32,9 @@ class MainActivity : AppCompatActivity() {
         username = preferenceManager.getUsername().toString()
 
         if (preferenceManager.isLogin() == false) {
-//            val loginActivity = Intent(this, LoginActivity::class.java)
-//            startActivity(loginActivity)
-//            finish()
+            val loginActivity = Intent(this, LoginActivity::class.java)
+            startActivity(loginActivity)
+            finish()
         }
 
 
