@@ -30,7 +30,7 @@
                 android:layout_marginLeft="10dp">
 
                 <TextView
-                    android:id="@+id/total_tasks"
+                    android:id="@+id/tasks_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -40,49 +40,10 @@
                     android:textSize="22sp"
                     android:textStyle="bold"/>
 
-                <RelativeLayout
-                    android:id="@+id/progress_layout_1"
-                    android:layout_width="220dp"
-                    android:layout_height="220dp"
-                    android:layout_gravity="center_horizontal">
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/circle_shape"
-                        android:indeterminate="false"
-                        android:progressDrawable="@drawable/circle_progress_bar"
-                        android:textAlignment="center" />
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/progress_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="100%"
-                            android:textColor="#33AC72"
-                            android:textSize="28sp"
-                            android:textStyle="bold"
-                            />
-
-                        <TextView
-                            android:id="@+id/progress_text_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/progress_text"
-                            android:layout_centerInParent="true"
-                            android:text="Tasks Completed"
-                            android:textColor="#817F7F"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-                </RelativeLayout>
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"/>
             </LinearLayout>
 
             <LinearLayout
