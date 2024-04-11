@@ -54,41 +54,54 @@ class AddList : Fragment() {
         listIconTV = view.findViewById<TextView>(R.id.list_icon_text_view)
         listNameET = view.findViewById<EditText>(R.id.list_name_edit_text)
 
+        listColorButtons = mutableListOf()
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_1))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_2))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_3))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_4))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_5))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_6))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_7))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_8))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_9))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_10))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_11))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_12))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_13))
+        listColorButtons.add(view.findViewById<Button>(R.id.list_color_button_14))
+
+        listColors = mutableListOf()
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_1, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_2, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_3, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_4, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_5, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_6, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_7, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_8, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_9, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_10, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_11, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_12, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_13, null))
+        listColors.add(ResourcesCompat.getColor(resources, R.color.list_color_14, null))
 
         chosenColorButton = listColorButtons[3]
+
+        setupListColorButtons()
     }
 
     private fun setupListColorButtons() {
-//        for (button in listColorButtons) {
-//            button.setOnClickListener {
-//                if (chosenColorButton != button) {
-//                    chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle, null)
-//                    chosenColorButton = button
-//                    chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle_border, null)
-//                    listIconTV.setTextColor(ResourcesCompat.getColor(resources, R.color.list_color_1, null))
-//                }
-//            }
-//        }
-//
-//        listColorButton2.setOnClickListener {
-//            if (chosenColorButton != listColorButton2) {
-//                chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle, null)
-//                chosenColorButton = listColorButton2
-//                chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle_border, null)
-//                listIconTV.setTextColor(ResourcesCompat.getColor(resources, R.color.list_color_2, null))
-//            }
-//        }
-//
-//        listColorButton3.setOnClickListener {
-//            if (chosenColorButton != listColorButton3) {
-//                chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle, null)
-//                chosenColorButton = listColorButton3
-//                chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle_border, null)
-//                listIconTV.setTextColor(ResourcesCompat.getColor(resources, R.color.list_color_3, null))
-//            }
-//        }
-
-
+        for (button in listColorButtons) {
+            button.setOnClickListener {
+                if (chosenColorButton != button) {
+                    chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle, null)
+                    chosenColorButton = button
+                    chosenColorButton.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_circle_border, null)
+                    listIconTV.setTextColor(listColors[listColorButtons.indexOf(button)])
+                }
+            }
+        }
     }
 
     companion object {
