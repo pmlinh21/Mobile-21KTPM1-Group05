@@ -186,8 +186,8 @@ class WeeklyReport : Fragment() {
         val yAxis: YAxis = barChart.axisLeft
         yAxis.setDrawGridLines(false)
         yAxis.setDrawAxisLine(false)
-        yAxis.axisMaximum = 0f
-        yAxis.axisMaximum = 18f
+        yAxis.axisMinimum = 0f
+        yAxis.axisMaximum = 12f
         yAxis.setLabelCount(6)
         yAxis.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -201,7 +201,7 @@ class WeeklyReport : Fragment() {
         dataSet.colors = colorsList
 
         val barData = BarData(dataSet)
-        barData.barWidth = 0.8f
+        barData.barWidth = 0.6f
         barChart.data = barData
         barData.setValueTextSize(12f)
 
@@ -237,9 +237,9 @@ class WeeklyReport : Fragment() {
 
         // Đếm số lượng task done cho mỗi ngày
         for (task in tasksList) {
-            val dueDateTime = task.due_datetime
+            val dueDateTime = task.due_datetime.substring(0, 10)
             for (day in daysOfWeek) {
-                if (dueDateTime.contains(day)) {
+                if (dueDateTime == day) {
                     if (task.isDone) {
                         doneTaskCountByDay[day] = doneTaskCountByDay.getValue(day) + 1
                     }
@@ -271,7 +271,7 @@ class WeeklyReport : Fragment() {
         val yAxis_1: YAxis = barChartDone.axisLeft
         yAxis_1.setDrawGridLines(false)
         yAxis_1.setDrawAxisLine(false)
-        yAxis_1.axisMaximum = 0f
+        yAxis_1.axisMinimum = 0f
         yAxis_1.axisMaximum = 100f
         yAxis_1.setLabelCount(10)
         yAxis_1.setValueFormatter(object : ValueFormatter() {
@@ -286,7 +286,7 @@ class WeeklyReport : Fragment() {
         dataSetDone.colors = colorsListDone
 
         val barDataDone = BarData(dataSetDone)
-        barDataDone.barWidth = 0.8f
+        barDataDone.barWidth = 0.6f
         barChartDone.data = barDataDone
         barDataDone.setValueTextSize(12f)
 
