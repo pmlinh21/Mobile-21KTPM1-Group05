@@ -18,4 +18,6 @@
     <string name="feature_1">Enhance focus with white noise</string>
     <string name="feature_2">Customize app notifications</string>
     <string name="feature_3">Monthly reports</string>
+    <string name="new_list">New List</string>
+    <string name="list_name">List Name</string>
 </resources>

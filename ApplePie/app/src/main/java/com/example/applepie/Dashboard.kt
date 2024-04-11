@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.applepie.model.TaskList
 import com.example.studentmanagementv4.ListRecyclerAdapter
@@ -44,8 +45,14 @@ class Dashboard : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
+        listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
+        addListTV = view.findViewById<TextView>(R.id.add_list_text_view)
 
+        setupListRV()
+        setupAddListTV()
+    }
+
+    private fun setupListRV() {
         val list1 = TaskList(1, "list_color_4", "briefcase", "Mobile")
         val list2 = TaskList(2, "list_color_3", "briefcase", "Physics")
         val list3 = TaskList(3, "list_color_2", "briefcase", "Math")
@@ -58,6 +65,15 @@ class Dashboard : Fragment() {
 //            val intent = Intent(this, EditActivity::class.java)
 //            intent.putExtra("id", student.id)
 //            startActivity(intent)
+        }
+    }
+
+    private fun setupAddListTV() {
+        addListTV.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, AddList()) // replace current fragment with new fragment
+                .addToBackStack(null) // Optional: Add transaction to back stack for navigation back
+                .commit()
         }
     }
 
@@ -80,4 +96,7 @@ class Dashboard : Fragment() {
                 }
             }
     }
+
+    private lateinit var addListTV: TextView
+    private lateinit var listRV: androidx.recyclerview.widget.RecyclerView
 }
