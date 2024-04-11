@@ -60,57 +60,61 @@ class MonthlyReport : Fragment() {
         lists.add(TaskList(3, "", "", "IELTS"))
         lists.add(TaskList(4, "", "", "ML"))
 
-        tasksList.add(Task("", "10:00 PM Sunday", 1, 45, false, "", "", "Project proposal"))
-        tasksList.add(Task("", "9:00 PM Sunday", 1, 44, false, "", "", "Writing report"))
-        tasksList.add(Task("", "7:00 PM Sunday", 3, 43, false, "", "", "IELTS Writing"))
-        tasksList.add(Task("", "5:00 PM Sunday", 4, 42, true, "", "", "Exercise4"))
-        tasksList.add(Task("", "11:00 AM Sunday", 1, 41, true, "", "", "Fix errors"))
-        tasksList.add(Task("", "10:00 AM Sunday", 1, 40, false, "", "", "Handle signup logic"))
-        tasksList.add(Task("", "10:00 AM Sunday", 1, 39, false, "", "", "Handle login logic"))
-        tasksList.add(Task("", "10:00 AM Sunday", 1, 38, true, "", "", "Design signup UI"))
-        tasksList.add(Task("", "10:00 AM Sunday", 1, 37, true, "", "", "Design login UI"))
-        tasksList.add(Task("", "10:00 AM Sunday", 1, 36, true, "", "", "Design homepage UI"))
+        //W1
+        tasksList.add(Task("", "10:00 PM 07/04/2024", 1, 45, false, "", "", "Project proposal"))
+        tasksList.add(Task("", "9:00 PM 07/04/2024", 1, 44, false, "", "", "Writing report"))
+        tasksList.add(Task("", "7:00 PM 07/04/2024", 3, 43, false, "", "", "IELTS Writing"))
+        tasksList.add(Task("", "5:00 PM 07/04/2024", 4, 42, true, "", "", "Exercise4"))
+        tasksList.add(Task("", "11:00 AM 07/04/2024", 1, 41, true, "", "", "Fix errors"))
+        tasksList.add(Task("", "10:00 AM 07/04/2024", 1, 40, false, "", "", "Handle signup logic"))
+        tasksList.add(Task("", "10:00 AM 07/04/2024", 1, 39, false, "", "", "Handle login logic"))
+        tasksList.add(Task("", "10:00 AM 07/04/2024", 1, 38, true, "", "", "Design signup UI"))
+        tasksList.add(Task("", "10:00 AM 07/04/2024", 1, 37, true, "", "", "Design login UI"))
+        tasksList.add(Task("", "10:00 AM 07/04/2024", 1, 36, true, "", "", "Design homepage UI"))
 
-        tasksList.add(Task("", "11:59 PM Saturday", 1, 35, true, "", "", "W01 - Kotlin"))
-        tasksList.add(Task("", "10:00 PM Saturday", 1, 34, true, "", "", "UI Learning"))
-        tasksList.add(Task("", "10:00 PM Saturday", 1, 33, true, "", "", "Menu demo"))
-        tasksList.add(Task("", "07:00 PM Saturday", 1, 32, true, "", "", "Action bar"))
-        tasksList.add(Task("", "12:00 AM Saturday", 1, 31, true, "", "", "Activity learning"))
-        tasksList.add(Task("", "12:00 AM Saturday", 1, 30, true, "", "", "Fragment learning"))
+        // W2
+        tasksList.add(Task("", "11:59 PM 30/03/2024", 1, 35, true, "", "", "W01 - Kotlin"))
+        tasksList.add(Task("", "10:00 PM 30/03/2024", 1, 34, true, "", "", "UI Learning"))
+        tasksList.add(Task("", "10:00 PM 30/03/2024", 1, 33, true, "", "", "Menu demo"))
+        tasksList.add(Task("", "07:00 PM 30/03/2024", 1, 32, true, "", "", "Action bar"))
+        tasksList.add(Task("", "12:00 AM 30/03/2024", 1, 31, true, "", "", "Activity learning"))
+        tasksList.add(Task("", "12:00 AM 30/03/2024", 1, 30, true, "", "", "Fragment learning"))
 
-        tasksList.add(Task("", "11:59 PM Friday", 1, 29, true,"", "", "W03 - UI + Auto layout"))
-        tasksList.add(Task("", "11:59 AM Friday", 3, 28, true,"", "", "IELTS Writing"))
-        tasksList.add(Task("", "11:59 AM Friday", 3, 27, false,"", "", "IELTS Speaking"))
+        tasksList.add(Task("", "11:59 PM 25/03/2024", 1, 29, true,"", "", "W03 - UI + Auto layout"))
+        tasksList.add(Task("", "11:59 AM 25/03/2024", 3, 28, true,"", "", "IELTS Writing"))
+        tasksList.add(Task("", "11:59 AM 25/03/2024", 3, 27, false,"", "", "IELTS Speaking"))
 
-        tasksList.add(Task("", "11:59 PM Thursday", 3, 26, true,"", "", "IELTS Listening ex1"))
-        tasksList.add(Task("", "11:59 PM Thursday", 3, 25, true,"", "", "IELTS Listening ex2"))
-        tasksList.add(Task("", "11:59 PM Thursday", 3, 24, true,"", "", "IELTS Listening ex3"))
-        tasksList.add(Task("", "11:59 PM Thursday", 3, 23, true,"", "", "IELTS Listening ex4"))
-        tasksList.add(Task("", "11:59 PM Thursday", 3, 22, true,"", "", "IELTS Reading ex1"))
-        tasksList.add(Task("", "11:59 PM Thursday", 3, 21, true,"", "", "IELTS Reading ex2"))
-        tasksList.add(Task("", "11:59 PM Thursday", 3, 20, true,"", "", "IELTS Reading ex3"))
+        // W3
+        tasksList.add(Task("", "11:59 PM 22/03/2024", 3, 26, true,"", "", "IELTS Listening ex1"))
+        tasksList.add(Task("", "11:59 PM 22/03/2024", 3, 25, true,"", "", "IELTS Listening ex2"))
+        tasksList.add(Task("", "11:59 PM 22/03/2024", 3, 24, true,"", "", "IELTS Listening ex3"))
+        tasksList.add(Task("", "11:59 PM 22/03/2024", 3, 23, true,"", "", "IELTS Listening ex4"))
+        tasksList.add(Task("", "11:59 PM 22/03/2024", 3, 22, true,"", "", "IELTS Reading ex1"))
+        tasksList.add(Task("", "11:59 PM 22/03/2024", 3, 21, true,"", "", "IELTS Reading ex2"))
+        tasksList.add(Task("", "11:59 PM 22/03/2024", 3, 20, true,"", "", "IELTS Reading ex3"))
 
-        tasksList.add(Task("", "11:59 PM Wednesday", 3, 19, true,"", "", "IELTS Speaking ex1"))
-        tasksList.add(Task("", "11:59 PM Wednesday", 3, 18, true,"", "", "IELTS Speaking ex2"))
+        tasksList.add(Task("", "11:59 PM 21/03/2024", 3, 19, true,"", "", "IELTS Speaking ex1"))
+        tasksList.add(Task("", "11:59 PM 21/03/2024", 3, 18, true,"", "", "IELTS Speaking ex2"))
 
-        tasksList.add(Task("", "10:00 PM Tuesday", 4, 17, true,"", "", "Exercise3"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 4, 16, true,"", "", "Homework3"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 15, true,"", "", "Report SD1"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 14, true,"", "", "Report SD2"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 13, false,"", "", "Report SD3"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 12, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 11, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 10, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 9, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 8, false,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 7, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Tuesday", 2, 6, true,"", "", "Design Layout"))
+        // W4
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 4, 17, true,"", "", "Exercise3"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 4, 16, true,"", "", "Homework3"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 15, true,"", "", "Report SD1"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 14, true,"", "", "Report SD2"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 13, false,"", "", "Report SD3"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 12, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 11, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 10, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 9, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 8, false,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 7, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "10:00 PM 15/03/2024", 2, 6, true,"", "", "Design Layout"))
 
-        tasksList.add(Task("", "10:00 PM Monday", 2, 5, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "9:00 PM Monday", 2, 4, false,"", "", "Handle login with google function"))
-        tasksList.add(Task("", "9:00 PM Monday", 2, 3, true,"", "", "Handle signup function"))
-        tasksList.add(Task("", "9:00 PM Monday", 2, 2, true,"", "", "Handle login function"))
-        tasksList.add(Task("", "9:00 PM Monday", 2, 1, true,"", "", "Handle popup function"))
+        tasksList.add(Task("", "10:00 PM 14/03/2024", 2, 5, true,"", "", "Design Layout"))
+        tasksList.add(Task("", "9:00 PM 14/03/2024", 2, 4, false,"", "", "Handle login with google function"))
+        tasksList.add(Task("", "9:00 PM 14/03/2024", 2, 3, true,"", "", "Handle signup function"))
+        tasksList.add(Task("", "9:00 PM 14/03/2024", 2, 2, true,"", "", "Handle login function"))
+        tasksList.add(Task("", "9:00 PM 14/03/2024", 2, 1, true,"", "", "Handle popup function"))
 
         val barChart: BarChart = rootView.findViewById(R.id.barChart)
         barChart.axisRight.setDrawLabels(false)
@@ -119,10 +123,10 @@ class MonthlyReport : Fragment() {
         barChart.axisRight.setDrawGridLines(false)
         barChart.xAxis.setDrawGridLines(false)
 
-        val taskCountByDay = mutableMapOf<String, Float>()
+        val taskCountByWeek = mutableMapOf<String, Float>()
 
         for (day in xValues) {
-            taskCountByDay[day] = 0f
+            taskCountByWeek[day] = 0f
         }
 
         // Đếm số lượng task cho mỗi ngày
@@ -130,7 +134,7 @@ class MonthlyReport : Fragment() {
             val dueDateTime = task.due_datetime
             for (day in xValues) {
                 if (dueDateTime.contains(day)) {
-                    taskCountByDay[day] = taskCountByDay.getValue(day) + 1
+                    taskCountByWeek[day] = taskCountByWeek.getValue(day) + 1
                 }
             }
         }
@@ -138,7 +142,7 @@ class MonthlyReport : Fragment() {
         // Tạo danh sách các BarEntry từ số lượng task theo ngày
         val entries = ArrayList<BarEntry>()
         for ((index, day) in xValues.withIndex()) {
-            val taskCount = taskCountByDay.getValue(day)
+            val taskCount = taskCountByWeek.getValue(day)
             entries.add(BarEntry(index.toFloat(), taskCount))
         }
 
@@ -214,7 +218,7 @@ class MonthlyReport : Fragment() {
         val percentages = mutableListOf<Float>()
         for (day in xValues) {
             val doneTaskCount = doneTaskCountByDay.getValue(day)
-            val totalTaskCount = taskCountByDay.getValue(day)
+            val totalTaskCount = taskCountByWeek.getValue(day)
             val percentage = if (totalTaskCount != 0f) {
                 (doneTaskCount / totalTaskCount) * 100
             } else {
