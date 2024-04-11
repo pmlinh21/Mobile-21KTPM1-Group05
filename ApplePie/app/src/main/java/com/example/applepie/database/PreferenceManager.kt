@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 
 class PreferenceManager(context: Context?) {
     val PRIVATE_MODE = 0
+    private val PREF_INDEX = 0
     private val PREF_NAME = "SharedPreferences"
     private val IS_LOGIN = "is_login"
 
@@ -21,12 +22,21 @@ class PreferenceManager(context: Context?) {
         editor?.commit()
     }
 
+    fun setIndex(index: Int) {
+        editor?.putInt("index", index)
+        editor?.commit()
+    }
+
     fun isLogin() : Boolean? {
         return pref?.getBoolean(IS_LOGIN, false)
     }
 
     fun getUsername(): String? {
         return pref?.getString("username", "")
+    }
+
+    fun getIndex(): Int? {
+        return pref?.getInt("index", 0)
     }
 
     fun removeData() {

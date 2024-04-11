@@ -35,11 +35,9 @@ class MainActivity : AppCompatActivity() {
         getInfoFromFirebase()
 
         if (preferenceManager.isLogin() == false) {
-//            val loginActivity = Intent(this, LoginActivity::class.java)
-//            startActivity(loginActivity)
-//            finish()
-        } else {
-            Log.d("List", FirebaseManager.getUserList().toString())
+            val loginActivity = Intent(this, LoginActivity::class.java)
+            startActivity(loginActivity)
+            finish()
         }
 
         setLanguage()
