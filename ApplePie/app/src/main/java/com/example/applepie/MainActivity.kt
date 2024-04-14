@@ -29,17 +29,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         preferenceManager = PreferenceManager(this)
-        username = preferenceManager.getUsername().toString()
-        index = preferenceManager.getIndex()
 
         if (preferenceManager.isLogin() == false ) {
             val loginActivity = Intent(this, LoginActivity::class.java)
             startActivity(loginActivity)
             finish()
+            return
         }
 
+        username = preferenceManager.getUsername().toString()
         index = preferenceManager.getIndex()!!
-        Log.i("index",index.toString())
+        Log.i("index", index.toString())
 
         getInfoFromFirebase()
 

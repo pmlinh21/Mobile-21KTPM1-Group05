@@ -34,16 +34,17 @@
         </LinearLayout>
 
         <ScrollView
-            android:theme="@style/Theme.MaterialComponents.Light"
             android:id="@+id/sv_createTask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="76dp"
-            android:paddingTop="16dp"
+            android:layout_marginTop="84dp"
             android:background="#F7F7F7"
             android:orientation="vertical"
             android:paddingHorizontal="24dp"
+            android:paddingTop="16dp"
+            android:theme="@style/Theme.MaterialComponents.Light"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_createTask">
 
@@ -71,21 +72,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:hint="Mobile project proposal"
-                    android:textColorHint="@color/grey"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="10dp"
                     app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusTopStart="10dp"
-                    app:boxBackgroundColor="@color/white">
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tie_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
+                        android:hint="Mobile project proposal"
+                        android:textColorHint="@color/grey"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="12dp"
                         android:textColor="@color/black" />
@@ -109,23 +111,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:hint="@string/description"
-                    android:textColorHint="@color/grey"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="10dp"
                     app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusTopStart="10dp"
-                    app:boxBackgroundColor="@color/white">
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tie_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:lines="5"
                         android:gravity="top|left"
                         android:inputType="textMultiLine"
+                        android:hint="@string/description"
+                        android:textColorHint="@color/grey"
+                        android:lines="5"
                         android:paddingHorizontal="8dp"
                         android:paddingVertical="12dp"
                         android:textColor="@color/black" />
@@ -149,20 +152,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:hint="04/04/2024"
-                    android:textColorHint="@color/grey"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
+                    android:clickable="false"
+                    app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="10dp"
                     app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusTopStart="10dp"
-                    app:boxBackgroundColor="@color/white">
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tie_duedate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="04/04/2024"
+                        android:textColorHint="@color/grey"
                         android:background="@null"
                         android:clickable="false"
                         android:cursorVisible="false"
@@ -188,23 +193,24 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_time"
                     style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                    android:layout_width="125dp"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:hint="10 : 00"
-                    android:textColorHint="@color/grey"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp"
+                    app:hintEnabled="false"
+                    app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="10dp"
                     app:boxCornerRadiusBottomStart="10dp"
                     app:boxCornerRadiusTopEnd="10dp"
                     app:boxCornerRadiusTopStart="10dp"
-                    app:boxBackgroundColor="@color/white">
+                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidthFocused="0dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/tie_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="10:00"
+                        android:textColorHint="@color/grey"
                         android:background="@null"
                         android:clickable="false"
                         android:cursorVisible="false"
@@ -232,8 +238,27 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="6dp"
-                    android:paddingHorizontal="6dp"
-                    android:background="@drawable/custom_spinner"/>
+                    android:background="@drawable/custom_spinner"
+                    android:paddingHorizontal="6dp" />
+
+                <TextView
+                    android:id="@+id/list_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:text="List"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/spn_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/custom_spinner"
+                    android:paddingHorizontal="6dp" />
 
                 <TextView
                     android:id="@+id/attachment_text"
@@ -249,28 +274,29 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="6dp">
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal">
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_attachment"
                         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="280dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="https://docs.google.com/..."
-                        android:textColorHint="@color/grey"
-                        app:boxStrokeWidth="0dp"
-                        app:boxStrokeWidthFocused="0dp"
+                        app:hintEnabled="false"
+                        app:boxBackgroundColor="@color/white"
                         app:boxCornerRadiusBottomEnd="10dp"
                         app:boxCornerRadiusBottomStart="10dp"
                         app:boxCornerRadiusTopEnd="10dp"
                         app:boxCornerRadiusTopStart="10dp"
-                        app:boxBackgroundColor="@color/white">
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="0dp">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/tie_attachment"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="https://docs.google.com/..."
+                            android:textColorHint="@color/grey"
                             android:background="@null"
                             android:inputType="text"
                             android:paddingHorizontal="8dp"
@@ -279,21 +305,21 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/btn_add_attachment"
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/ic_add_circle_outline"
-                        android:backgroundTint="@color/green" />
+<!--                    <Button-->
+<!--                        android:id="@+id/btn_add_attachment"-->
+<!--                        android:layout_width="42dp"-->
+<!--                        android:layout_height="42dp"-->
+<!--                        android:layout_alignParentEnd="true"-->
+<!--                        android:layout_centerVertical="true"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginStart="10dp"-->
+<!--                        android:background="@drawable/ic_add_circle_outline"-->
+<!--                        android:backgroundTint="@color/green" />-->
 
                 </LinearLayout>
 
                 <Button
-                    android:id="@+id/notification_btn"
+                    android:id="@+id/btn_createTask"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
