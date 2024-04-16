@@ -17,8 +17,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Task
+import com.example.applepie.model.TaskList
 import com.example.applepie.model.User
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DataSnapshot
@@ -108,35 +110,22 @@ class CreateTask : Fragment() {
 
         spnPriority.adapter = adapter
 
+        val taskLists = FirebaseManager.getUserList()
+
         val listNames = mutableListOf<String>()
-
-        userRef.child("lists").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                for (listSnapshot in snapshot.children) {
-                    val listName = listSnapshot.child("list_name").getValue(String::class.java)
-                    if (listName != null) {
-                        listNames.add(listName)
-                    }
-                }
-
-                val adt = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listNames)
-                adt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-                spnList.adapter = adt
-//                val lists = listNames.toTypedArray()
-//                val builder = AlertDialog.Builder(requireContext())
-//                builder.setTitle("Choose a list")
-//                    .setItems(lists) { _: DialogInterface?, which: Int ->
-//                        spnList.setSelection(which)
-//                    }
-//
-//                val dialog = builder.create()
-//                dialog.show()
+        val listNameToIdMap = mutableMapOf<String, Int>()
+        for (taskList in taskLists) {
+            val listName = taskList.list_name
+            if (listName.isNotEmpty()) {
+                listNames.add(listName)
+                listNameToIdMap[listName] = taskList.id_list
             }
+        }
 
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+        val adt = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listNames)
+        adt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spnList.adapter = adt
 
         btnCreateTask.setOnClickListener {
             val title = tieTitle.text.toString()
@@ -144,26 +133,22 @@ class CreateTask : Fragment() {
             val duedate = tieDuedate.text.toString()
             val time = tieTime.text.toString()
             val priority = spnPriority.selectedItem.toString()
-            val list = spnList.selectedItem.toString()
+            val listName = spnList.selectedItem.toString()
+            val idList = listNameToIdMap[listName]
             val attachment = tieAttachment.text.toString()
 
-            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    val user = Task(description = description, due_datetime = duedate + time, link = attachment, priority = priority, title = title)
-                    userRef.child("tasks").setValue(user).addOnCompleteListener { dbTask ->
-                        if (dbTask.isSuccessful) {
-//                            Toasty.success(this@CreateTask, "Create task successfully", Toast.LENGTH_SHORT, true).show()
-//                            finish()
-                        } else {
-//                            Toasty.error(this@RegisterActivity, "Failed to add user to database", Toast.LENGTH_SHORT, true).show()
-                        }
-                    }
-                }
+            val newTask = Task(
+                id_task = -1,
+                id_list = idList!!,
+                description = description,
+                due_datetime = duedate + ' ' + time,
+                link = attachment,
+                priority = priority,
+                title = title
+            )
+            FirebaseManager.addNewTask(newTask)
 
-                override fun onCancelled(databaseError: DatabaseError) {
-//                    Toasty.error(this@RegisterActivity, databaseError.message, Toast.LENGTH_SHORT, true).show()
-                }
-            })
+            Toasty.success(requireContext(), "Create task successfully!", Toast.LENGTH_SHORT, true).show()
         }
 
         return rootView

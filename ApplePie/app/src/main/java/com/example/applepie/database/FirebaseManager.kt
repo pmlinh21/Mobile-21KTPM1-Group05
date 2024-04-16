@@ -369,4 +369,19 @@ object FirebaseManager {
         )
         userListsRef.child(newListId.toString()).setValue(newList)
     }
+
+    fun addNewTask(task: Task) {
+        val newTaskId = userTask.size
+        val newTask = Task(
+            task.description,
+            task.due_datetime,
+            task.id_list,
+            newTaskId,
+            task.isDone,
+            task.link,
+            task.priority,
+            task.title
+        )
+        userTasksRef.child(newTaskId.toString()).setValue(newTask)
+    }
 }
