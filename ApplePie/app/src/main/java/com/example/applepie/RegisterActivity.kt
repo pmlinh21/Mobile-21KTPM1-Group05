@@ -72,7 +72,7 @@ class RegisterActivity : ComponentActivity() {
                                         val userCount = dataSnapshot.childrenCount.toInt()
 //                                        Log.i("nqlog", userCount.toString())
                                         val newUserRef = databaseReference.child(userCount.toString())
-                                        val user = User(email = email, password = password, username = username)
+                                        val user = User(email = email, password = password, username = username, id_user = userCount + 1)
                                         newUserRef.child("info").setValue(user).addOnCompleteListener { dbTask ->
                                             if (dbTask.isSuccessful) {
                                                 Toasty.success(this@RegisterActivity, "Sign up successfully", Toast.LENGTH_SHORT, true).show()
