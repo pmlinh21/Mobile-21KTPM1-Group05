@@ -235,25 +235,32 @@ class MonthlyReport : Fragment() {
                 if (e == null) return
 
                 val index = e.x.toInt()
+                Log.d("index: ", index.toString())
 
-                val calendar = Calendar.getInstance()
-                val currentWeekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH) - 1 // 0-based indexing
-
-                val weekOffset = index + 1 - currentWeekOfMonth
-
-                calendar.add(Calendar.WEEK_OF_MONTH, weekOffset)
-
-                val weekStartDate = calendar.time
-                Log.d("weekStartDate: ", weekStartDate.toString())
-                calendar.add(Calendar.DAY_OF_MONTH, 6)
-
-                val weekEndDate = calendar.time
-                Log.d("weekEndDate: ", weekEndDate.toString())
-
-                // Lọc ra các task của tuần được chọn
-                val tasksForSelectedWeek = tasksList.filter { task ->
-                    val taskDueDate = sdf.parse(task.due_datetime.substring(0, 10)) ?: return@filter false
-                    taskDueDate in weekStartDate..weekEndDate
+                var tasksForSelectedWeek: List<Task>
+                if(index == 0){
+                    tasksForSelectedWeek = tasksList.filter { task ->
+                        val taskDueDate = sdf.parse(task.due_datetime.substring(0, 10)) ?: return@filter false
+                        taskDueDate in firstWeekFirstDay..firstWeekLastDay
+                    }
+                }
+                else if(index == 1){
+                    tasksForSelectedWeek = tasksList.filter { task ->
+                        val taskDueDate = sdf.parse(task.due_datetime.substring(0, 10)) ?: return@filter false
+                        taskDueDate in secondWeekFirstDay..secondWeekLastDay
+                    }
+                }
+                else if(index == 2){
+                    tasksForSelectedWeek = tasksList.filter { task ->
+                        val taskDueDate = sdf.parse(task.due_datetime.substring(0, 10)) ?: return@filter false
+                        taskDueDate in thirdWeekFirstDay..thirdWeekLastDay
+                    }
+                }
+                else{
+                    tasksForSelectedWeek = tasksList.filter { task ->
+                        val taskDueDate = sdf.parse(task.due_datetime.substring(0, 10)) ?: return@filter false
+                        taskDueDate in fourthWeekFirstDay..lastDayOfMonth
+                    }
                 }
                 Log.d("tasksForSelectedWeek: ", tasksForSelectedWeek.toString())
 
