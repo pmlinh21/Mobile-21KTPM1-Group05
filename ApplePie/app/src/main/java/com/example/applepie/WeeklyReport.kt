@@ -7,19 +7,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
+import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,6 +85,16 @@ class WeeklyReport : Fragment() {
             sdf.parse(task.due_datetime)
         }
 
+        originTaskList = tasksList
+
+        taskText = rootView.findViewById(R.id.task_text)
+        if (tasksList.isEmpty()) {
+            taskText.text = "There are no tasks for today"
+            taskRecyclerView.visibility = View.GONE
+        } else {
+            taskText.visibility = View.GONE
+        }
+
         taskRecyclerView = rootView.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter(requireContext(), tasksList, lists)
 
@@ -124,12 +141,19 @@ class WeeklyReport : Fragment() {
         barChart.xAxis.textSize = 13f
         barChart.axisLeft.textSize = 12f
 
+        val maxTaskCount = taskCountByDay.values.maxOrNull() ?: 0f
+
         val yAxis: YAxis = barChart.axisLeft
         yAxis.setDrawGridLines(false)
         yAxis.setDrawAxisLine(false)
+
         yAxis.axisMinimum = 0f
-        yAxis.axisMaximum = 12f
-        yAxis.setLabelCount(6)
+        yAxis.axisMaximum = maxTaskCount + 4f
+
+        val maxLabelCount = if (yAxis.axisMaximum < 5) 3 else 5
+
+        yAxis.setLabelCount(maxLabelCount)
+
         yAxis.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
@@ -138,7 +162,15 @@ class WeeklyReport : Fragment() {
 
         val dataSet = BarDataSet(entries, "Day of the week")
 
-        val colorsList = listOf(Color.parseColor("#319F43"), Color.parseColor("#C6E9C7"))
+        val colorsList = mutableListOf<Int>()
+        for (taskCount in taskCountByDay) {
+            val color = if (taskCount.value >= 4f) {
+                Color.parseColor("#319F43")
+            } else {
+                Color.parseColor("#C6E9C7")
+            }
+            colorsList.add(color)
+        }
         dataSet.colors = colorsList
 
         val barData = BarData(dataSet)
@@ -163,6 +195,38 @@ class WeeklyReport : Fragment() {
 
         barChart.renderer = RoundedBarChart(barChart, barChart.animator, barChart.viewPortHandler)
 
+        barChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                // Check if an entry is selected
+                if (e == null) return
+                // Get the index of the selected entry
+                val index = e.x.toInt()
+                // Get the corresponding day of the week
+                val selectedDay = xValues[index]
+                // Filter the tasks list for the selected day
+                val calendar = Calendar.getInstance()
+                val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 0-based indexing
+                // Calculate the difference in days between the selected day and the current day
+                val dayOffset = index + 1 - currentDayOfWeek
+                // Move the calendar to the selected day by adding the offset
+                calendar.add(Calendar.DAY_OF_WEEK, dayOffset)
+                // Get the selected date in "yyyy-MM-dd" format
+                val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                // Filter the tasks list for the selected date
+                Log.d("selectedDate: ", selectedDate)
+                val tasksForSelectedDay = tasksList.filter { task ->
+                    task.due_datetime.startsWith(selectedDate)
+                }
+                // Update the RecyclerView with the filtered tasks list
+                updateRecyclerView(tasksForSelectedDay)
+            }
+
+            override fun onNothingSelected() {
+                // Handle case when nothing is selected, if needed
+            }
+        })
+
+        // Bar chart for %done
         val barChartDone: BarChart = rootView.findViewById(R.id.barChart_1)
         barChartDone.axisRight.setDrawLabels(false)
 
@@ -214,7 +278,7 @@ class WeeklyReport : Fragment() {
         yAxis_1.setDrawAxisLine(false)
         yAxis_1.axisMinimum = 0f
         yAxis_1.axisMaximum = 100f
-        yAxis_1.setLabelCount(10)
+        yAxis_1.setLabelCount(5)
         yAxis_1.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
@@ -223,7 +287,15 @@ class WeeklyReport : Fragment() {
 
         val dataSetDone = BarDataSet(entriesDone, "Completed Tasks")
 
-        val colorsListDone = listOf(Color.parseColor("#C6E9C7"), Color.parseColor("#C6E9C7"))
+        val colorsListDone = mutableListOf<Int>()
+        for (percentage in percentages) {
+            val color = if (percentage >= 75f) {
+                Color.parseColor("#319F43") // Màu xanh lá cây nếu % done >= 75%
+            } else {
+                Color.parseColor("#C6E9C7") // Màu xanh nước biển nếu % done < 75%
+            }
+            colorsListDone.add(color)
+        }
         dataSetDone.colors = colorsListDone
 
         val barDataDone = BarData(dataSetDone)
@@ -248,7 +320,28 @@ class WeeklyReport : Fragment() {
 
         barChartDone.renderer = RoundedBarChart(barChartDone, barChartDone.animator, barChartDone.viewPortHandler)
 
+        viewAllButton = rootView.findViewById(R.id.task_all)
+        viewAllButton.setOnClickListener {
+            adapter.updateData(originTaskList)
+            if (originTaskList.isEmpty()) {
+                taskText.text = "There are no tasks for this week"
+                taskText.visibility = View.VISIBLE
+            } else {
+                taskText.visibility = View.GONE
+            }
+        }
+
         return rootView
+    }
+
+    private fun updateRecyclerView(tasks: List<Task>) {
+        adapter.updateData(tasks)
+        if (tasks.isEmpty()) {
+            taskText.text = "There are no tasks for this day"
+            taskText.visibility = View.VISIBLE
+        } else {
+            taskText.visibility = View.GONE
+        }
     }
 
     companion object {
@@ -273,8 +366,9 @@ class WeeklyReport : Fragment() {
 
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter
-//    private val tasksList = ArrayList<Task>()
-//    private val lists = ArrayList<TaskList>()
+    private lateinit var taskText: TextView
+    private lateinit var viewAllButton: Button
+    private lateinit var originTaskList: List<Task>
     private val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 }
 

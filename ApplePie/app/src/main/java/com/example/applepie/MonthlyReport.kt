@@ -156,13 +156,19 @@ class MonthlyReport : Fragment() {
         barChart.xAxis.textSize = 14f
         barChart.axisLeft.textSize = 13f
 
+        val maxTaskCount = taskCountByWeek.values.maxOrNull() ?: 0f
 
         val yAxis: YAxis = barChart.axisLeft
         yAxis.setDrawGridLines(false)
         yAxis.setDrawAxisLine(false)
+
         yAxis.axisMinimum = 0f
-        yAxis.axisMaximum = 20f
-        yAxis.setLabelCount(8)
+        yAxis.axisMaximum = maxTaskCount + 4f
+
+        val maxLabelCount = if (yAxis.axisMaximum < 8) 3 else 6
+
+        yAxis.setLabelCount(maxLabelCount)
+
         yAxis.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
@@ -171,7 +177,18 @@ class MonthlyReport : Fragment() {
 
         val dataSet = BarDataSet(entries, "Week of month")
 
-        val colorsList = listOf(Color.parseColor("#319F43"), Color.parseColor("#C6E9C7"))
+        //val colorsList = listOf(Color.parseColor("#319F43"), Color.parseColor("#C6E9C7"))
+        //dataSet.colors = colorsList
+
+        val colorsList = mutableListOf<Int>()
+        for (taskCount in taskCountByWeek) {
+            val color = if (taskCount.value >= 20f) {
+                Color.parseColor("#319F43")
+            } else {
+                Color.parseColor("#C6E9C7")
+            }
+            colorsList.add(color)
+        }
         dataSet.colors = colorsList
 
         val barData = BarData(dataSet)
@@ -266,7 +283,15 @@ class MonthlyReport : Fragment() {
 
         val dataSetDone = BarDataSet(entriesDone, "Completed Tasks")
 
-        val colorsListDone = listOf(Color.parseColor("#C6E9C7"), Color.parseColor("#C6E9C7"))
+        val colorsListDone = mutableListOf<Int>()
+        for (percentage in percentages) {
+            val color = if (percentage >= 75f) {
+                Color.parseColor("#319F43")
+            } else {
+                Color.parseColor("#C6E9C7")
+            }
+            colorsListDone.add(color)
+        }
         dataSetDone.colors = colorsListDone
 
         val barDataDone = BarData(dataSetDone)
@@ -316,7 +341,5 @@ class MonthlyReport : Fragment() {
 
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter
-//    private val tasksList = ArrayList<Task>()
-//    private val lists = ArrayList<TaskList>()
     private val xValues = listOf("Week1", "Week2", "Week3", "Week4")
 }

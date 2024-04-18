@@ -17,7 +17,7 @@ import java.util.Locale
 class TaskListAdapter(context: Context, tasks: List<Task>, lists: List<TaskList>):
     RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
         private val context: Context = context
-        private val tasks: List<Task> = tasks
+        private var tasks: List<Task> = tasks
         private val lists: List<TaskList> = lists
         interface OnItemClickListener{
             fun onItemClick(task: Task)
@@ -70,5 +70,10 @@ class TaskListAdapter(context: Context, tasks: List<Task>, lists: List<TaskList>
         val totalTasks = tasks.size
         val doneTasks = tasks.filter { it.isDone }.count()
         return if (totalTasks > 0) doneTasks.toFloat() / totalTasks * 100 else 0.0f
+    }
+
+    fun updateData(newTasks: List<Task>) {
+        tasks = newTasks
+        notifyDataSetChanged()
     }
 }

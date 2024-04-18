@@ -78,12 +78,12 @@ class DailyReport : Fragment() {
             }
         }, 200)
 
-
+        taskText = rootView.findViewById(R.id.task_text)
         if (tasksList.isEmpty()) {
-            taskText = rootView.findViewById(R.id.task_text)
             taskText.text = "There are no tasks for today"
             taskRecyclerView.visibility = View.GONE
         } else {
+            taskText.visibility = View.GONE
             taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             taskRecyclerView.adapter = adapter
         }
