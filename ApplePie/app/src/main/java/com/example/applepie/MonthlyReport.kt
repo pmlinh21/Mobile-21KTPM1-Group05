@@ -2,14 +2,14 @@ package com.example.applepie
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.applepie.model.Task
-import com.example.applepie.model.TaskList
+import com.example.applepie.database.FirebaseManager
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -18,6 +18,9 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import java.util.Calendar
+import java.text.SimpleDateFormat
+import java.util.Date
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,72 +52,37 @@ class MonthlyReport : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_monthly_report, container, false)
 
+        val lists = FirebaseManager.getUserList()?: listOf()
+        var tasksList = FirebaseManager.getUserTask()?: listOf()
+
+        val currentTime = Calendar.getInstance().time
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        val appDate = sdf.format(currentTime)
+
+        // Lấy những task chưa quá hạn trong tháng
+        val calendar = Calendar.getInstance()
+        calendar.time = sdf.parse(appDate)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+
+        val firstDayOfMonth = calendar.time
+
+        calendar.add(Calendar.MONTH, 1)
+        calendar.add(Calendar.DAY_OF_MONTH, -1)
+        val lastDayOfMonth = calendar.time
+
+        tasksList = tasksList.filter { task ->
+            val taskDueDate = sdf.parse(task.due_datetime)
+            // Kiểm tra xem due_datetime của task có nằm trong tháng không
+            taskDueDate in firstDayOfMonth..lastDayOfMonth
+        }.sortedByDescending { task ->
+            sdf.parse(task.due_datetime)
+        }
+
         taskRecyclerView = rootView.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter(requireContext(), tasksList, lists)
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
-
-        lists.add(TaskList(1, 0, "", "mobile"))
-        lists.add(TaskList(2, 0, "", "SoftwareDesign"))
-        lists.add(TaskList(3, 0, "", "web"))
-        lists.add(TaskList(4, 0, "", "java"))
-
-        //W1
-        tasksList.add(Task("", "10:00 PM Week1", 1, 45, false, "", "", "Project proposal"))
-        tasksList.add(Task("", "9:00 PM Week1", 1, 44, false, "", "", "Writing report"))
-        tasksList.add(Task("", "7:00 PM Week1", 3, 43, false, "", "", "Fix popup errors"))
-        tasksList.add(Task("", "5:00 PM Week1", 4, 42, true, "", "", "Exercise4"))
-        tasksList.add(Task("", "11:00 AM Week1", 1, 41, true, "", "", "Fix errors"))
-        tasksList.add(Task("", "10:00 AM Week1", 1, 40, false, "", "", "Handle signup logic"))
-        tasksList.add(Task("", "10:00 AM Week1", 1, 39, false, "", "", "Handle login logic"))
-        tasksList.add(Task("", "10:00 AM Week1", 1, 38, true, "", "", "Design signup UI"))
-        tasksList.add(Task("", "10:00 AM Week1", 1, 37, true, "", "", "Design login UI"))
-        tasksList.add(Task("", "10:00 AM Week1", 1, 36, true, "", "", "Design homepage UI"))
-
-        // W2
-        tasksList.add(Task("", "11:59 PM Week2", 1, 35, true, "", "", "W01 - Kotlin"))
-        tasksList.add(Task("", "10:00 PM Week2", 1, 34, true, "", "", "UI Learning"))
-        tasksList.add(Task("", "10:00 PM Week2", 1, 33, true, "", "", "Menu demo"))
-        tasksList.add(Task("", "07:00 PM Week2", 1, 32, true, "", "", "Action bar"))
-        tasksList.add(Task("", "12:00 AM Week2", 1, 31, true, "", "", "Activity learning"))
-        tasksList.add(Task("", "12:00 AM Week2", 1, 30, true, "", "", "Fragment learning"))
-
-        tasksList.add(Task("", "11:59 PM Week2", 1, 29, true,"", "", "W03 - UI + Auto layout"))
-        tasksList.add(Task("", "11:59 AM Week2", 3, 28, true,"", "", "Writing doc"))
-        tasksList.add(Task("", "11:59 AM Week2", 3, 27, false,"", "", "Representation"))
-
-        // W3
-        tasksList.add(Task("", "11:59 PM Week3", 3, 26, true,"", "", "Doing ex1"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 25, true,"", "", "Doing ex2"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 24, true,"", "", "Doing ex3"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 23, true,"", "", "Doing ex4"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 22, true,"", "", "Report ex1"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 21, true,"", "", "Report ex2"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 20, true,"", "", "Report ex3"))
-
-        tasksList.add(Task("", "11:59 PM Week3", 3, 19, true,"", "", "Report ex1"))
-        tasksList.add(Task("", "11:59 PM Week3", 3, 18, true,"", "", "Report ex2"))
-
-        // W4
-        tasksList.add(Task("", "10:00 PM Week4", 4, 17, true,"", "", "Exercise3"))
-        tasksList.add(Task("", "10:00 PM Week4", 4, 16, true,"", "", "Homework3"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 15, true,"", "", "Report SD1"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 14, true,"", "", "Report SD2"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 13, false,"", "", "Report SD3"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 12, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 11, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 10, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 9, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 8, false,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 7, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "10:00 PM Week4", 2, 6, true,"", "", "Design Layout"))
-
-        tasksList.add(Task("", "10:00 PM Week4", 2, 5, true,"", "", "Design Layout"))
-        tasksList.add(Task("", "9:00 PM Week4", 2, 4, false,"", "", "Handle login with google function"))
-        tasksList.add(Task("", "9:00 PM Week4", 2, 3, true,"", "", "Handle signup function"))
-        tasksList.add(Task("", "9:00 PM Week4", 2, 2, true,"", "", "Handle login function"))
-        tasksList.add(Task("", "9:00 PM Week4", 2, 1, true,"", "", "Handle popup function"))
 
         val barChart: BarChart = rootView.findViewById(R.id.barChart)
         barChart.axisRight.setDrawLabels(false)
@@ -123,28 +91,67 @@ class MonthlyReport : Fragment() {
         barChart.axisRight.setDrawGridLines(false)
         barChart.xAxis.setDrawGridLines(false)
 
-        val taskCountByWeek = mutableMapOf<String, Float>()
-
-        for (week in xValues) {
-            taskCountByWeek[week] = 0f
+        val taskCountByWeek = mutableMapOf<Int, Float>()
+        for (i in 0 until 4) {
+            taskCountByWeek[i] = 0f
         }
+        // Lấy ngày đầu của tuần đầu tiên
+        calendar.time = firstDayOfMonth
+        val firstWeekFirstDay = calendar.time
+
+        // Tìm ngày cuối của tuần đầu tiên
+        calendar.add(Calendar.DAY_OF_MONTH, 6)
+        val firstWeekLastDay = calendar.time
+
+        // Lấy ngày đầu của tuần thứ hai
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val secondWeekFirstDay = calendar.time
+        //Log.d("secondWeekFirstDay: ", secondWeekFirstDay.toString())
+
+        // Tìm ngày cuối của tuần thứ hai
+        calendar.add(Calendar.DAY_OF_MONTH, 6)
+        val secondWeekLastDay = calendar.time
+        //Log.d("secondWeekLastDay: ", secondWeekLastDay.toString())
+
+        // Lấy ngày đầu của tuần thứ ba
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val thirdWeekFirstDay = calendar.time
+        //Log.d("thirdWeekFirstDay: ", thirdWeekFirstDay.toString())
+
+        // Tìm ngày cuối của tuần thứ ba
+        calendar.add(Calendar.DAY_OF_MONTH, 6)
+        val thirdWeekLastDay = calendar.time
+        //Log.d("thirdWeekLastDay: ", thirdWeekLastDay.toString())
+
+        // Lấy ngày đầu của tuần thứ tư
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val fourthWeekFirstDay = calendar.time
+        //Log.d("fourthWeekFirstDay: ", fourthWeekFirstDay.toString())
 
         // Đếm số lượng task cho mỗi tuần
         for (task in tasksList) {
-            val dueDateTime = task.due_datetime
-            for (week in xValues) {
-                if (dueDateTime.contains(week)) {
-                    taskCountByWeek[week] = taskCountByWeek.getValue(week) + 1
-                }
+            val dueDateTime = sdf.parse(task.due_datetime.substring(0, 10)) ?: continue
+            //Log.d("dueDateTime: ", dueDateTime.toString())
+
+            if (dueDateTime in firstWeekFirstDay..firstWeekLastDay) {
+                taskCountByWeek[0] = (taskCountByWeek[0] ?: 0f) + 1
+            } else if (dueDateTime in secondWeekFirstDay..secondWeekLastDay) {
+                taskCountByWeek[1] = (taskCountByWeek[1] ?: 0f) + 1
+            } else if (dueDateTime in thirdWeekFirstDay..thirdWeekLastDay) {
+                taskCountByWeek[2] = (taskCountByWeek[2] ?: 0f) + 1
+            } else {
+                taskCountByWeek[3] = (taskCountByWeek[3] ?: 0f) + 1
             }
         }
+        //Log.d("taskCountByWeek: ", taskCountByWeek.toString())
 
         // Tạo danh sách các BarEntry từ số lượng task theo ngày
         val entries = ArrayList<BarEntry>()
-        for ((index, week) in xValues.withIndex()) {
-            val taskCount = taskCountByWeek.getValue(week)
-            entries.add(BarEntry(index.toFloat(), taskCount))
+        for ((week, taskCount) in taskCountByWeek) {
+            entries.add(BarEntry(week.toFloat(), taskCount))
         }
+
+        //Log.d("entries: ", entries.toString())
 
         barChart.xAxis.textSize = 14f
         barChart.axisLeft.textSize = 13f
@@ -189,6 +196,7 @@ class MonthlyReport : Fragment() {
 
         barChart.renderer = RoundedBarChart(barChart, barChart.animator, barChart.viewPortHandler)
 
+        // Bar chart for % done
         val barChartDone: BarChart = rootView.findViewById(R.id.barChart_1)
         barChartDone.axisRight.setDrawLabels(false)
 
@@ -196,33 +204,42 @@ class MonthlyReport : Fragment() {
         barChartDone.axisRight.setDrawGridLines(false)
         barChartDone.xAxis.setDrawGridLines(false)
 
-        val doneTaskCountByWeek = mutableMapOf<String, Float>()
+        val doneTaskCountByWeek = mutableMapOf<Int, Float>()
 
-        for (week in xValues) {
-            doneTaskCountByWeek[week] = 0f
+        for (i in 0 until 4) {
+            doneTaskCountByWeek[i] = 0f
         }
 
         // Đếm số lượng task done cho mỗi week
         for (task in tasksList) {
-            val dueDateTime = task.due_datetime
-            for (week in xValues) {
-                if (dueDateTime.contains(week)) {
-                    if (task.isDone) {
-                        doneTaskCountByWeek[week] = doneTaskCountByWeek.getValue(week) + 1
-                    }
-                }
+            val dueDateTime = sdf.parse(task.due_datetime.substring(0, 10)) ?: continue
+            //Log.d("task: ", task.toString())
+
+            if (dueDateTime in firstWeekFirstDay..firstWeekLastDay) {
+                if(task.isDone)
+                    doneTaskCountByWeek[0] = (doneTaskCountByWeek[0] ?: 0f) + 1
+            } else if (dueDateTime in secondWeekFirstDay..secondWeekLastDay) {
+                if(task.isDone)
+                    doneTaskCountByWeek[1] = (doneTaskCountByWeek[1] ?: 0f) + 1
+            } else if (dueDateTime in thirdWeekFirstDay..thirdWeekLastDay) {
+                if(task.isDone)
+                    doneTaskCountByWeek[2] = (doneTaskCountByWeek[2] ?: 0f) + 1
+            } else {
+                if(task.isDone)
+                    doneTaskCountByWeek[3] = (doneTaskCountByWeek[3] ?: 0f) + 1
             }
         }
+        //Log.d("doneTaskCountByWeek: ", doneTaskCountByWeek.toString())
 
         // Tạo danh sách các BarEntry từ số lượng task done theo week
         val percentages = mutableListOf<Float>()
-        for (week in xValues) {
-            val doneTaskCount = doneTaskCountByWeek.getValue(week)
-            val totalTaskCount = taskCountByWeek.getValue(week)
+        for (i in 0 until 4) {
+            val doneTaskCount = doneTaskCountByWeek[i] ?: 0f
+            val totalTaskCount = taskCountByWeek[i] ?: 0f
             val percentage = if (totalTaskCount != 0f) {
-                (doneTaskCount / totalTaskCount) * 100
+                doneTaskCount / totalTaskCount * 100
             } else {
-                0f
+                0f // Để tránh chia cho 0
             }
             percentages.add(percentage)
         }
@@ -299,7 +316,7 @@ class MonthlyReport : Fragment() {
 
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter
-    private val tasksList = ArrayList<Task>()
-    private val lists = ArrayList<TaskList>()
+//    private val tasksList = ArrayList<Task>()
+//    private val lists = ArrayList<TaskList>()
     private val xValues = listOf("Week1", "Week2", "Week3", "Week4")
 }

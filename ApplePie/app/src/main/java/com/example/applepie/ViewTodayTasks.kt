@@ -61,10 +61,8 @@ class ViewTodayTasks : Fragment() {
 
         // Lấy những task có due_datetime sau hoặc bằng today (task chưa quá hạn)
         tasksList = tasksList.filter { task ->
-            val taskDueDate = sdf_1.parse(task.due_datetime)
-            val appDateTime = sdf_1.parse(appDate)
             val taskDueDate_1 = task.due_datetime.substring(0, 10)
-            taskDueDate?.after(appDateTime) ?: false || taskDueDate_1 == appDate
+            (taskDueDate_1 == appDate) ?: false
         }.sortedByDescending { task ->
             sdf_1.parse(task.due_datetime)
         }
@@ -74,17 +72,6 @@ class ViewTodayTasks : Fragment() {
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
-
-//        lists.add(TaskList(1, 0, "", "Mobile"))
-//        lists.add(TaskList(2, 0, "", "SoftwareDesign"))
-//
-//        tasksList.add(Task("", "10:00 AM", 1, 1, false, "", "", "Project Proposal"))
-//        tasksList.add(Task("", "10:00 PM", 1, 2, true, "", "", "W01 - Kotlin"))
-//        tasksList.add(Task("", "11:59 AM", 1, 3, false,"", "", "W03 - UI + Auto layout"))
-//        tasksList.add(Task("", "8:00 PM", 2, 3, false,"", "", "Design Layout"))
-//        tasksList.add(Task("", "9:00 PM", 2, 3, true,"", "", "Handle login function"))
-
-
         return rootView
     }
 
@@ -111,6 +98,4 @@ class ViewTodayTasks : Fragment() {
     private lateinit var today: TextView
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter1
-//    private val tasksList = ArrayList<Task>()
-//    private val lists = ArrayList<TaskList>()
 }

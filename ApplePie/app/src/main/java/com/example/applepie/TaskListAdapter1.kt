@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
+import java.text.SimpleDateFormat
 
 class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList>):
     RecyclerView.Adapter<TaskListAdapter1.ViewHolder>() {
@@ -44,7 +45,9 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
             holder.taskStatus_1.visibility = View.VISIBLE
         }
 
-        holder.dueDateTextView.text = currentTask.due_datetime
+        val sdf_1 = SimpleDateFormat("dd-MM-yyyy")
+        val formatDate = sdf_1.format(currentTask.due_datetime)
+        holder.dueDateTextView.text = formatDate
 
         val matchingList = lists.find { it.id_list == currentTask.id_list }
         val listName = matchingList?.list_name ?: "Unknown List"

@@ -10,8 +10,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
-import com.example.applepie.model.Task
-import com.example.applepie.model.TaskList
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -85,63 +83,6 @@ class WeeklyReport : Fragment() {
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
-
-//        lists.add(TaskList(1, 0, "", "Mobile"))
-//        lists.add(TaskList(2, 0, "", "SoftwareDesign"))
-//        lists.add(TaskList(3, 0, "", "IELTS"))
-//        lists.add(TaskList(4, 0, "", "ML"))
-
-//        tasksList.add(Task("", "10:00 PM Sunday", 1, 45, false, "", "", "Project proposal"))
-//        tasksList.add(Task("", "9:00 PM Sunday", 1, 44, false, "", "", "Writing report"))
-//        tasksList.add(Task("", "7:00 PM Sunday", 3, 43, false, "", "", "IELTS Writing"))
-//        tasksList.add(Task("", "5:00 PM Sunday", 4, 42, true, "", "", "Exercise4"))
-//        tasksList.add(Task("", "11:00 AM Sunday", 1, 41, true, "", "", "Fix errors"))
-//        tasksList.add(Task("", "10:00 AM Sunday", 1, 40, false, "", "", "Handle signup logic"))
-//        tasksList.add(Task("", "10:00 AM Sunday", 1, 39, false, "", "", "Handle login logic"))
-//        tasksList.add(Task("", "10:00 AM Sunday", 1, 38, true, "", "", "Design signup UI"))
-//        tasksList.add(Task("", "10:00 AM Sunday", 1, 37, true, "", "", "Design login UI"))
-//        tasksList.add(Task("", "10:00 AM Sunday", 1, 36, true, "", "", "Design homepage UI"))
-//
-//        tasksList.add(Task("", "11:59 PM Saturday", 1, 35, true, "", "", "W01 - Kotlin"))
-//        tasksList.add(Task("", "10:00 PM Saturday", 1, 34, true, "", "", "UI Learning"))
-//        tasksList.add(Task("", "10:00 PM Saturday", 1, 33, true, "", "", "Menu demo"))
-//        tasksList.add(Task("", "07:00 PM Saturday", 1, 32, true, "", "", "Action bar"))
-//        tasksList.add(Task("", "12:00 AM Saturday", 1, 31, true, "", "", "Activity learning"))
-//        tasksList.add(Task("", "12:00 AM Saturday", 1, 30, true, "", "", "Fragment learning"))
-//
-//        tasksList.add(Task("", "11:59 PM Friday", 1, 29, true,"", "", "W03 - UI + Auto layout"))
-//        tasksList.add(Task("", "11:59 AM Friday", 3, 28, true,"", "", "IELTS Writing"))
-//        tasksList.add(Task("", "11:59 AM Friday", 3, 27, false,"", "", "IELTS Speaking"))
-//
-//        tasksList.add(Task("", "11:59 PM Thursday", 3, 26, true,"", "", "IELTS Listening ex1"))
-//        tasksList.add(Task("", "11:59 PM Thursday", 3, 25, true,"", "", "IELTS Listening ex2"))
-//        tasksList.add(Task("", "11:59 PM Thursday", 3, 24, true,"", "", "IELTS Listening ex3"))
-//        tasksList.add(Task("", "11:59 PM Thursday", 3, 23, true,"", "", "IELTS Listening ex4"))
-//        tasksList.add(Task("", "11:59 PM Thursday", 3, 22, true,"", "", "IELTS Reading ex1"))
-//        tasksList.add(Task("", "11:59 PM Thursday", 3, 21, true,"", "", "IELTS Reading ex2"))
-//        tasksList.add(Task("", "11:59 PM Thursday", 3, 20, true,"", "", "IELTS Reading ex3"))
-//
-//        tasksList.add(Task("", "11:59 PM Wednesday", 3, 19, true,"", "", "IELTS Speaking ex1"))
-//        tasksList.add(Task("", "11:59 PM Wednesday", 3, 18, true,"", "", "IELTS Speaking ex2"))
-//
-//        tasksList.add(Task("", "10:00 PM Tuesday", 4, 17, true,"", "", "Exercise3"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 4, 16, true,"", "", "Homework3"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 15, true,"", "", "Report SD1"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 14, true,"", "", "Report SD2"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 13, false,"", "", "Report SD3"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 12, true,"", "", "Design Layout"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 11, true,"", "", "Design Layout"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 10, true,"", "", "Design Layout"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 9, true,"", "", "Design Layout"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 8, false,"", "", "Design Layout"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 7, true,"", "", "Design Layout"))
-//        tasksList.add(Task("", "10:00 PM Tuesday", 2, 6, true,"", "", "Design Layout"))
-//
-//        tasksList.add(Task("", "10:00 PM Monday", 2, 5, true,"", "", "Design Layout"))
-//        tasksList.add(Task("", "9:00 PM Monday", 2, 4, false,"", "", "Handle login with google function"))
-//        tasksList.add(Task("", "9:00 PM Monday", 2, 3, true,"", "", "Handle signup function"))
-//        tasksList.add(Task("", "9:00 PM Monday", 2, 2, true,"", "", "Handle login function"))
-//        tasksList.add(Task("", "9:00 PM Monday", 2, 1, true,"", "", "Handle popup function"))
 
         val barChart: BarChart = rootView.findViewById(R.id.barChart)
         barChart.axisRight.setDrawLabels(false)
