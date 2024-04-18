@@ -89,7 +89,7 @@ class WeeklyReport : Fragment() {
 
         taskText = rootView.findViewById(R.id.task_text)
         if (tasksList.isEmpty()) {
-            taskText.text = "There are no tasks for today"
+            taskText.text = "There are no tasks for this week"
             taskRecyclerView.visibility = View.GONE
         } else {
             taskText.visibility = View.GONE
@@ -197,27 +197,23 @@ class WeeklyReport : Fragment() {
 
         barChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
             override fun onValueSelected(e: Entry?, h: Highlight?) {
-                // Check if an entry is selected
                 if (e == null) return
-                // Get the index of the selected entry
+
                 val index = e.x.toInt()
-                // Get the corresponding day of the week
-                val selectedDay = xValues[index]
-                // Filter the tasks list for the selected day
+
                 val calendar = Calendar.getInstance()
                 val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 0-based indexing
-                // Calculate the difference in days between the selected day and the current day
+
                 val dayOffset = index + 1 - currentDayOfWeek
-                // Move the calendar to the selected day by adding the offset
+
                 calendar.add(Calendar.DAY_OF_WEEK, dayOffset)
-                // Get the selected date in "yyyy-MM-dd" format
+
                 val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-                // Filter the tasks list for the selected date
-                Log.d("selectedDate: ", selectedDate)
+
                 val tasksForSelectedDay = tasksList.filter { task ->
                     task.due_datetime.startsWith(selectedDate)
                 }
-                // Update the RecyclerView with the filtered tasks list
+
                 updateRecyclerView(tasksForSelectedDay)
             }
 

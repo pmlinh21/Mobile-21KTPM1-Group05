@@ -7,20 +7,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
+import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import java.util.Calendar
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,6 +83,16 @@ class MonthlyReport : Fragment() {
             taskDueDate in firstDayOfMonth..lastDayOfMonth
         }.sortedByDescending { task ->
             sdf.parse(task.due_datetime)
+        }
+
+        originTaskList = tasksList
+
+        taskText = rootView.findViewById(R.id.task_text)
+        if (tasksList.isEmpty()) {
+            taskText.text = "There are no tasks for this month"
+            taskRecyclerView.visibility = View.GONE
+        } else {
+            taskText.visibility = View.GONE
         }
 
         taskRecyclerView = rootView.findViewById(R.id.recyclerView)
@@ -213,6 +230,41 @@ class MonthlyReport : Fragment() {
 
         barChart.renderer = RoundedBarChart(barChart, barChart.animator, barChart.viewPortHandler)
 
+        barChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
+            override fun onValueSelected(e: Entry?, h: Highlight?) {
+                if (e == null) return
+
+                val index = e.x.toInt()
+
+                val calendar = Calendar.getInstance()
+                val currentWeekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH) - 1 // 0-based indexing
+
+                val weekOffset = index + 1 - currentWeekOfMonth
+
+                calendar.add(Calendar.WEEK_OF_MONTH, weekOffset)
+
+                val weekStartDate = calendar.time
+                Log.d("weekStartDate: ", weekStartDate.toString())
+                calendar.add(Calendar.DAY_OF_MONTH, 6)
+
+                val weekEndDate = calendar.time
+                Log.d("weekEndDate: ", weekEndDate.toString())
+
+                // Lọc ra các task của tuần được chọn
+                val tasksForSelectedWeek = tasksList.filter { task ->
+                    val taskDueDate = sdf.parse(task.due_datetime.substring(0, 10)) ?: return@filter false
+                    taskDueDate in weekStartDate..weekEndDate
+                }
+                Log.d("tasksForSelectedWeek: ", tasksForSelectedWeek.toString())
+
+                updateRecyclerView(tasksForSelectedWeek)
+            }
+
+            override fun onNothingSelected() {
+                // Handle case when nothing is selected, if needed
+            }
+        })
+
         // Bar chart for % done
         val barChartDone: BarChart = rootView.findViewById(R.id.barChart_1)
         barChartDone.axisRight.setDrawLabels(false)
@@ -316,7 +368,28 @@ class MonthlyReport : Fragment() {
 
         barChartDone.renderer = RoundedBarChart(barChartDone, barChartDone.animator, barChartDone.viewPortHandler)
 
+        viewAllButton = rootView.findViewById(R.id.task_all)
+        viewAllButton.setOnClickListener {
+            adapter.updateData(originTaskList)
+            if (originTaskList.isEmpty()) {
+                taskText.text = "There are no tasks for this month"
+                taskText.visibility = View.VISIBLE
+            } else {
+                taskText.visibility = View.GONE
+            }
+        }
+
         return rootView
+    }
+
+    private fun updateRecyclerView(tasks: List<Task>) {
+        adapter.updateData(tasks)
+        if (tasks.isEmpty()) {
+            taskText.text = "There are no tasks for this day"
+            taskText.visibility = View.VISIBLE
+        } else {
+            taskText.visibility = View.GONE
+        }
     }
 
     companion object {
@@ -341,5 +414,8 @@ class MonthlyReport : Fragment() {
 
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter
+    private lateinit var taskText: TextView
+    private lateinit var viewAllButton: Button
+    private lateinit var originTaskList: List<Task>
     private val xValues = listOf("Week1", "Week2", "Week3", "Week4")
 }
