@@ -81,9 +81,11 @@ class WeeklyReport : Fragment() {
             val taskDueDate = sdf.parse(task.due_datetime)
             // Kiểm tra xem due_datetime của task có nằm trong tuần không
             taskDueDate in firstDayOfWeek..lastDayOfWeek
-        }.sortedByDescending { task ->
-            sdf.parse(task.due_datetime)
-        }
+        }.sortedWith(compareByDescending<Task> { task ->
+            task.due_datetime.substring(0, 10)
+        }.thenByDescending { task ->
+            task.due_datetime.substring(11)
+        })
 
         originTaskList = tasksList
 

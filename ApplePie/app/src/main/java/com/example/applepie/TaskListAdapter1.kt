@@ -16,7 +16,7 @@ import java.util.Locale
 class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList>):
     RecyclerView.Adapter<TaskListAdapter1.ViewHolder>() {
     private val context: Context = context
-    private val tasks: List<Task> = tasks
+    private var tasks: List<Task> = tasks
     private val lists: List<TaskList> = lists
     interface OnItemClickListener{
         fun onItemClick(task: Task)
@@ -48,8 +48,8 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
 
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val formattedDate = sdf.parse(currentTask.due_datetime)
-        val formattedDateString = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(formattedDate)
-        holder.dueDateTextView.text = formattedDateString
+        val formattedTimeString = SimpleDateFormat("HH:mm", Locale.getDefault()).format(formattedDate)
+        holder.dueDateTextView.text = formattedTimeString
 
         val matchingList = lists.find { it.id_list == currentTask.id_list }
         val listName = matchingList?.list_name ?: "Unknown List"
@@ -69,5 +69,10 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
         val totalTasks = tasks.size
         val doneTasks = tasks.filter { it.isDone }.count()
         return if (totalTasks > 0) doneTasks.toFloat() / totalTasks * 100 else 0.0f
+    }
+
+    fun updateData(newTasks: List<Task>) {
+        tasks = newTasks
+        notifyDataSetChanged()
     }
 }

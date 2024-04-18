@@ -42,8 +42,9 @@
                 app:layout_constraintTop_toBottomOf="@+id/dashboard_title">
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:id="@+id/previous_date"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="2dp"
                     android:layout_gravity="center"
@@ -53,8 +54,8 @@
                     android:layout_width="26dp"
                     android:layout_height="26dp"
                     android:layout_marginRight="5dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="60dp"
                     android:src="@drawable/ic_today_calendar" />
 
                 <TextView
@@ -65,8 +66,18 @@
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     android:textStyle="bold"
+                    android:layout_marginTop="3dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/dashboard_title" />
+
+                <ImageView
+                    android:id="@+id/next_date"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginLeft="65dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_chevron_right" />
+
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -81,6 +92,16 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:elevation="2dp">
+
+                <TextView
+                    android:id="@+id/task_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Tasks text"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"

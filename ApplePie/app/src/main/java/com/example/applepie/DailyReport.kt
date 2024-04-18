@@ -60,12 +60,16 @@ class DailyReport : Fragment() {
         val appDate = sdf.format(currentTime)
 
         // Lấy những task có due_datetime sau hoặc bằng today (task chưa quá hạn)
+//        tasksList = tasksList.filter { task ->
+//            val taskDueDate_1 = task.due_datetime.substring(0, 10)
+//            (taskDueDate_1 == appDate) ?: false
+//        }.sortedByDescending { task ->
+//            sdf.parse(task.due_datetime)
+//        }
         tasksList = tasksList.filter { task ->
-            val taskDueDate_1 = task.due_datetime.substring(0, 10)
-            (taskDueDate_1 == appDate) ?: false
-        }.sortedByDescending { task ->
-            sdf.parse(task.due_datetime)
-        }
+            val taskDueDate = task.due_datetime.substring(0, 10)
+            (taskDueDate == appDate) ?: false
+        }.sortedWith(compareByDescending<Task> { it.due_datetime.substring(11) })
 
         adapter = TaskListAdapter(requireContext(), tasksList, lists)
 
