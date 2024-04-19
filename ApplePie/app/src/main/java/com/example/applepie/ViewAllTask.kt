@@ -117,7 +117,7 @@ class ViewAllTask : Fragment() {
             val taskDueDate = LocalDate.parse(task.due_datetime.substring(0, 10))
             taskDueDate == date
         }.sortedWith(compareByDescending<Task> { it.due_datetime.substring(11) })
-
+        //Log.d("newTaskList: ", newTaskList.toString())
         adapter.updateData(newTaskList)
     }
 
@@ -131,6 +131,7 @@ class ViewAllTask : Fragment() {
         }
     }
     private fun configureBinders(rootView: View, daysOfWeek: List<DayOfWeek>) {
+        val calendarView = rootView.findViewById<com.kizitonwose.calendar.view.CalendarView>(R.id.exFiveCalendar)
         // Container for each day view in the calendar
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay
@@ -139,20 +140,24 @@ class ViewAllTask : Fragment() {
             init {
                 view.setOnClickListener {
                     if (day.position == DayPosition.MonthDate) {
+                        //Log.d("Click: ", selectedDate.toString())
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
                             selectedDate = day.date
+                            //Log.d("Click after: ", selectedDate.toString())
                             updateAdapterForDate(day.date)
+                            calendarView.notifyDateChanged(day.date)
                             // You can notify the CalendarView to update here if needed
                             oldDate?.let {
                                 // Notify the CalendarView to update the old date if needed
+                                calendarView.notifyDateChanged(it)
                             }
                         }
                     }
                 }
             }
         }
-        val calendarView = rootView.findViewById<com.kizitonwose.calendar.view.CalendarView>(R.id.exFiveCalendar)
+
         calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, data: CalendarDay) {
@@ -167,6 +172,8 @@ class ViewAllTask : Fragment() {
                 BottomView.background = null
 
                 if (data.position == DayPosition.MonthDate) {
+                    //Log.d("selectedDate: ", selectedDate.toString())
+
                     container.textView.setTextColorRes(R.color.black)
                     container.layout.setBackgroundResource(if (selectedDate == data.date) R.drawable.select_bg else 0)
 
@@ -175,13 +182,12 @@ class ViewAllTask : Fragment() {
                         taskDueDate == data.date
                     }.sortedWith(compareByDescending<Task> { it.due_datetime.substring(11) })
 
-                    Log.d("tasksList: ", tasksList.toString())
+                    //Log.d("tasksList: ", tasksList.toString())
                     if (tasksList.isNotEmpty()) {
-                        adapter = TaskCalendarAdapter(requireContext(), tasksList, lists)
-
-                        taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-                        taskRecyclerView.adapter = adapter
-
+//                        adapter = TaskCalendarAdapter(requireContext(), tasksList, lists)
+//                        taskRecyclerView.adapter = adapter
+                        //adapter.updateData(tasksList)
+                        //taskRecyclerView.adapter = adapter
                         val priorityColor = getPriorityColor(tasksList[0].priority)
                         if (tasksList.size == 1) {
                             BottomView.setBackgroundColor(context.getColorCompat(priorityColor))
