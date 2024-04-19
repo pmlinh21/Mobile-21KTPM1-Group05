@@ -36,4 +36,11 @@
     <color name="list_color_11">#787B89</color>
     <color name="list_color_12">#E890CF</color>
 
+    <color name="colorPrimaryDark">#303F9F</color>
+
+    <color name="none_color">#31B2FC</color>
+    <color name="low_color">#FFD600</color>
+    <color name="medium_color">#FF8540</color>
+    <color name="high_color">#F24E1E</color>
+
 </resources>

@@ -59,6 +59,14 @@ class Dashboard : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        val viewAllTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewAllTask)
+        viewAllTask.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ViewAllTask.newInstance("", ""))
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     private fun setupListRV() {

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="1dp"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+        <TextView
+            android:id="@+id/dueDateTextView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#5D4037"
+            android:gravity="center"
+            android:lineSpacingExtra="2.5dp"
+            android:textAllCaps="true"
+            android:textColor="#DCDCDC"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1.1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.143"
+            tools:text="THU\nJUN 30\n14:00" />
+
+        <FrameLayout
+            android:id="@+id/TaskStatusCircle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/dueDateTextView"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintStart_toEndOf="@id/dueDateTextView"
+            app:layout_constraintTop_toTopOf="@id/dueDateTextView">
+
+            <ImageView
+                android:id="@+id/taskStatus"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_circular" />
+
+            <ImageView
+                android:id="@+id/taskStatus_1"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_done_green"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/taskDetailLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@id/TaskStatusCircle"
+            app:layout_constraintDimensionRatio="W,4.6:1"
+            app:layout_constraintStart_toEndOf="@id/TaskStatusCircle"
+            app:layout_constraintTop_toTopOf="@id/TaskStatusCircle"
+            android:paddingLeft="5dp">
+
+            <TextView
+                android:id="@+id/taskTitleTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                tools:text="Task title" />
+
+            <TextView
+                android:id="@+id/listTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                tools:text="List name" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#CCCCCC" />
+</LinearLayout>

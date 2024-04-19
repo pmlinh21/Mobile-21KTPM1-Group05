@@ -19,6 +19,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -31,6 +32,8 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -79,6 +82,10 @@ dependencies {
     implementation("com.github.GrenderG:Toasty:1.5.2")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation("com.kizitonwose.calendar:compose:2.5.0")
+    implementation("com.kizitonwose.calendar:view:2.5.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
