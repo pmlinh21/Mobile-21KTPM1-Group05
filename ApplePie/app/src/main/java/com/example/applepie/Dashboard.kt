@@ -125,6 +125,7 @@ class Dashboard : Fragment() {
         for (task in tasks) {
             val matchingList = lists.find { it.id_list == task.id_list }
             task.listName = matchingList?.list_name ?: "Unknown List"
+            task.list_color = matchingList?.list_color ?: -1
             Log.d("Task", task.toString())
         }
 

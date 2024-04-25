@@ -11,5 +11,6 @@ data class Task(
     val link: String = "",
     val priority: String = "",
     val title: String = "",
-    var listName: String = ""
+    var listName: String = "",
+    var list_color: Int = -1
 )
