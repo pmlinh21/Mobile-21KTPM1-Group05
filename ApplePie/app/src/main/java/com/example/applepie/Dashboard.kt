@@ -1,16 +1,18 @@
 package com.example.applepie
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.view.ViewCompat.canScrollVertically
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
-import com.example.studentmanagementv4.ListRecyclerAdapter
+import com.google.android.material.divider.MaterialDividerItemDecoration
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,6 +25,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class Dashboard : Fragment() {
+    private lateinit var addListTV: TextView
+    private lateinit var listRV: androidx.recyclerview.widget.RecyclerView
+    private lateinit var highPriorityRV: androidx.recyclerview.widget.RecyclerView
+    private lateinit var viewTodayTask: androidx.constraintlayout.widget.ConstraintLayout
+    private lateinit var viewAllTask: androidx.constraintlayout.widget.ConstraintLayout
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -49,24 +57,23 @@ class Dashboard : Fragment() {
         listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
         addListTV = view.findViewById<TextView>(R.id.add_list_text_view)
 
+        highPriorityRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.high_priority_recycler_view)
+
+        viewTodayTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewTodayTask)
+        viewAllTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewAllTask)
+
         setupListRV()
         setupAddListTV()
 
-        val viewTodayTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewTodayTask)
-        viewTodayTask.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ViewTodayTasks.newInstance("", ""))
-                .addToBackStack(null)
-                .commit()
-        }
+        setupHighPriorityRV()
 
-        val viewAllTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewAllTask)
-        viewAllTask.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ViewAllTask.newInstance("", ""))
-                .addToBackStack(null)
-                .commit()
-        }
+        setupViewTodayTask()
+        setupViewAllTask()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateTaskLists()
     }
 
     private fun setupListRV() {
@@ -76,7 +83,16 @@ class Dashboard : Fragment() {
         listRV.layoutManager = LinearLayoutManager(requireContext())
 
         val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-        listRV.addItemDecoration(itemDecoration)
+//        listRV.addItemDecoration(itemDecoration)
+        listRV.addItemDecoration(
+            MaterialDividerItemDecoration(
+                requireContext(),
+                MaterialDividerItemDecoration.VERTICAL
+            ).apply {
+                isLastItemDecorated = false
+                dividerColor = resources.getColor(R.color.light_grey)
+            }
+        )
 
         adapter.onItemClick = { taskList ->
             parentFragmentManager.beginTransaction()
@@ -86,12 +102,11 @@ class Dashboard : Fragment() {
         }
     }
 
-     fun updateTaskLists() {
+     private fun updateTaskLists() {
         val taskLists = FirebaseManager.getUserList()?: listOf()
         val adapter = listRV.adapter as ListRecyclerAdapter
         adapter.setLists(taskLists)
     }
-
 
     private fun setupAddListTV() {
         addListTV.setOnClickListener {
@@ -102,9 +117,60 @@ class Dashboard : Fragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateTaskLists()
+    private fun setupHighPriorityRV() {
+        val tasks = FirebaseManager.getUserTask()
+        val lists = FirebaseManager.getUserList()
+
+        tasks.filter { it.priority == "high" && !it.isDone }
+            .sortedByDescending { it.due_datetime }
+
+        for (task in tasks) {
+            val matchingList = lists.find { it.id_list == task.id_list }
+            task.listName = matchingList?.list_name ?: "Unknown List"
+            Log.d("Task", task.toString())
+        }
+
+        val adapter = PriorityRecyclerAdapter(requireContext(), tasks)
+        highPriorityRV.adapter = adapter
+        highPriorityRV.layoutManager = LinearLayoutManager(requireContext())
+
+        val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        highPriorityRV.addItemDecoration(
+            MaterialDividerItemDecoration(
+                requireContext(),
+                MaterialDividerItemDecoration.VERTICAL
+            ).apply {
+                isLastItemDecorated = false
+                dividerColor = resources.getColor(R.color.light_grey)
+            }
+        )
+
+//        highPriorityRV.layoutManager = object: LinearLayoutManager(requireContext()) { override fun canScrollVertically() = false }
+
+//        adapter.onItemClick = { task ->
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, TaskDetails.newInstance(task.id_task))
+//                .addToBackStack(null)
+//                .commit()
+//        }
+    }
+
+    private fun setupViewTodayTask() {
+        viewTodayTask.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ViewTodayTasks.newInstance("", ""))
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    private fun setupViewAllTask() {
+        viewAllTask.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, ViewAllTask.newInstance("", ""))
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     companion object {
@@ -127,6 +193,4 @@ class Dashboard : Fragment() {
             }
     }
 
-    private lateinit var addListTV: TextView
-    private lateinit var listRV: androidx.recyclerview.widget.RecyclerView
 }
