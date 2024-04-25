@@ -82,8 +82,6 @@ class Dashboard : Fragment() {
         listRV.adapter = adapter
         listRV.layoutManager = LinearLayoutManager(requireContext())
 
-        val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
-//        listRV.addItemDecoration(itemDecoration)
         listRV.addItemDecoration(
             MaterialDividerItemDecoration(
                 requireContext(),
@@ -134,7 +132,6 @@ class Dashboard : Fragment() {
         highPriorityRV.adapter = adapter
         highPriorityRV.layoutManager = LinearLayoutManager(requireContext())
 
-        val itemDecoration: RecyclerView.ItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         highPriorityRV.addItemDecoration(
             MaterialDividerItemDecoration(
                 requireContext(),
