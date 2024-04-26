@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import androidx.viewpager2.widget.ViewPager2
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
@@ -21,11 +20,14 @@ import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var homeButton: Button
+    private lateinit var studyButton: Button
+    private lateinit var createTaskButton: Button
+    private lateinit var reportButton: Button
+    private lateinit var accountButton: Button
 
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var username: String
-    private lateinit var mainViewPager: ViewPager2
-    private lateinit var mainViewPagerAdapter: MainViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +51,56 @@ class MainActivity : AppCompatActivity() {
         setLanguage()
     }
 
-    private fun setupMainViewPager() {
-        mainViewPager = findViewById(R.id.main_view_pager)
-        mainViewPagerAdapter = MainViewPagerAdapter(this)
+    @SuppressLint("UseCompatLoadingForDrawables")
+    fun handleNavbarClick(button: Button){
+        // TODO: Change the button icon to @color/green
 
-        mainViewPager.adapter = mainViewPagerAdapter
-        mainViewPager.offscreenPageLimit = 3
-        mainViewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
-        mainViewPager.currentItem = 1
+        // Change the button background
+        homeButton.setBackgroundColor(Color.TRANSPARENT)
+        studyButton.setBackgroundColor(Color.TRANSPARENT)
+        createTaskButton.setBackgroundColor(Color.TRANSPARENT)
+        reportButton.setBackgroundColor(Color.TRANSPARENT)
+        accountButton.setBackgroundColor(Color.TRANSPARENT)
+
+        button.background = resources.getDrawable(R.drawable.bg_button_active)
+    }
+
+    private fun setUI(){
+        homeButton = findViewById(R.id.home_icon)
+        studyButton = findViewById(R.id.study_icon)
+        createTaskButton = findViewById(R.id.create_task_icon)
+        reportButton = findViewById(R.id.report_icon)
+        accountButton = findViewById(R.id.account_icon)
+
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).commit()
+
+        homeButton.setOnClickListener {
+            handleNavbarClick(homeButton)
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).addToBackStack(null).commit()
+        }
+
+        studyButton.setOnClickListener {
+            handleNavbarClick(studyButton)
+            if (!PomodoroTimer.isStop())
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Pomodoro()).addToBackStack(null).commit()
+            else
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Stopwatch()).addToBackStack(null).commit()
+        }
+
+        createTaskButton.setOnClickListener {
+            handleNavbarClick(createTaskButton)
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
+        }
+
+        reportButton.setOnClickListener {
+            handleNavbarClick(reportButton)
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Report()).addToBackStack(null).commit()
+        }
+
+        accountButton.setOnClickListener {
+            handleNavbarClick(accountButton)
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Account()).addToBackStack(null).commit()
+        }
     }
 
     private fun getInfoFromFirebase(){
@@ -84,8 +128,7 @@ class MainActivity : AppCompatActivity() {
                     Log.i("data", FirebaseManager.getUserList().toString())
 
                     isUserListDataReceived = true
-//                    setUI()
-                    setupMainViewPager()
+                    setUI()
                 }
 
                 override fun onError(error: DatabaseError) {
@@ -99,8 +142,7 @@ class MainActivity : AppCompatActivity() {
                     Log.i("data", FirebaseManager.getUserTask().toString())
 
                     isUserTaskDataReceived = true
-//                    setUI()
-                    setupMainViewPager()
+                    setUI()
                 }
 
                 override fun onError(error: DatabaseError) {
