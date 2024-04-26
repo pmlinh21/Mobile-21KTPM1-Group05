@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
@@ -17,7 +18,7 @@ class TaskRecyclerAdapter(private val context: Context, private var tasks: List<
     var onItemClick: ((Task) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View): RecyclerView.ViewHolder(listItemView) {
-        val taskStatusRB: RadioButton = listItemView.findViewById<RadioButton>(R.id.task_status_radio_button)
+        val taskStatusRB: CheckBox = listItemView.findViewById<CheckBox>(R.id.task_status_radio_button)
         val taskTitleTV: TextView = listItemView.findViewById<TextView>(R.id.task_title_text_view)
         val listNameTV: TextView = listItemView.findViewById<TextView>(R.id.list_name_text_view)
         val dueDateTV: TextView = listItemView.findViewById<TextView>(R.id.due_date_text_view)

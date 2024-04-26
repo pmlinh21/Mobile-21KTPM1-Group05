@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.compose.ui.text.capitalize
 import androidx.core.view.ViewCompat.canScrollVertically
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,6 +27,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class Dashboard : Fragment() {
+    private lateinit var todayTV: TextView
     private lateinit var addListTV: TextView
     private lateinit var listRV: androidx.recyclerview.widget.RecyclerView
     private lateinit var highPriorityRV: androidx.recyclerview.widget.RecyclerView
@@ -54,21 +57,15 @@ class Dashboard : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
-        addListTV = view.findViewById<TextView>(R.id.add_list_text_view)
+        setupUI(view)
 
-        highPriorityRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.high_priority_recycler_view)
+        setupListRV(view)
+        setupAddListTV(view)
 
-        viewTodayTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewTodayTask)
-        viewAllTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewAllTask)
+        setupHighPriorityRV(view)
 
-        setupListRV()
-        setupAddListTV()
-
-        setupHighPriorityRV()
-
-        setupViewTodayTask()
-        setupViewAllTask()
+        setupViewTodayTask(view)
+        setupViewAllTask(view)
     }
 
     override fun onResume() {
@@ -76,7 +73,17 @@ class Dashboard : Fragment() {
         updateTaskLists()
     }
 
-    private fun setupListRV() {
+    private fun setupUI(view: View) {
+        todayTV = view.findViewById<TextView>(R.id.today_text_view)
+        val day = java.time.LocalDate.now().dayOfMonth
+        val month = java.time.LocalDate.now().month.toString().lowercase().replaceFirstChar { it.uppercase() }
+        val today = "Today, $day $month"
+        todayTV.text = today
+    }
+
+    private fun setupListRV(view: View) {
+        listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
+
         val taskLists = FirebaseManager.getUserList()
         val adapter = ListRecyclerAdapter(requireContext(), taskLists)
         listRV.adapter = adapter
@@ -106,7 +113,8 @@ class Dashboard : Fragment() {
         adapter.setLists(taskLists)
     }
 
-    private fun setupAddListTV() {
+    private fun setupAddListTV(view: View) {
+        addListTV = view.findViewById<TextView>(R.id.add_list_text_view)
         addListTV.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, AddList()) // replace current fragment with new fragment
@@ -115,7 +123,9 @@ class Dashboard : Fragment() {
         }
     }
 
-    private fun setupHighPriorityRV() {
+    private fun setupHighPriorityRV(view: View) {
+        highPriorityRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.high_priority_recycler_view)
+
         val tasks = FirebaseManager.getUserTask()
         val lists = FirebaseManager.getUserList()
 
@@ -153,7 +163,9 @@ class Dashboard : Fragment() {
 //        }
     }
 
-    private fun setupViewTodayTask() {
+    private fun setupViewTodayTask(view: View) {
+        viewTodayTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewTodayTask)
+
         viewTodayTask.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ViewTodayTasks.newInstance("", ""))
@@ -162,7 +174,9 @@ class Dashboard : Fragment() {
         }
     }
 
-    private fun setupViewAllTask() {
+    private fun setupViewAllTask(view: View) {
+        viewAllTask = view.findViewById<androidx.constraintlayout.widget.ConstraintLayout>(R.id.viewAllTask)
+
         viewAllTask.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ViewAllTask.newInstance("", ""))

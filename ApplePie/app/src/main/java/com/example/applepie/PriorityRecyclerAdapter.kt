@@ -15,10 +15,10 @@ class PriorityRecyclerAdapter(private val context: Context, private var tasks: L
     var onItemClick: ((Task) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View): RecyclerView.ViewHolder(listItemView) {
-        val taskTitleTV = listItemView.findViewById<TextView>(R.id.task_title_text_view)
-        val listNameTV = listItemView.findViewById<TextView>(R.id.list_name_text_view)
-        val listIconTV = listItemView.findViewById<TextView>(R.id.list_icon_text_view)
-        val dueDateTV = listItemView.findViewById<TextView>(R.id.due_date_text_view)
+        val taskTitleTV: TextView = listItemView.findViewById<TextView>(R.id.task_title_text_view)
+        val listNameTV: TextView = listItemView.findViewById<TextView>(R.id.list_name_text_view)
+        val listIconTV: TextView = listItemView.findViewById<TextView>(R.id.list_icon_text_view)
+        val dueDateTV: TextView = listItemView.findViewById<TextView>(R.id.due_date_text_view)
 
         init {
             listItemView.setOnClickListener {

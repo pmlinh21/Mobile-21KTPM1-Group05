@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:padding="10dp">
 
-    <RadioButton
-        android:id="@+id/task_status_radio_button"
+    <CheckBox
+        android:id="@+id/task_status_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
         android:textColor="@color/black"
         android:text="Complete the assignment"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/task_status_radio_button"
+        app:layout_constraintStart_toEndOf="@id/task_status_check_box"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/due_date_text_view"/>
 
@@ -33,7 +33,7 @@
         android:textColor="@color/green"
         android:text="12-12-2024 10:00 AM"
         android:layout_marginStart="5dp"
-        app:layout_constraintStart_toEndOf="@id/task_status_radio_button"
+        app:layout_constraintStart_toEndOf="@id/task_status_check_box"
         app:layout_constraintTop_toBottomOf="@id/task_title_text_view"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

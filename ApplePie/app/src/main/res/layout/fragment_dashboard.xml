@@ -17,33 +17,6 @@
         android:paddingVertical="10dp"
         android:paddingHorizontal="20dp">
 
-<!--        <EditText-->
-<!--            android:id="@+id/search_edit_text"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:background="@drawable/bg_search"-->
-<!--            android:paddingStart="30dp"-->
-<!--            android:paddingEnd="10dp"-->
-<!--            android:hint="@string/search_hint"-->
-<!--            android:textColor="@color/grey"-->
-<!--            android:textSize="16sp"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/search_icon"-->
-<!--            android:layout_width="30dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_constraintTop_toTopOf="@id/search_edit_text"-->
-<!--            app:layout_constraintBottom_toBottomOf="@id/search_edit_text"-->
-<!--            app:layout_constraintStart_toStartOf="@id/search_edit_text"-->
-<!--            android:fontFamily="@font/font_awesome_solid"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textAlignment="center"-->
-<!--            android:textColor="@color/grey"-->
-<!--            android:text="@string/icon_search" />-->
-
         <TextView
             android:id="@+id/dashboard_title"
             android:layout_width="wrap_content"
@@ -56,6 +29,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
+            android:id="@+id/today_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Today, 26 March"
