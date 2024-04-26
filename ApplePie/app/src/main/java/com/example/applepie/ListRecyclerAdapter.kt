@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.core.graphics.toColor
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.R
+import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
 import com.google.common.io.Resources.getResource
 
@@ -25,6 +26,7 @@ class ListRecyclerAdapter(private val context: Context, private var taskLists: L
     inner class ViewHolder(listItemView: View): RecyclerView.ViewHolder(listItemView) {
         val iconTV = listItemView.findViewById<TextView>(R.id.list_icon_text_view)
         val nameTV = listItemView.findViewById<TextView>(R.id.list_name_text_view)
+        val taskCountTV = listItemView.findViewById<TextView>(R.id.task_count_text_view)
 
         init {
             listItemView.setOnClickListener { onItemClick?.invoke(taskLists[absoluteAdapterPosition]) }
@@ -47,8 +49,8 @@ class ListRecyclerAdapter(private val context: Context, private var taskLists: L
         val taskList = taskLists[position]
         holder.nameTV.text = taskList.list_name
         holder.iconTV.text = taskList.list_icon
-
         holder.iconTV.setTextColor(taskList.list_color - 0x1000000)
+        holder.taskCountTV.text = FirebaseManager.countTasksOfList(taskList.id_list).toString()
     }
 
     @SuppressLint("NotifyDataSetChanged")

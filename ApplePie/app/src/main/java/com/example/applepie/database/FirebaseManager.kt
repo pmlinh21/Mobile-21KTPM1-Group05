@@ -360,14 +360,18 @@ object FirebaseManager {
     }
 
     fun addUserList(taskList: TaskList) {
-        val newListId = userList.size
+        val newListId = userList.size + 1
         val newList = TaskList(
             newListId,
             taskList.list_color,
             taskList.list_icon,
             taskList.list_name
         )
-        userListsRef.child(newListId.toString()).setValue(newList)
+        userListsRef.child((newListId - 1).toString()).setValue(newList)
+    }
+
+    fun countTasksOfList(listId: Int): Int {
+        return userTask.count { it.id_list == listId }
     }
 
     fun addNewTask(task: Task) {
