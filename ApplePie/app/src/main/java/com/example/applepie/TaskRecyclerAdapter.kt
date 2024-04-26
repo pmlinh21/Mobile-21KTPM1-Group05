@@ -21,6 +21,7 @@ class TaskRecyclerAdapter(private val context: Context, private var tasks: List<
         val taskStatusRB: CheckBox = listItemView.findViewById<CheckBox>(R.id.task_status_radio_button)
         val taskTitleTV: TextView = listItemView.findViewById<TextView>(R.id.task_title_text_view)
         val listNameTV: TextView = listItemView.findViewById<TextView>(R.id.list_name_text_view)
+        val listIconTV: TextView = listItemView.findViewById<TextView>(R.id.list_icon_text_view)
         val dueDateTV: TextView = listItemView.findViewById<TextView>(R.id.due_date_text_view)
 
         init {
@@ -49,6 +50,14 @@ class TaskRecyclerAdapter(private val context: Context, private var tasks: List<
         holder.taskTitleTV.text = task.title
         holder.listNameTV.text = task.listName
         holder.dueDateTV.text = task.due_datetime
+
+        if (task.list_color == -1){
+            holder.listIconTV.setTextColor(context.getColor(R.color.green))
+            holder.listNameTV.setTextColor(context.getColor(R.color.green))
+        } else {
+            holder.listIconTV.setTextColor(task.list_color - 0x1000000)
+            holder.listNameTV.setTextColor(task.list_color - 0x1000000)
+        }
 
 //        val color = try {
 //            task.list_color.toColor()
