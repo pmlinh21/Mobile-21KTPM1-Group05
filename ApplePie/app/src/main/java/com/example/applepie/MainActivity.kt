@@ -2,13 +2,18 @@ package com.example.applepie
 
 import PomodoroTimer
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.view.Gravity
+import android.view.ViewGroup
+import android.view.Window
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
@@ -88,7 +93,9 @@ class MainActivity : AppCompatActivity() {
 
         createTaskButton.setOnClickListener {
             handleNavbarClick(createTaskButton)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
+//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
+            val createTaskFragment = CreateTaskFragment()
+            createTaskFragment.show(supportFragmentManager, createTaskFragment.tag)
         }
 
         reportButton.setOnClickListener {

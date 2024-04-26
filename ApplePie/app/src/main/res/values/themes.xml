@@ -2,4 +2,5 @@
 <resources>
 
     <style name="Theme.ApplePie" parent="Theme.AppCompat.Light.NoActionBar" />
+
 </resources>

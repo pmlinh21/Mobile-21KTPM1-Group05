@@ -2,7 +2,9 @@ package com.example.applepie
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.DialogInterface
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,70 +12,51 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.CalendarView
-import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Task
-import com.example.applepie.model.TaskList
-import com.example.applepie.model.User
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import es.dmoral.toasty.Toasty
 import java.util.Calendar
-import kotlin.properties.Delegates
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateTask.newInstance] factory method to
- * create an instance of this fragment.
- */
-class CreateTask : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+class CreateTaskFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_create_task, container, false)
+        return inflater.inflate(R.layout.fragment_create_task, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val bottomSheet: View = view.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR;
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT);
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT);
+
 
         preferenceManager = PreferenceManager(this.activity)
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
         val userRef = databaseReference.child(preferenceManager.getIndex().toString())
         Log.i("index", preferenceManager.getIndex().toString())
 
-        tieTitle = rootView.findViewById(R.id.tie_title)
-        tieDescription = rootView.findViewById(R.id.tie_description)
-        tieDuedate = rootView.findViewById(R.id.tie_duedate)
-        tieTime = rootView.findViewById(R.id.tie_time)
-        spnPriority = rootView.findViewById(R.id.spn_priority)
-        spnList = rootView.findViewById(R.id.spn_list)
-        tieAttachment = rootView.findViewById(R.id.tie_attachment)
-        btnCreateTask = rootView.findViewById(R.id.btn_createTask)
+        tieTitle = view.findViewById(R.id.tie_title)
+        tieDescription = view.findViewById(R.id.tie_description)
+        tieDuedate = view.findViewById(R.id.tie_duedate)
+        tieTime = view.findViewById(R.id.tie_time)
+        spnPriority = view.findViewById(R.id.spn_priority)
+        spnList = view.findViewById(R.id.spn_list)
+        tieAttachment = view.findViewById(R.id.tie_attachment)
+        btnCreateTask = view.findViewById(R.id.btn_createTask)
+        btnCancel = view.findViewById(R.id.btn_cancel)
 
         tieDuedate.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
@@ -149,29 +132,12 @@ class CreateTask : Fragment() {
             FirebaseManager.addNewTask(newTask)
 
             Toasty.success(requireContext(), "Create task successfully!", Toast.LENGTH_SHORT, true).show()
+            dismiss()
         }
 
-        return rootView
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment Dashboard.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CreateTask().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        btnCancel.setOnClickListener {
+            dismiss()
+        }
     }
 
     private lateinit var tieTitle: TextInputEditText
@@ -182,6 +148,7 @@ class CreateTask : Fragment() {
     private lateinit var spnList: Spinner
     private lateinit var tieAttachment: TextInputEditText
     private lateinit var btnCreateTask: Button
+    private lateinit var btnCancel: Button
 
     private var myCalendar: Calendar = Calendar.getInstance()
     private var year = myCalendar.get(Calendar.YEAR)
