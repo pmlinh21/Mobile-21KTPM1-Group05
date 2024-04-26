@@ -1,11 +1,13 @@
 package com.example.applepie
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.compose.ui.text.capitalize
 import androidx.core.view.ViewCompat.canScrollVertically
@@ -28,6 +30,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class Dashboard : Fragment() {
     private lateinit var todayTV: TextView
+    private lateinit var searchBtn: Button
     private lateinit var addListTV: TextView
     private lateinit var listRV: androidx.recyclerview.widget.RecyclerView
     private lateinit var highPriorityRV: androidx.recyclerview.widget.RecyclerView
@@ -59,6 +62,7 @@ class Dashboard : Fragment() {
 
         setupUI(view)
 
+        setupSearchBtn(view)
         setupListRV(view)
         setupAddListTV(view)
 
@@ -74,11 +78,20 @@ class Dashboard : Fragment() {
     }
 
     private fun setupUI(view: View) {
+        searchBtn = view.findViewById<Button>(R.id.search_button)
         todayTV = view.findViewById<TextView>(R.id.today_text_view)
         val day = java.time.LocalDate.now().dayOfMonth
         val month = java.time.LocalDate.now().month.toString().lowercase().replaceFirstChar { it.uppercase() }
         val today = "Today, $day $month"
         todayTV.text = today
+    }
+
+    private fun setupSearchBtn(view: View) {
+        searchBtn = view.findViewById<Button>(R.id.search_button)
+        searchBtn.setOnClickListener {
+            val searchActivity = Intent(requireContext(), SearchActivity::class.java)
+            startActivity(searchActivity)
+        }
     }
 
     private fun setupListRV(view: View) {

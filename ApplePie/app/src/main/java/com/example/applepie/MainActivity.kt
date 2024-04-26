@@ -14,7 +14,6 @@ import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 import com.example.applepie.model.User
-import com.example.tablayout.MainViewPagerAdapter
 import com.google.firebase.database.DatabaseError
 import java.util.Locale
 
