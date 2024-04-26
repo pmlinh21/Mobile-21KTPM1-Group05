@@ -79,7 +79,7 @@ class CreateTask : Fragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val dat = (dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year)
+                    val dat = "$year-${monthOfYear + 1}-$dayOfMonth"
                     tieDuedate.setText(dat)
                 },
                 year,
