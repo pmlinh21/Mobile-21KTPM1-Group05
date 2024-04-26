@@ -89,4 +89,9 @@ dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:32.8.0"))
     implementation("com.google.firebase:firebase-analytics")
+
+    // In App Billing
+    implementation("com.android.billingclient:billing:6.1.0")
+    implementation("com.android.billingclient:billing-ktx:6.1.0")
+    implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
 }
