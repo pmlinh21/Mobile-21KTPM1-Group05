@@ -129,10 +129,13 @@ class Dashboard : Fragment() {
     private fun setupAddListTV(view: View) {
         addListTV = view.findViewById<TextView>(R.id.add_list_text_view)
         addListTV.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, AddList()) // replace current fragment with new fragment
-                .addToBackStack(null) // Optional: Add transaction to back stack for navigation back
-                .commit()
+//            parentFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, AddList()) // replace current fragment with new fragment
+//                .addToBackStack(null) // Optional: Add transaction to back stack for navigation back
+//                .commit()
+
+            val createListFragment = CreateListFragment()
+            createListFragment.show(parentFragmentManager, createListFragment.tag)
         }
     }
 

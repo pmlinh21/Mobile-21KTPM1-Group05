@@ -9,6 +9,8 @@
     tools:context=".CreateTaskFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -61,11 +63,12 @@
         android:id="@+id/sv_createTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical"
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="20dp"
         android:theme="@style/Theme.MaterialComponents.Light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/create_task_title">
 
         <LinearLayout
@@ -197,7 +200,7 @@
                             android:id="@+id/tie_duedate"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="04/04/2024"
+                            android:hint="YYYY-MM-DD"
                             android:textColorHint="@color/grey"
                             android:background="@null"
                             android:clickable="false"
@@ -248,7 +251,7 @@
                             android:id="@+id/tie_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="10:00"
+                            android:hint="HH:MM"
                             android:textColorHint="@color/grey"
                             android:background="@null"
                             android:clickable="false"

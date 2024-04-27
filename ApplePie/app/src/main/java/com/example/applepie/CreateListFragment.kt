@@ -1,9 +1,9 @@
 package com.example.applepie
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,55 +15,25 @@ import androidx.core.content.res.ResourcesCompat
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
-import com.example.applepie.model.User
-import com.google.firebase.database.DatabaseError
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddList.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AddList : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    private lateinit var backButton: Button
-    private lateinit var doneButton: Button
-
-    private lateinit var listIconTV: TextView
-    private lateinit var listNameET: EditText
-    private lateinit var listColorButtons: MutableList<Button>
-    private lateinit var listIconButtons: MutableList<Button>
-
-    private lateinit var chosenColorButton: Button
-    private lateinit var chosenIconButton: Button
-
-    private lateinit var preferenceManager: PreferenceManager
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
+class CreateListFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_list, container, false)
+        return inflater.inflate(R.layout.fragment_create_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val bottomSheet: View = view.parent as View
+        bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR;
+        bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT);
+        bottomSheet.setBackgroundColor(Color.TRANSPARENT);
+
 
         preferenceManager = PreferenceManager(requireContext())
 
@@ -75,8 +45,8 @@ class AddList : Fragment() {
     }
 
     private fun setupUI(view: View) {
-        backButton = view.findViewById<Button>(R.id.back_button)
-        doneButton = view.findViewById<Button>(R.id.done_button)
+        cancelButton = view.findViewById<Button>(R.id.cancel_button)
+        addButton = view.findViewById<Button>(R.id.add_button)
 
         listIconTV = view.findViewById<TextView>(R.id.list_icon_text_view)
         listNameET = view.findViewById<EditText>(R.id.list_name_edit_text)
@@ -132,13 +102,13 @@ class AddList : Fragment() {
     }
 
     private fun setupBackButton() {
-        backButton.setOnClickListener {
+        cancelButton.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
     }
 
     private fun setupDoneButton() {
-        doneButton.setOnClickListener {
+        addButton.setOnClickListener {
             // TODO: add list to database
             if (listNameET.text.isEmpty()) {
                 Toast.makeText(context, "List name required", Toast.LENGTH_SHORT).show()
@@ -187,23 +157,16 @@ class AddList : Fragment() {
         }
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddList.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddList().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+    private lateinit var cancelButton: Button
+    private lateinit var addButton: Button
+
+    private lateinit var listIconTV: TextView
+    private lateinit var listNameET: EditText
+    private lateinit var listColorButtons: MutableList<Button>
+    private lateinit var listIconButtons: MutableList<Button>
+
+    private lateinit var chosenColorButton: Button
+    private lateinit var chosenIconButton: Button
+
+    private lateinit var preferenceManager: PreferenceManager
 }

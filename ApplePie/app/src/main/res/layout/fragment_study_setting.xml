@@ -87,11 +87,10 @@
                 android:id="@+id/notification_btn"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/green"
+                android:background="@drawable/bg_rounded_corner_green"
                 android:text="See more"
                 android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -127,12 +126,10 @@
                 android:id="@+id/whitenoise_btn"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:background="@color/green"
-                android:shadowColor="@color/black"
+                android:background="@drawable/bg_rounded_corner_green"
                 android:text="See more"
                 android:textColor="@color/white"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -161,7 +158,6 @@
                 android:contentDescription=" "
                 android:trackTint="@color/green"
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
-
 
         </LinearLayout>
 
