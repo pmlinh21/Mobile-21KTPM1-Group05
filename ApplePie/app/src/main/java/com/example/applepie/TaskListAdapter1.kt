@@ -2,6 +2,7 @@ package com.example.applepie
 
 import android.content.Context
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,13 +27,14 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskTitleTextView: TextView = itemView.findViewById(R.id.taskTitleTextView)
         val dueDateTextView: TextView = itemView.findViewById(R.id.dueDateTextView)
-        val listTextView: TextView = itemView.findViewById(R.id.listTextView)
+        val dueTimeTextView: TextView = itemView.findViewById(R.id.dueTimeTextView)
+//        val listTextView: TextView = itemView.findViewById(R.id.listTextView)
         val taskStatus: ImageView = itemView.findViewById(R.id.taskStatus)
         val taskStatus_1: ImageView = itemView.findViewById(R.id.taskStatus_1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.list_item_task_1, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_task, parent, false)
         return ViewHolder(view)
     }
 
@@ -40,21 +42,28 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
         val currentTask = tasks[position]
 
         holder.taskTitleTextView.text = currentTask.title
+        Log.i("isDone", currentTask.isDone.toString())
         if (currentTask.isDone) {
             holder.taskTitleTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             holder.taskStatus.setImageResource(R.drawable.ic_circular_full)
             holder.taskStatus_1.visibility = View.VISIBLE
+        } else {
+            holder.taskTitleTextView.paintFlags = holder.taskTitleTextView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            holder.taskStatus.setImageResource(R.drawable.ic_circular)
+            holder.taskStatus_1.visibility = View.GONE
         }
 
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
         val formattedDate = sdf.parse(currentTask.due_datetime)
+        val formattedDateString = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(formattedDate)
         val formattedTimeString = SimpleDateFormat("HH:mm", Locale.getDefault()).format(formattedDate)
-        holder.dueDateTextView.text = formattedTimeString
+        holder.dueDateTextView.text = formattedDateString
+        holder.dueTimeTextView.text = formattedTimeString
 
         val matchingList = lists.find { it.id_list == currentTask.id_list }
         val listName = matchingList?.list_name ?: "Unknown List"
 
-        holder.listTextView.text = listName
+//        holder.listTextView.text = listName
 
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(currentTask)

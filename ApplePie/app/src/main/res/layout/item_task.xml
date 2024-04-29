@@ -1,15 +1,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
+    android:layout_marginHorizontal="8dp"
     android:layout_marginTop="10dp"
-    android:padding="15dp"
+    android:paddingVertical="14dp"
+    android:paddingHorizontal="24dp"
     android:background="@drawable/task_box"
     android:elevation="2dp"
-    android:layout_marginBottom="10dp">
+    android:layout_marginBottom="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".TaskListAdapter1">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -18,80 +19,83 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/dueDateTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textSize="16dp"
+            android:textColor="@color/grey"
+            android:text="20/04/2024" />
+
+        <TextView
             android:id="@+id/taskTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="19sp"
+            android:textSize="18dp"
+            android:textStyle="bold"
             android:textColor="@color/black"
-            android:text="Task Title" />
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:maxEms="20"
+            android:text="Mobile Project Proposal" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="14dp">
+            android:layout_marginTop="8dp">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_time"
+                android:src="@drawable/ic_time_filled"
                 android:layout_marginRight="3dp"/>
 
             <TextView
-                android:id="@+id/dueDateTextView"
+                android:id="@+id/dueTimeTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:text="10:00 AM"
                 android:textColor="#80B435" />
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="15dp"
-                android:src="@drawable/ic_tag" />
-
-            <TextView
-                android:id="@+id/listTextView"
-                android:layout_width="130dp"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="5dp"
-                android:textSize="17sp"
-                android:text="Mobile"
-                android:textColor="#80B435"
-                android:ellipsize="end"
-                android:maxLines="1"/>
-
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="8dp"
+                android:src="@drawable/ic_flag"
+                android:layout_marginRight="3dp"/>
         </LinearLayout>
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp">
         <ImageView
             android:id="@+id/taskStatus"
             android:layout_width="26dp"
             android:layout_height="26dp"
-            android:layout_marginLeft="3dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_circular" />
 
         <ImageView
             android:id="@+id/taskStatus_1"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="11dp"
             android:src="@drawable/ic_done"
             android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/taskDelete"
-            android:layout_width="33dp"
-            android:layout_height="33dp"
-            android:layout_marginTop="34dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="48dp"
             android:src="@drawable/ic_delete" />
     </FrameLayout>
 </LinearLayout>
