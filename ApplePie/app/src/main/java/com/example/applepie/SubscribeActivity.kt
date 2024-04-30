@@ -15,11 +15,6 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.collect.ImmutableList
-import com.paypal.android.corepayments.CoreConfig
-import com.paypal.android.corepayments.PayPalSDKError
-import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutClient
-import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutListener
-import com.paypal.android.paypalnativepayments.PayPalNativeCheckoutResult
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
