@@ -1,12 +1,14 @@
 package com.example.applepie
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
@@ -51,12 +53,13 @@ class ListOfTasks : Fragment() {
         backButton = view.findViewById(R.id.back_button)
         moreButton = view.findViewById(R.id.more_button)
 
-        highPriorityRV = view.findViewById(R.id.high_priority_recycler_view)
+        taskRV = view.findViewById(R.id.task_recycler_view)
+        taskRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
         val lists = FirebaseManager.getUserList()?: listOf()
         val tasksList = FirebaseManager.getUserTask()?: listOf()
-        highPriorityRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
 
+        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
         setupBackButton()
         setupMoreButton()
     }
@@ -98,5 +101,5 @@ class ListOfTasks : Fragment() {
     private lateinit var listNameTV: TextView
     private lateinit var backButton: Button
     private lateinit var moreButton: Button
-    private lateinit var highPriorityRV: RecyclerView
+    private lateinit var taskRV: RecyclerView
 }
