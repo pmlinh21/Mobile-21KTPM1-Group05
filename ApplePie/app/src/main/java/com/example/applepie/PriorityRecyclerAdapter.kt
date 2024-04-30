@@ -2,11 +2,15 @@ package com.example.applepie
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Task
 import es.dmoral.toasty.Toasty
 
@@ -15,15 +19,23 @@ class PriorityRecyclerAdapter(private val context: Context, private var tasks: L
     var onItemClick: ((Task) -> Unit)? = null
 
     inner class ViewHolder(listItemView: View): RecyclerView.ViewHolder(listItemView) {
+        val taskStatusCB: CheckBox = listItemView.findViewById<CheckBox>(R.id.task_status_check_box)
         val taskTitleTV: TextView = listItemView.findViewById<TextView>(R.id.task_title_text_view)
         val listNameTV: TextView = listItemView.findViewById<TextView>(R.id.list_name_text_view)
         val listIconTV: TextView = listItemView.findViewById<TextView>(R.id.list_icon_text_view)
         val dueDateTV: TextView = listItemView.findViewById<TextView>(R.id.due_date_text_view)
+        val preferenceManager = PreferenceManager(context)
 
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(tasks[absoluteAdapterPosition])
-                Toasty.info(context, "Task clicked", Toasty.LENGTH_SHORT).show()
+                Toasty.info(context, "Go to task details page", Toasty.LENGTH_SHORT).show()
+            }
+
+            taskStatusCB.setOnClickListener {
+                val task = tasks[absoluteAdapterPosition]
+                Toasty.success(context, "Task completed", Toasty.LENGTH_SHORT).show()
+                FirebaseManager.setTaskStatus(preferenceManager.getIndex(), task.id_task, !task.isDone)
             }
         }
     }
@@ -42,6 +54,7 @@ class PriorityRecyclerAdapter(private val context: Context, private var tasks: L
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = tasks[position]
+        holder.taskStatusCB.isChecked = task.isDone
         holder.taskTitleTV.text = task.title
         holder.listNameTV.text = task.listName
         holder.dueDateTV.text = task.due_datetime
@@ -53,15 +66,6 @@ class PriorityRecyclerAdapter(private val context: Context, private var tasks: L
             holder.listIconTV.setTextColor(task.list_color - 0x1000000)
             holder.listNameTV.setTextColor(task.list_color - 0x1000000)
         }
-
-//        val color = try {
-//            task.list_color.toColor()
-//        } catch (e: IllegalArgumentException) {
-//            // Handle potential conversion errors (e.g., invalid color value)
-//            ContextCompat.getColor(context, R.color.green) // Use a default color
-//        }
-
-//        holder.iconTV.setTextColor(ContextCompat.getColor(context, R.color.green))
     }
 
     @SuppressLint("NotifyDataSetChanged")

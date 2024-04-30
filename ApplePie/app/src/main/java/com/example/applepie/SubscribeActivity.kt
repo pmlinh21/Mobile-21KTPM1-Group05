@@ -7,6 +7,8 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.payment.Amount
 import com.example.applepie.model.payment.CaptureOrderCallback
 import com.example.applepie.model.payment.ExperienceContext
@@ -36,6 +38,7 @@ import java.util.Base64
 class SubscribeActivity : AppCompatActivity() {
     private lateinit var closeButton: Button
     private lateinit var goPremiumButton: Button
+    private lateinit var preferenceManager: PreferenceManager
 
     private val CLIENT_ID = "AQwgXzcJ7bz-R12JXRooKiznHGtLI2hU2_nVD7VShEmEooErrCdckWfqFuX53NmkLnD05NnUVSQTVLXu"
     private val CLIENT_SECRET = "EHflaaZL9eQs6GAZskU8AlIL8QvVe0BBRO3UOmYX-zb5Dswci6mG3MWCeAFCovLtatpyTvusrY7fDVX_"
@@ -53,6 +56,8 @@ class SubscribeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_subscribe)
 
         val intent = intent
+
+        preferenceManager = PreferenceManager(this)
 
         val coreConfig = CoreConfig(CLIENT_ID)
          payPalNativeClient = PayPalNativeCheckoutClient(
@@ -83,6 +88,7 @@ class SubscribeActivity : AppCompatActivity() {
                 captureOrder(object : CaptureOrderCallback {
                     override fun onCaptureOrderReceived(status: String?) {
                         Log.d("PayPal", "Order status: $status")
+                        FirebaseManager.setUserPremium(preferenceManager.getIndex())
                         Toast.makeText(applicationContext, "Payment successful", Toast.LENGTH_SHORT).show()
                     }
                     override fun onCaptureOrderError(error: String?) {

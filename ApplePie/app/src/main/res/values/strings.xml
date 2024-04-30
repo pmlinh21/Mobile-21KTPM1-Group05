@@ -52,5 +52,8 @@
     <string name="list_icon_28">football-ball</string>
     <string name="list_icon_29">heart</string>
     <string name="list_icon_30">star</string>
+    <string name="premium_button">Go premium</string>
+    <string name="premium_description_free">You are currently on the free plan. Upgrade to premium to unlock all features.</string>
+    <string name="premium_description_paid">You are already on the premium plan. Enjoy all the features!</string>
 
 </resources>

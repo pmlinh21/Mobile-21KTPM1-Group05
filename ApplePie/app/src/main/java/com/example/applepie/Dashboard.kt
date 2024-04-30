@@ -121,41 +121,35 @@ class Dashboard : Fragment() {
     }
 
      private fun updateTaskLists() {
-        val taskLists = FirebaseManager.getUserList()?: listOf()
+        val taskLists = FirebaseManager.getUserList()
         val adapter = listRV.adapter as ListRecyclerAdapter
         adapter.setLists(taskLists)
     }
 
     private fun setupAddListTV(view: View) {
-        addListTV = view.findViewById<TextView>(R.id.add_list_text_view)
+        addListTV = view.findViewById(R.id.add_list_text_view)
         addListTV.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, AddList()) // replace current fragment with new fragment
-//                .addToBackStack(null) // Optional: Add transaction to back stack for navigation back
-//                .commit()
-
             val createListFragment = CreateListFragment()
             createListFragment.show(parentFragmentManager, createListFragment.tag)
         }
     }
 
     private fun setupHighPriorityRV(view: View) {
-        highPriorityRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.high_priority_recycler_view)
+        highPriorityRV = view.findViewById(R.id.high_priority_recycler_view)
 
         val tasks = FirebaseManager.getUserTask()
         val lists = FirebaseManager.getUserList()
 
-        tasks.filter { it.priority == "high" && !it.isDone }
-            .sortedByDescending { it.due_datetime }
+        val highPriorityTasks = tasks.filter { it.priority == "high" && !it.isDone }
+                                     .sortedByDescending { it.due_datetime }
 
-        for (task in tasks) {
+        for (task in highPriorityTasks) {
             val matchingList = lists.find { it.id_list == task.id_list }
             task.listName = matchingList?.list_name ?: "Unknown List"
             task.list_color = matchingList?.list_color ?: -1
-            Log.d("Task", task.toString())
         }
 
-        val adapter = PriorityRecyclerAdapter(requireContext(), tasks)
+        val adapter = PriorityRecyclerAdapter(requireContext(), highPriorityTasks)
         highPriorityRV.adapter = adapter
         highPriorityRV.layoutManager = LinearLayoutManager(requireContext())
 
