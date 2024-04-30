@@ -4,19 +4,6 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-allprojects {
-    repositories {
-        maven {
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-            credentials {
-                username = "paypal_sgerritz"
-                password =
-                    "AKCp8jQ8tAahqpT5JjZ4FRP2mW7GMoFZ674kGqHmupTesKeAY2G8NcmPKLuTxTGkKjDLRzDUQ"
-            }
-        }
-    }
-}
-
 android {
     namespace = "com.example.applepie"
     compileSdk = 34
@@ -107,12 +94,4 @@ dependencies {
     implementation("com.android.billingclient:billing:6.1.0")
     implementation("com.android.billingclient:billing-ktx:6.1.0")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
-
-    // Paypal
-    implementation("com.paypal.android:card-payments:1.3.0") {
-        exclude(group="org.jfrog.cardinalcommerce.gradle", module="cardinalmobilesdk")
-    }
-    implementation("com.paypal.android:paypal-native-payments:1.3.0") {
-        exclude(group="org.jfrog.cardinalcommerce.gradle", module="cardinalmobilesdk")
-    }
 }
