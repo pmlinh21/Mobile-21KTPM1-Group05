@@ -77,8 +77,12 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val dat = String.format("%02d-%02d-%02d", year, monthOfYear + 1, dayOfMonth)
-                    tieDuedate.setText(dat)
+//                    val dat = String.format("%02d-%02d-%02d", year, monthOfYear + 1, dayOfMonth)
+//                    tieDuedate.setText(dat)
+                    val formattedMonth = (monthOfYear + 1).toString().padStart(2, '0')
+                    val formattedDay = dayOfMonth.toString().padStart(2, '0')
+                    val formattedDate = "$year-$formattedMonth-$formattedDay"
+                    tieDuedate.setText(formattedDate)
                 },
                 year,
                 month,
@@ -136,7 +140,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             val description = tieDescription.text.toString()
             val duedate = tieDuedate.text.toString()
             val time = tieTime.text.toString()
-            val priority = spnPriority.selectedItem.toString()
+            val priority = spnPriority.selectedItem.toString().lowercase()
             val listName = spnList.selectedItem.toString()
             val idList = listNameToIdMap[listName]
             val attachment = tieAttachment.text.toString()
