@@ -61,10 +61,11 @@
                 android:textColor="#80B435" />
 
             <ImageView
+                android:id="@+id/priorityImageView"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_flag"
+                android:src="@drawable/ic_prio_none"
                 android:layout_marginRight="3dp"/>
         </LinearLayout>
 

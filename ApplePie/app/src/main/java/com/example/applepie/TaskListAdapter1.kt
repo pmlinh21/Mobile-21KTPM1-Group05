@@ -31,6 +31,7 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
 //        val listTextView: TextView = itemView.findViewById(R.id.listTextView)
         val taskStatus: ImageView = itemView.findViewById(R.id.taskStatus)
         val taskStatus_1: ImageView = itemView.findViewById(R.id.taskStatus_1)
+        val priorityImageView: ImageView = itemView.findViewById(R.id.priorityImageView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -59,6 +60,14 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
         val formattedTimeString = SimpleDateFormat("HH:mm", Locale.getDefault()).format(formattedDate)
         holder.dueDateTextView.text = formattedDateString
         holder.dueTimeTextView.text = formattedTimeString
+
+        if (currentTask.priority == "high") {
+            holder.priorityImageView.setImageResource(R.drawable.ic_prio_high)
+        } else if (currentTask.priority == "medium") {
+            holder.priorityImageView.setImageResource(R.drawable.ic_prio_medium)
+        } else if (currentTask.priority == "low") {
+            holder.priorityImageView.setImageResource(R.drawable.ic_prio_low)
+        }
 
         val matchingList = lists.find { it.id_list == currentTask.id_list }
         val listName = matchingList?.list_name ?: "Unknown List"
