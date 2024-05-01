@@ -90,6 +90,7 @@ class SubscribeActivity : AppCompatActivity() {
                         Log.d("PayPal", "Order status: $status")
                         FirebaseManager.setUserPremium(preferenceManager.getIndex())
                         Toast.makeText(applicationContext, "Payment successful", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
                     override fun onCaptureOrderError(error: String?) {
                         Log.e("PayPal", "Error: $error")

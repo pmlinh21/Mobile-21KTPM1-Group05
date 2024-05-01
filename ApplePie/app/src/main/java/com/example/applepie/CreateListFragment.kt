@@ -3,6 +3,7 @@ package com.example.applepie
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.icu.text.RelativeDateTimeFormatter.RelativeDateTimeUnit
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import java.time.LocalDateTime
 
 class CreateListFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
@@ -33,7 +35,6 @@ class CreateListFragment : BottomSheetDialogFragment() {
         bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR;
         bottomSheet.backgroundTintList = ColorStateList.valueOf(Color.TRANSPARENT);
         bottomSheet.setBackgroundColor(Color.TRANSPARENT);
-
 
         preferenceManager = PreferenceManager(requireContext())
 
@@ -115,7 +116,7 @@ class CreateListFragment : BottomSheetDialogFragment() {
                 return@setOnClickListener
             } else {
                 val newList = TaskList(
-                    -1,
+                    LocalDateTime.now().toString().replace("-", "").replace("T", "").replace(":", "").split(".")[0],
                     chosenColorButton.backgroundTintList!!.defaultColor,
                     chosenIconButton.text.toString(),
                     listNameET.text.toString()

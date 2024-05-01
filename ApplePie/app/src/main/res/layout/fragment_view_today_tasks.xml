@@ -106,6 +106,18 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/task_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="15dp"
+        android:text="Tasks text"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/date_linear_layout"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -119,16 +131,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:elevation="2dp">
-
-            <TextView
-                android:id="@+id/task_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="15dp"
-                android:text="Tasks text"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"

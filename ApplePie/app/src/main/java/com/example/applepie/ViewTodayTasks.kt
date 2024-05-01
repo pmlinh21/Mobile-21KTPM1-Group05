@@ -68,9 +68,9 @@ class ViewTodayTasks : Fragment() {
 
         // Lấy những task có due_datetime bằng today (task chưa quá hạn)
         tasksList = tasksList.filter { task ->
-            val taskDueDate = task.due_datetime.substring(0, 10)
+            val taskDueDate = task.due_datetime.split(" ")[0]
             (taskDueDate == appDate) ?: false
-        }.sortedWith(compareByDescending<Task> { it.due_datetime.substring(11) })
+        }.sortedWith(compareByDescending<Task> { it.due_datetime.split(" ")[1] })
 
         taskText = rootView.findViewById(R.id.task_text)
 

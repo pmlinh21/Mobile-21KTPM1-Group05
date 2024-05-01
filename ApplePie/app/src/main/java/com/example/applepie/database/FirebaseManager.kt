@@ -316,27 +316,25 @@ object FirebaseManager {
     }
 
     fun addUserList(taskList: TaskList) {
-        val newListId = userList.size + 1
         val newList = TaskList(
-            newListId,
+            taskList.id_list,
             taskList.list_color,
             taskList.list_icon,
             taskList.list_name
         )
-        userListsRef.child((newListId - 1).toString()).setValue(newList)
+        userListsRef.child(userList.size.toString()).setValue(newList)
     }
 
-    fun countTasksOfList(listId: Int): Int {
+    fun countTasksOfList(listId: String): Int {
         return userTask.count { it.id_list == listId }
     }
 
     fun addNewTask(task: Task) {
-        val newTaskId = userTask.size
         val newTask = Task(
             task.description,
             task.due_datetime,
             task.id_list,
-            newTaskId,
+            task.id_task,
             task.isDone,
             task.link,
             task.priority,
@@ -345,7 +343,7 @@ object FirebaseManager {
             task.list_color,
             task.reminder
         )
-        userTasksRef.child(newTaskId.toString()).setValue(newTask)
+        userTasksRef.child(userTask.size.toString()).setValue(newTask)
     }
 
     fun setUserPremium(index: Int) {
@@ -353,11 +351,23 @@ object FirebaseManager {
         userPremiumRef.setValue(true)
     }
 
-    fun setTaskStatus(index: Int, taskId: Int, isDone: Boolean) {
+    fun setTaskStatus(index: Int, taskId: String, isDone: Boolean) {
         // find task index that has taskId
         val task = userTask.find { it.id_task == taskId }
         val taskIndex = userTask.indexOf(task)
         val taskRef = FirebaseDatabase.getInstance().getReference("users/$index/tasks/$taskIndex/isDone")
         taskRef.setValue(isDone)
+    }
+
+    fun getHighPriorityUndoneTasks(): List<Task> {
+        val tasks = userTask.filter { it.priority == "high" && !it.isDone }.sortedByDescending { it.due_datetime }
+
+        for (task in tasks) {
+            val matchingList = userList.find { it.id_list == task.id_list }
+            task.listName = matchingList?.list_name ?: "Unknown List"
+            task.list_color = matchingList?.list_color ?: -1
+        }
+
+        return tasks
     }
 }

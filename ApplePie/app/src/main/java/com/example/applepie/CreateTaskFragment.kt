@@ -24,6 +24,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import es.dmoral.toasty.Toasty
+import java.time.LocalDateTime
 import java.util.Calendar
 
 
@@ -115,7 +116,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         val taskLists = FirebaseManager.getUserList()
 
         val listNames = mutableListOf<String>()
-        val listNameToIdMap = mutableMapOf<String, Int>()
+        val listNameToIdMap = mutableMapOf<String, String>()
         for (taskList in taskLists) {
             val listName = taskList.list_name
             if (listName.isNotEmpty()) {
@@ -136,13 +137,13 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             val description = tieDescription.text.toString()
             val duedate = tieDuedate.text.toString()
             val time = tieTime.text.toString()
-            val priority = spnPriority.selectedItem.toString()
+            val priority = spnPriority.selectedItem.toString().lowercase()
             val listName = spnList.selectedItem.toString()
             val idList = listNameToIdMap[listName]
             val attachment = tieAttachment.text.toString()
 
             val newTask = Task(
-                id_task = -1,
+                id_task = LocalDateTime.now().toString().replace("-", "").replace("T", "").replace(":", "").split(".")[0],
                 id_list = idList!!,
                 description = description,
                 due_datetime = duedate + ' ' + time,
@@ -190,7 +191,8 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
 //            Toasty.success(requireContext(), "Reminder: " + duration, Toast.LENGTH_SHORT, true).show()
 
             timePickerListener?.onTimePicked(duration)
-            tieReminder.setText(selectedHour.toString() + ":" + selectedMinute.toString())
+            val reminderText = "$selectedHour:$selectedMinute"
+            tieReminder.setText(reminderText)
 
             dialog.dismiss()
         }

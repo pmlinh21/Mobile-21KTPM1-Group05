@@ -223,7 +223,7 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
-                android:id="@+id/high_priority_title"
+                android:id="@+id/high_priority_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="High Priority"

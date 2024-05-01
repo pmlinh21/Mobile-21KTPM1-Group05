@@ -56,7 +56,11 @@ class WeeklyReport : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val rootView = inflater.inflate(R.layout.fragment_weekly_report, container, false)
+        return inflater.inflate(R.layout.fragment_weekly_report, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val lists = FirebaseManager.getUserList()?: listOf()
         var tasksList = FirebaseManager.getUserTask()?: listOf()
@@ -67,9 +71,9 @@ class WeeklyReport : Fragment() {
 
         // Lấy những task chưa quá hạn trong tuần
         val calendar = Calendar.getInstance()
-        calendar.time = sdf.parse(appDate)
+        calendar.time = sdf.parse(appDate)!!
 
-        calendar.setFirstDayOfWeek(Calendar.MONDAY)
+        calendar.firstDayOfWeek = Calendar.MONDAY
 
         calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
         val firstDayOfWeek = calendar.time
@@ -89,7 +93,7 @@ class WeeklyReport : Fragment() {
 
         originTaskList = tasksList
 
-        taskText = rootView.findViewById(R.id.task_text)
+        taskText = view.findViewById(R.id.task_text)
         if (tasksList.isEmpty()) {
             taskText.text = "There are no tasks for this week"
             taskRecyclerView.visibility = View.GONE
@@ -97,13 +101,13 @@ class WeeklyReport : Fragment() {
             taskText.visibility = View.GONE
         }
 
-        taskRecyclerView = rootView.findViewById(R.id.recyclerView)
+        taskRecyclerView = view.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter(requireContext(), tasksList, lists)
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
 
-        val barChart: BarChart = rootView.findViewById(R.id.barChart)
+        val barChart: BarChart = view.findViewById(R.id.barChart)
         barChart.axisRight.setDrawLabels(false)
 
         barChart.axisLeft.setDrawGridLines(false)
@@ -225,7 +229,7 @@ class WeeklyReport : Fragment() {
         })
 
         // Bar chart for %done
-        val barChartDone: BarChart = rootView.findViewById(R.id.barChart_1)
+        val barChartDone: BarChart = view.findViewById(R.id.barChart_1)
         barChartDone.axisRight.setDrawLabels(false)
 
         barChartDone.axisLeft.setDrawGridLines(false)
@@ -277,11 +281,11 @@ class WeeklyReport : Fragment() {
         yAxis_1.axisMinimum = 0f
         yAxis_1.axisMaximum = 100f
         yAxis_1.setLabelCount(5)
-        yAxis_1.setValueFormatter(object : ValueFormatter() {
+        yAxis_1.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return value.toInt().toString()
             }
-        })
+        }
 
         val dataSetDone = BarDataSet(entriesDone, "Completed Tasks")
 
@@ -318,7 +322,7 @@ class WeeklyReport : Fragment() {
 
         barChartDone.renderer = RoundedBarChart(barChartDone, barChartDone.animator, barChartDone.viewPortHandler)
 
-        viewAllButton = rootView.findViewById(R.id.task_all)
+        viewAllButton = view.findViewById(R.id.task_all)
         viewAllButton.setOnClickListener {
             adapter.updateData(originTaskList)
             if (originTaskList.isEmpty()) {
@@ -328,8 +332,6 @@ class WeeklyReport : Fragment() {
                 taskText.visibility = View.GONE
             }
         }
-
-        return rootView
     }
 
     private fun updateRecyclerView(tasks: List<Task>) {

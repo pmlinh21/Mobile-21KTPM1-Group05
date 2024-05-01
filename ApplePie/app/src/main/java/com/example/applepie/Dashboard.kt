@@ -11,7 +11,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.compose.ui.text.capitalize
 import androidx.core.view.ViewCompat.canScrollVertically
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
@@ -34,8 +33,9 @@ class Dashboard : Fragment() {
     private lateinit var todayTV: TextView
     private lateinit var searchBtn: Button
     private lateinit var addListTV: TextView
-    private lateinit var listRV: androidx.recyclerview.widget.RecyclerView
-    private lateinit var highPriorityRV: androidx.recyclerview.widget.RecyclerView
+    private lateinit var listRV: RecyclerView
+    private lateinit var highPriorityTV: TextView
+    private lateinit var highPriorityRV: RecyclerView
     private lateinit var viewTodayTask: androidx.constraintlayout.widget.ConstraintLayout
     private lateinit var viewAllTask: androidx.constraintlayout.widget.ConstraintLayout
     private lateinit var todayCountTV: TextView
@@ -79,6 +79,7 @@ class Dashboard : Fragment() {
     override fun onResume() {
         super.onResume()
         updateTaskLists()
+        updateHighPriorityTasks()
     }
 
     private fun setupUI(view: View) {
@@ -109,7 +110,7 @@ class Dashboard : Fragment() {
     }
 
     private fun setupListRV(view: View) {
-        listRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.list_recycler_view)
+        listRV = view.findViewById<RecyclerView>(R.id.list_recycler_view)
 
         val taskLists = FirebaseManager.getUserList()
         val adapter = ListRecyclerAdapter(requireContext(), taskLists)
@@ -149,6 +150,7 @@ class Dashboard : Fragment() {
     }
 
     private fun setupHighPriorityRV(view: View) {
+        highPriorityTV = view.findViewById(R.id.high_priority_text_view)
         highPriorityRV = view.findViewById(R.id.high_priority_recycler_view)
 
         val tasks = FirebaseManager.getUserTask()
@@ -156,6 +158,15 @@ class Dashboard : Fragment() {
 
         val highPriorityTasks = tasks.filter { it.priority == "high" && !it.isDone }
                                      .sortedByDescending { it.due_datetime }
+
+        if (highPriorityTasks.isEmpty()) {
+            highPriorityTV.visibility = View.INVISIBLE
+            highPriorityRV.visibility = View.INVISIBLE
+            return
+        } else {
+            highPriorityTV.visibility = View.VISIBLE
+            highPriorityRV.visibility = View.VISIBLE
+        }
 
         for (task in highPriorityTasks) {
             val matchingList = lists.find { it.id_list == task.id_list }
@@ -185,6 +196,23 @@ class Dashboard : Fragment() {
 //                .addToBackStack(null)
 //                .commit()
 //        }
+    }
+
+    private fun updateHighPriorityTasks() {
+
+        val highPriorityTasks = FirebaseManager.getHighPriorityUndoneTasks()
+
+        if (highPriorityTasks.isEmpty()) {
+            highPriorityTV.visibility = View.INVISIBLE
+            highPriorityRV.visibility = View.INVISIBLE
+            return
+        } else {
+            highPriorityTV.visibility = View.VISIBLE
+            highPriorityRV.visibility = View.VISIBLE
+        }
+
+        val adapter = highPriorityRV.adapter as PriorityRecyclerAdapter
+        adapter.setTasks(highPriorityTasks)
     }
 
     private fun setupViewTodayTask(view: View) {
