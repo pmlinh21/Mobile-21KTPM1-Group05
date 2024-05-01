@@ -384,7 +384,10 @@ object FirebaseManager {
             task.isDone,
             task.link,
             task.priority,
-            task.title
+            task.title,
+            task.listName,
+            task.list_color,
+            task.reminder
         )
         userTasksRef.child(newTaskId.toString()).setValue(newTask)
     }

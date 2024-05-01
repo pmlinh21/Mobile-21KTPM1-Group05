@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.NumberPicker
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.applepie.database.FirebaseManager
@@ -25,7 +27,18 @@ import es.dmoral.toasty.Toasty
 import java.util.Calendar
 
 
+interface TimePickerListener {
+    fun onTimePicked(duration: Int)
+}
+
+
 class CreateTaskFragment : BottomSheetDialogFragment() {
+    private var timePickerListener: TimePickerListener? = null
+
+    fun setTimePickerListener(listener: TimePickerListener) {
+        this.timePickerListener = listener
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,6 +67,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         tieTime = view.findViewById(R.id.tie_time)
         spnPriority = view.findViewById(R.id.spn_priority)
         spnList = view.findViewById(R.id.spn_list)
+        tieReminder = view.findViewById(R.id.tie_reminder)
         tieAttachment = view.findViewById(R.id.tie_attachment)
         btnCreateTask = view.findViewById(R.id.btn_createTask)
         btnCancel = view.findViewById(R.id.btn_cancel)
@@ -86,6 +100,10 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             timePickerDialog.show()
         }
 
+        tieReminder.setOnClickListener {
+            showTimePickerDialog()
+        }
+
         val spinnerItems = listOf("None", "Low", "Medium", "High")
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, spinnerItems)
@@ -110,6 +128,8 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
 
         spnList.adapter = adt
 
+//        Log.i("duration", duration.toString())
+
         btnCreateTask.setOnClickListener {
             val title = tieTitle.text.toString()
             val description = tieDescription.text.toString()
@@ -127,9 +147,12 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
                 due_datetime = duedate + ' ' + time,
                 link = attachment,
                 priority = priority,
-                title = title
+                title = title,
+                reminder = duration
             )
             FirebaseManager.addNewTask(newTask)
+
+//            Toasty.success(requireContext(), "Duration: " + duration, Toast.LENGTH_SHORT, true).show()
 
             Toasty.success(requireContext(), "Create task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()
@@ -140,12 +163,50 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun showTimePickerDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_time_picker, null)
+        val hourPicker = dialogView.findViewById<NumberPicker>(R.id.hourPicker)
+        val minutePicker = dialogView.findViewById<NumberPicker>(R.id.minutePicker)
+
+        hourPicker.minValue = 0
+        hourPicker.maxValue = 23
+
+        minutePicker.minValue = 0
+        minutePicker.maxValue = 59
+
+//        Log.i("account", (reminder/60).toString())
+//        Log.i("account", (reminder%60).toString())
+//        hourPicker.value = reminder / 60
+//        minutePicker.value = reminder % 60
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setView(dialogView)
+        builder.setPositiveButton("OK") { dialog, _ ->
+            val selectedHour = hourPicker.value
+            val selectedMinute = minutePicker.value
+            duration = selectedHour * 60 + selectedMinute
+
+//            Toasty.success(requireContext(), "Reminder: " + duration, Toast.LENGTH_SHORT, true).show()
+
+            timePickerListener?.onTimePicked(duration)
+            tieReminder.setText(selectedHour.toString() + ":" + selectedMinute.toString())
+
+            dialog.dismiss()
+        }
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val dialog = builder.create()
+        dialog.show()
+    }
+
     private lateinit var tieTitle: TextInputEditText
     private lateinit var tieDescription: TextInputEditText
     private lateinit var tieDuedate: TextInputEditText
     private lateinit var tieTime: TextInputEditText
     private lateinit var spnPriority: Spinner
     private lateinit var spnList: Spinner
+    private lateinit var tieReminder: TextInputEditText
     private lateinit var tieAttachment: TextInputEditText
     private lateinit var btnCreateTask: Button
     private lateinit var btnCancel: Button
@@ -156,6 +217,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
     private var day = myCalendar.get(Calendar.DAY_OF_MONTH)
     private var hourOfDay = myCalendar.get(Calendar.HOUR_OF_DAY)
     private var minute = myCalendar.get(Calendar.MINUTE)
+    private var duration = 0
 
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var databaseReference: DatabaseReference
