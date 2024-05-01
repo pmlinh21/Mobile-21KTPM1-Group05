@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +38,8 @@ class Dashboard : Fragment() {
     private lateinit var highPriorityRV: androidx.recyclerview.widget.RecyclerView
     private lateinit var viewTodayTask: androidx.constraintlayout.widget.ConstraintLayout
     private lateinit var viewAllTask: androidx.constraintlayout.widget.ConstraintLayout
+    private lateinit var todayCountTV: TextView
+    private lateinit var allCountTV: TextView
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -80,10 +84,20 @@ class Dashboard : Fragment() {
     private fun setupUI(view: View) {
         searchBtn = view.findViewById<Button>(R.id.search_button)
         todayTV = view.findViewById<TextView>(R.id.today_text_view)
-        val day = java.time.LocalDate.now().dayOfMonth
-        val month = java.time.LocalDate.now().month.toString().lowercase().replaceFirstChar { it.uppercase() }
+        val day = LocalDate.now().dayOfMonth
+        val month = LocalDate.now().month.toString().lowercase().replaceFirstChar { it.uppercase() }
         val today = "Today, $day $month"
         todayTV.text = today
+
+        todayCountTV = view.findViewById(R.id.today_count_text_view)
+        allCountTV = view.findViewById(R.id.all_count_text_view)
+
+        val tasks = FirebaseManager.getUserTask()
+        val todayTasks = tasks.filter { !it.isDone && it.due_datetime.split(" ")[0] == LocalDate.now().toString().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}
+        todayCountTV.text = todayTasks.size.toString()
+
+        val undoneTasks = tasks.filter { !it.isDone }
+        allCountTV.text = undoneTasks.size.toString()
     }
 
     private fun setupSearchBtn(view: View) {

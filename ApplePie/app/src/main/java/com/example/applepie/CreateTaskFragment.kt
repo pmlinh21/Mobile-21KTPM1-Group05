@@ -58,11 +58,12 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         btnCreateTask = view.findViewById(R.id.btn_createTask)
         btnCancel = view.findViewById(R.id.btn_cancel)
 
+        // format date: yyyy-MM-dd
         tieDuedate.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 { view, year, monthOfYear, dayOfMonth ->
-                    val dat = "$year-${monthOfYear + 1}-$dayOfMonth"
+                    val dat = String.format("%02d-%02d-%02d", year, monthOfYear + 1, dayOfMonth)
                     tieDuedate.setText(dat)
                 },
                 year,
