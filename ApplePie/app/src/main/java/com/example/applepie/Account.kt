@@ -48,6 +48,7 @@ class Account : Fragment() {
 
         val rootView = inflater.inflate(R.layout.fragment_account, container, false)
 
+        subscriptionDescription = rootView.findViewById(R.id.subscription_description)
         subscriptionButton = rootView.findViewById(R.id.subscription_btn)
         reminderButton = rootView.findViewById(R.id.reminder_btn)
         logoutButton = rootView.findViewById(R.id.logout_btn)
@@ -65,16 +66,23 @@ class Account : Fragment() {
         return rootView
     }
 
-    fun setUI(){
+    private fun setUI(){
         usernameInput.setText(FirebaseManager.getUserInfo().username)
         emailInput.setText(FirebaseManager.getUserInfo().email)
-        currentStreakText.setText(FirebaseManager.getUserInfo().current_streak.toString())
-        longestStreakText.setText(FirebaseManager.getUserInfo().longest_streak.toString())
+        currentStreakText.text = FirebaseManager.getUserInfo().current_streak.toString()
+        longestStreakText.text = FirebaseManager.getUserInfo().longest_streak.toString()
+        if (FirebaseManager.getUserInfo().isPremium) {
+            subscriptionDescription.text = getString(R.string.premium_description_paid)
+            subscriptionButton.visibility = View.GONE
+        } else {
+            subscriptionDescription.setText(R.string.premium_description_free)
+            subscriptionButton.isEnabled = true
+            subscriptionButton.setText(R.string.premium_button)
+        }
     }
 
-    fun handleEventListener(){
+    private fun handleEventListener(){
         subscriptionButton.setOnClickListener {
-            // TODO: go to subscription activity
             val subscribeActivity = Intent(this.activity, SubscribeActivity::class.java)
             startActivity(subscribeActivity)
         }
@@ -86,7 +94,6 @@ class Account : Fragment() {
 
         logoutButton.setOnClickListener {
             // TODO:  delete index from preferences
-
             val builder = AlertDialog.Builder(this.activity)
             builder.setMessage("Are you sure you want to log out?")
                 .setCancelable(false)
@@ -161,6 +168,7 @@ class Account : Fragment() {
             }
     }
 
+    private lateinit var subscriptionDescription: TextView
     private lateinit var subscriptionButton: Button
     private lateinit var reminderButton: Button
     private lateinit var logoutButton: Button

@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
@@ -36,6 +38,8 @@ class Dashboard : Fragment() {
     private lateinit var highPriorityRV: androidx.recyclerview.widget.RecyclerView
     private lateinit var viewTodayTask: androidx.constraintlayout.widget.ConstraintLayout
     private lateinit var viewAllTask: androidx.constraintlayout.widget.ConstraintLayout
+    private lateinit var todayCountTV: TextView
+    private lateinit var allCountTV: TextView
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -80,10 +84,20 @@ class Dashboard : Fragment() {
     private fun setupUI(view: View) {
         searchBtn = view.findViewById<Button>(R.id.search_button)
         todayTV = view.findViewById<TextView>(R.id.today_text_view)
-        val day = java.time.LocalDate.now().dayOfMonth
-        val month = java.time.LocalDate.now().month.toString().lowercase().replaceFirstChar { it.uppercase() }
+        val day = LocalDate.now().dayOfMonth
+        val month = LocalDate.now().month.toString().lowercase().replaceFirstChar { it.uppercase() }
         val today = "Today, $day $month"
         todayTV.text = today
+
+        todayCountTV = view.findViewById(R.id.today_count_text_view)
+        allCountTV = view.findViewById(R.id.all_count_text_view)
+
+        val tasks = FirebaseManager.getUserTask()
+        val todayTasks = tasks.filter { !it.isDone && it.due_datetime.split(" ")[0] == LocalDate.now().toString().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))}
+        todayCountTV.text = todayTasks.size.toString()
+
+        val undoneTasks = tasks.filter { !it.isDone }
+        allCountTV.text = undoneTasks.size.toString()
     }
 
     private fun setupSearchBtn(view: View) {
@@ -121,41 +135,35 @@ class Dashboard : Fragment() {
     }
 
      private fun updateTaskLists() {
-        val taskLists = FirebaseManager.getUserList()?: listOf()
+        val taskLists = FirebaseManager.getUserList()
         val adapter = listRV.adapter as ListRecyclerAdapter
         adapter.setLists(taskLists)
     }
 
     private fun setupAddListTV(view: View) {
-        addListTV = view.findViewById<TextView>(R.id.add_list_text_view)
+        addListTV = view.findViewById(R.id.add_list_text_view)
         addListTV.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, AddList()) // replace current fragment with new fragment
-//                .addToBackStack(null) // Optional: Add transaction to back stack for navigation back
-//                .commit()
-
             val createListFragment = CreateListFragment()
             createListFragment.show(parentFragmentManager, createListFragment.tag)
         }
     }
 
     private fun setupHighPriorityRV(view: View) {
-        highPriorityRV = view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.high_priority_recycler_view)
+        highPriorityRV = view.findViewById(R.id.high_priority_recycler_view)
 
         val tasks = FirebaseManager.getUserTask()
         val lists = FirebaseManager.getUserList()
 
-        tasks.filter { it.priority == "high" && !it.isDone }
-            .sortedByDescending { it.due_datetime }
+        val highPriorityTasks = tasks.filter { it.priority == "high" && !it.isDone }
+                                     .sortedByDescending { it.due_datetime }
 
-        for (task in tasks) {
+        for (task in highPriorityTasks) {
             val matchingList = lists.find { it.id_list == task.id_list }
             task.listName = matchingList?.list_name ?: "Unknown List"
             task.list_color = matchingList?.list_color ?: -1
-            Log.d("Task", task.toString())
         }
 
-        val adapter = PriorityRecyclerAdapter(requireContext(), tasks)
+        val adapter = PriorityRecyclerAdapter(requireContext(), highPriorityTasks)
         highPriorityRV.adapter = adapter
         highPriorityRV.layoutManager = LinearLayoutManager(requireContext())
 

@@ -114,50 +114,6 @@ object FirebaseManager {
         })
     }
 
-    fun setUserList_(callback: DataCallback<List<TaskList>>) {
-        userListsRef.addChildEventListener(object: ChildEventListener {
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val tempList = userList.toMutableList()
-                val list = snapshot.getValue(TaskList::class.java)
-                list?.let {
-                    tempList.add(it)
-                }
-                userList = tempList
-                callback.onDataReceived(userList)
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val tempList = userList.toMutableList()
-                val list = snapshot.getValue(TaskList::class.java)
-                list?.let {
-                    val index:Int = userList.indexOfFirst { it.id_list == list.id_list }
-                    tempList[index] = list
-                }
-                userList = tempList
-                callback.onDataReceived(userList)
-            }
-
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                val tempList = userList.toMutableList()
-                val list = snapshot.getValue(TaskList::class.java)
-                list?.let {
-                    tempList.remove(list)
-                }
-                userList = tempList
-                callback.onDataReceived(userList)
-            }
-
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                // This method is not needed for this app
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                callback.onError(error)
-                Log.e("Firebase", "Error retrieving user info: ${error.message}")
-            }
-        })
-    }
-
     fun getUserList(): List<TaskList> {
         return userList
     }
@@ -390,5 +346,18 @@ object FirebaseManager {
             task.reminder
         )
         userTasksRef.child(newTaskId.toString()).setValue(newTask)
+    }
+
+    fun setUserPremium(index: Int) {
+        val userPremiumRef = FirebaseDatabase.getInstance().getReference("users/$index/info/isPremium")
+        userPremiumRef.setValue(true)
+    }
+
+    fun setTaskStatus(index: Int, taskId: Int, isDone: Boolean) {
+        // find task index that has taskId
+        val task = userTask.find { it.id_task == taskId }
+        val taskIndex = userTask.indexOf(task)
+        val taskRef = FirebaseDatabase.getInstance().getReference("users/$index/tasks/$taskIndex/isDone")
+        taskRef.setValue(isDone)
     }
 }

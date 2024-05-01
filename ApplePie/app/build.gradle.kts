@@ -94,4 +94,13 @@ dependencies {
     implementation("com.android.billingclient:billing:6.1.0")
     implementation("com.android.billingclient:billing-ktx:6.1.0")
     implementation("com.google.firebase:firebase-crashlytics-buildtools:2.9.9")
+
+    // Paypal
+    implementation("com.paypal.android:paypal-native-payments:1.3.0")
+    implementation("com.paypal.android:payment-buttons:1.3.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 }
