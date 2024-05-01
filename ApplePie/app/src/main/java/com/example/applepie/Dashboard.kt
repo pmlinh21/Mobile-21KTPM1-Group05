@@ -33,6 +33,7 @@ class Dashboard : Fragment() {
     private lateinit var todayTV: TextView
     private lateinit var searchBtn: Button
     private lateinit var addListTV: TextView
+    private lateinit var listEmptyTV: TextView
     private lateinit var listRV: RecyclerView
     private lateinit var highPriorityEmptyTV: TextView
     private lateinit var highPriorityRV: RecyclerView
@@ -111,8 +112,18 @@ class Dashboard : Fragment() {
 
     private fun setupListRV(view: View) {
         listRV = view.findViewById<RecyclerView>(R.id.list_recycler_view)
+        listEmptyTV = view.findViewById<TextView>(R.id.list_empty_text_view)
 
         val taskLists = FirebaseManager.getUserList()
+
+        if (taskLists.isEmpty()) {
+            listRV.visibility = View.INVISIBLE
+            listEmptyTV.visibility = View.VISIBLE
+        } else {
+            listRV.visibility = View.VISIBLE
+            listEmptyTV.visibility = View.INVISIBLE
+        }
+
         val adapter = ListRecyclerAdapter(requireContext(), taskLists)
         listRV.adapter = adapter
         listRV.layoutManager = LinearLayoutManager(requireContext())
@@ -137,6 +148,15 @@ class Dashboard : Fragment() {
 
      private fun updateTaskLists() {
         val taskLists = FirebaseManager.getUserList()
+
+        if (taskLists.isEmpty()) {
+            listRV.visibility = View.INVISIBLE
+            listEmptyTV.visibility = View.VISIBLE
+        } else {
+            listRV.visibility = View.VISIBLE
+            listEmptyTV.visibility = View.INVISIBLE
+        }
+
         val adapter = listRV.adapter as ListRecyclerAdapter
         adapter.setLists(taskLists)
     }
@@ -208,10 +228,10 @@ class Dashboard : Fragment() {
         } else {
             highPriorityRV.visibility = View.VISIBLE
             highPriorityEmptyTV.visibility = View.INVISIBLE
-
-            val adapter = highPriorityRV.adapter as PriorityRecyclerAdapter
-            adapter.setTasks(highPriorityTasks)
         }
+
+        val adapter = highPriorityRV.adapter as PriorityRecyclerAdapter
+        adapter.setTasks(highPriorityTasks)
     }
 
     private fun setupViewTodayTask(view: View) {

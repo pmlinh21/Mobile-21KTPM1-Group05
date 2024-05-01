@@ -124,7 +124,7 @@ class CreateListFragment : BottomSheetDialogFragment() {
                 FirebaseManager.addUserList(newList)
             }
 
-            parentFragmentManager.popBackStack()
+            dismiss()
         }
     }
 

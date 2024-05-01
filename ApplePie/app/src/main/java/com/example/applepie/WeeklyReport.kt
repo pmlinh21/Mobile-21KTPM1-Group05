@@ -94,14 +94,15 @@ class WeeklyReport : Fragment() {
         originTaskList = tasksList
 
         taskText = view.findViewById(R.id.task_text)
+        taskRecyclerView = view.findViewById(R.id.recyclerView)
+
         if (tasksList.isEmpty()) {
             taskText.text = "There are no tasks for this week"
-            taskRecyclerView.visibility = View.GONE
+            taskRecyclerView.visibility = View.INVISIBLE
         } else {
-            taskText.visibility = View.GONE
+            taskText.visibility = View.INVISIBLE
         }
 
-        taskRecyclerView = view.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter(requireContext(), tasksList, lists)
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
