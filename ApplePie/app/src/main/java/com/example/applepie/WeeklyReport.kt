@@ -26,6 +26,7 @@ import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
@@ -333,6 +334,95 @@ class WeeklyReport : Fragment() {
                 taskText.visibility = View.GONE
             }
         }
+
+        val pomodoroTimeByDay = mutableMapOf<String, Long>()
+        val stopwatchTimeByDay = mutableMapOf<String, Long>()
+
+        for (day in daysOfWeek) {
+            pomodoroTimeByDay[day] = 0L
+            stopwatchTimeByDay[day] = 0L
+        }
+
+        val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
+        val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
+
+        Log.d("firstDayOfWeek: ", firstDayOfWeek.toString())
+        Log.d("lastDayOfWeek: ", lastDayOfWeek.toString())
+
+        val sdf_1 = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+        for (pomodoro in pomodoroTimes) {
+            val startDate = dateTimeFormat.parse(pomodoro.start_time)
+            val endDate = dateTimeFormat.parse(pomodoro.end_time)
+            val startDay = sdf_1.format(startDate)
+
+            for (day in daysOfWeek) {
+                if (startDay == day) {
+                    val durationInSeconds = (endDate.time - startDate.time) / 1000
+                    pomodoroTimeByDay[day] = pomodoroTimeByDay.getOrDefault(day, 0L) + durationInSeconds
+                }
+            }
+        }
+        Log.d("pomodoroTimeByDay: ", pomodoroTimeByDay.toString())
+
+
+        for (stopwatch in stopwatchTimes) {
+            val startDate = dateTimeFormat.parse(stopwatch.start_time)
+            val endDate = dateTimeFormat.parse(stopwatch.end_time)
+            val startDay = sdf_1.format(startDate)
+
+            for (day in daysOfWeek) {
+                if (startDay == day) {
+                    val durationInSeconds = (endDate.time - startDate.time) / 1000
+                    stopwatchTimeByDay[day] = stopwatchTimeByDay.getOrDefault(day, 0L) + durationInSeconds
+                }
+            }
+        }
+        Log.d("stopwatchTimeByDay: ", stopwatchTimeByDay.toString())
+
+        val pomodoroEntries = ArrayList<BarEntry>()
+        val stopwatchEntries = ArrayList<BarEntry>()
+
+        daysOfWeek.forEachIndexed { index, day ->
+            pomodoroEntries.add(BarEntry(index.toFloat(), pomodoroTimeByDay[day]!!.toFloat()))
+            stopwatchEntries.add(BarEntry(index.toFloat() + 0.4f, stopwatchTimeByDay[day]!!.toFloat()))
+        }
+
+        val pomodoroDataSet = BarDataSet(pomodoroEntries, "Pomodoro").apply {
+            color = Color.parseColor("#319F43")
+        }
+        val stopwatchDataSet = BarDataSet(stopwatchEntries, "Stopwatch").apply {
+            color = Color.parseColor("#C6E9C7")
+        }
+
+        val timeBarData = BarData(pomodoroDataSet, stopwatchDataSet)
+        timeBarData.setValueTextSize(12f)
+        timeBarData.barWidth = 0.4f
+
+        timeBarData.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toInt().toString() + "s"
+            }
+        })
+
+        val timeBarChart: BarChart = view.findViewById(R.id.timeBarChart)
+        timeBarChart.axisRight.setDrawLabels(false)
+        timeBarChart.axisLeft.setDrawGridLines(false)
+        timeBarChart.axisRight.setDrawGridLines(false)
+        timeBarChart.xAxis.setDrawGridLines(false)
+
+        timeBarChart.description.isEnabled = false
+        timeBarChart.legend.isEnabled = false;
+
+        timeBarChart.data = timeBarData
+        timeBarChart.groupBars(0f, 0.1f, 0.02f)
+
+        timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
+        timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+        timeBarChart.invalidate()
+
     }
 
     private fun updateRecyclerView(tasks: List<Task>) {
