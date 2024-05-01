@@ -57,7 +57,8 @@ class ListOfTasks : Fragment() {
         taskRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
         val lists = FirebaseManager.getUserList()?: listOf()
-        val tasksList = FirebaseManager.getUserTask()?: listOf()
+//        val tasksList = FirebaseManager.getUserTask()?: listOf()
+        val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
 
         taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
         setupBackButton()
