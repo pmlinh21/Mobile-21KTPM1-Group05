@@ -1,22 +1,30 @@
 package com.example.applepie
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
-import com.example.applepie.model.TaskList
+import com.example.applepie.model.DateTime
 import com.example.applepie.model.Task
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,12 +68,6 @@ class DailyReport : Fragment() {
         val appDate = sdf.format(currentTime)
 
         // Lấy những task có due_datetime sau hoặc bằng today (task chưa quá hạn)
-//        tasksList = tasksList.filter { task ->
-//            val taskDueDate_1 = task.due_datetime.substring(0, 10)
-//            (taskDueDate_1 == appDate) ?: false
-//        }.sortedByDescending { task ->
-//            sdf.parse(task.due_datetime)
-//        }
         tasksList = tasksList.filter { task ->
             val taskDueDate = task.due_datetime.substring(0, 10)
             (taskDueDate == appDate) ?: false
@@ -96,7 +98,75 @@ class DailyReport : Fragment() {
 
         total_tasks = rootView.findViewById(R.id.total_tasks)
         total_tasks.text = "Total tasks: $totalTasks"
+
+        var pomodoroTime = FirebaseManager.getUserPomodoro()?: listOf()
+        var stopwatchTime = FirebaseManager.getUserStopwatch()?: listOf()
+
+        pomodoroTime = pomodoroTime.filter { it.start_time.startsWith(appDate) }
+        stopwatchTime = stopwatchTime.filter { it.start_time.startsWith(appDate) }
+
+        Log.d("Filtered pomodoroTime", pomodoroTime.toString())
+        Log.d("Filtered stopwatchTime", stopwatchTime.toString())
+
+        pieChart = rootView.findViewById(R.id.pieChart)
+
+        timeText = rootView.findViewById(R.id.time_text)
+        if (pomodoroTime.isEmpty() && stopwatchTime.isEmpty()) {
+            timeText.text = "Start a Pomodoro or Stopwatch session to see your progress here"
+            pieChart.visibility = View.GONE
+        } else {
+            timeText.visibility = View.GONE
+        }
+
+        fun calculateTotalSeconds(times: List<DateTime>): Long {
+            val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+            return times.sumOf { time ->
+                val startTime = format.parse(time.start_time)
+                val endTime = format.parse(time.end_time)
+                (endTime.time - startTime.time) / 1000
+            }
+        }
+
+        val totalPomodoroSeconds = calculateTotalSeconds(pomodoroTime)
+        val totalStopwatchSeconds = calculateTotalSeconds(stopwatchTime)
+
+        Log.d("Total Pomodoro Seconds", totalPomodoroSeconds.toString())
+        Log.d("Total Stopwatch Seconds", totalStopwatchSeconds.toString())
+
+        val entries = mutableListOf<PieEntry>()
+        entries.add(PieEntry(totalPomodoroSeconds.toFloat(), "Pomodoro"))
+        entries.add(PieEntry(totalStopwatchSeconds.toFloat(), "Stopwatch"))
+
+        val colors = listOf(Color.parseColor("#A1EEBD"), Color.parseColor("#7BD3EA"))
+
+        val dataSet = PieDataSet(entries, "Daily Time Usage").apply {
+            //setColors(*ColorTemplate.COLORFUL_COLORS)
+            setColors(colors)
+            valueTextSize = 13f
+            valueTextColor = Color.parseColor("#000000")
+            valueFormatter = TimeValueFormatter()
+        }
+
+        val data = PieData(dataSet)
+
+        pieChart.apply {
+            this.data = data
+            invalidate()
+            setUsePercentValues(false)
+            setEntryLabelTextSize(12f)
+            setEntryLabelColor(Color.parseColor("#000000"))
+            centerText = "Time Distribution"
+            setCenterTextSize(16f)
+            description.isEnabled = false
+            legend.isEnabled = false
+            animateY(1400)
+        }
+
         return rootView
+    }
+
+    class TimeValueFormatter : ValueFormatter() {
+        override fun getFormattedValue(value: Float): String = "${value.toInt()}s"
     }
 
     companion object {
@@ -125,4 +195,6 @@ class DailyReport : Fragment() {
     private lateinit var adapter: TaskListAdapter
     private  lateinit var taskText: TextView
     private lateinit var total_tasks: TextView
+    private lateinit var pieChart: PieChart
+    private  lateinit var timeText: TextView
 }
