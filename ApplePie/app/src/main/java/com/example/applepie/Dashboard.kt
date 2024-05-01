@@ -159,11 +159,9 @@ class Dashboard : Fragment() {
         val highPriorityTasks = tasks.filter { it.priority == "high" && !it.isDone }
                                      .sortedByDescending { it.due_datetime }
 
-
         if (highPriorityTasks.isEmpty()) {
             highPriorityRV.visibility = View.INVISIBLE
             highPriorityEmptyTV.visibility = View.VISIBLE
-            return
         } else {
             highPriorityRV.visibility = View.VISIBLE
             highPriorityEmptyTV.visibility = View.INVISIBLE
