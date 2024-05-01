@@ -55,7 +55,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/header"
@@ -230,45 +230,40 @@
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"
+                android:layout_marginBottom="10dp"
                 android:layout_marginStart="20dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/high_priority_recycler_view"
-                android:overScrollMode="never"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/bg_task"
                 android:elevation="6dp"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp">
+                android:overScrollMode="never">
 
             </androidx.recyclerview.widget.RecyclerView>
 
-<!--            <TextView-->
-<!--                android:id="@+id/medium_priority_title"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="Medium Priority"-->
-<!--                android:textSize="24sp"-->
-<!--                android:textStyle="bold"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:layout_marginStart="20dp" />-->
+            <TextView
+                android:visibility="invisible"
+                android:id="@+id/high_priority_empty_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="-20dp"
+                android:layout_marginBottom="20dp"
+                android:text="No high priority tasks"
+                android:textSize="16sp"
+                android:textColor="@color/grey"
+                android:padding="15dp"
+                android:background="@drawable/bg_task"
+                android:elevation="6dp">
 
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/medium_priority_recycler_view"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/bg_task"-->
-<!--                android:elevation="6dp"-->
-<!--                android:layout_marginHorizontal="20dp"-->
-<!--                android:layout_marginTop="10dp"-->
-<!--                android:layout_marginBottom="10dp">-->
-
-<!--            </androidx.recyclerview.widget.RecyclerView>-->
+            </TextView>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

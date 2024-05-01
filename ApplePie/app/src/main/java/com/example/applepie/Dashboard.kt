@@ -34,7 +34,7 @@ class Dashboard : Fragment() {
     private lateinit var searchBtn: Button
     private lateinit var addListTV: TextView
     private lateinit var listRV: RecyclerView
-    private lateinit var highPriorityTV: TextView
+    private lateinit var highPriorityEmptyTV: TextView
     private lateinit var highPriorityRV: RecyclerView
     private lateinit var viewTodayTask: androidx.constraintlayout.widget.ConstraintLayout
     private lateinit var viewAllTask: androidx.constraintlayout.widget.ConstraintLayout
@@ -150,7 +150,7 @@ class Dashboard : Fragment() {
     }
 
     private fun setupHighPriorityRV(view: View) {
-        highPriorityTV = view.findViewById(R.id.high_priority_text_view)
+        highPriorityEmptyTV = view.findViewById(R.id.high_priority_empty_text_view)
         highPriorityRV = view.findViewById(R.id.high_priority_recycler_view)
 
         val tasks = FirebaseManager.getUserTask()
@@ -159,15 +159,15 @@ class Dashboard : Fragment() {
         val highPriorityTasks = tasks.filter { it.priority == "high" && !it.isDone }
                                      .sortedByDescending { it.due_datetime }
 
+
         if (highPriorityTasks.isEmpty()) {
-            highPriorityTV.visibility = View.INVISIBLE
             highPriorityRV.visibility = View.INVISIBLE
+            highPriorityEmptyTV.visibility = View.VISIBLE
             return
         } else {
-            highPriorityTV.visibility = View.VISIBLE
             highPriorityRV.visibility = View.VISIBLE
+            highPriorityEmptyTV.visibility = View.INVISIBLE
         }
-
         for (task in highPriorityTasks) {
             val matchingList = lists.find { it.id_list == task.id_list }
             task.listName = matchingList?.list_name ?: "Unknown List"
@@ -195,7 +195,8 @@ class Dashboard : Fragment() {
 //                .replace(R.id.fragment_container, TaskDetails.newInstance(task.id_task))
 //                .addToBackStack(null)
 //                .commit()
-//        }
+//        }\
+
     }
 
     private fun updateHighPriorityTasks() {
@@ -203,16 +204,16 @@ class Dashboard : Fragment() {
         val highPriorityTasks = FirebaseManager.getHighPriorityUndoneTasks()
 
         if (highPriorityTasks.isEmpty()) {
-            highPriorityTV.visibility = View.INVISIBLE
             highPriorityRV.visibility = View.INVISIBLE
-            return
-        } else {
-            highPriorityTV.visibility = View.VISIBLE
-            highPriorityRV.visibility = View.VISIBLE
-        }
+            highPriorityEmptyTV.visibility = View.VISIBLE
 
-        val adapter = highPriorityRV.adapter as PriorityRecyclerAdapter
-        adapter.setTasks(highPriorityTasks)
+        } else {
+            highPriorityRV.visibility = View.VISIBLE
+            highPriorityEmptyTV.visibility = View.INVISIBLE
+
+            val adapter = highPriorityRV.adapter as PriorityRecyclerAdapter
+            adapter.setTasks(highPriorityTasks)
+        }
     }
 
     private fun setupViewTodayTask(view: View) {
