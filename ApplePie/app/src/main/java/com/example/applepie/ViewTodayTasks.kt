@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -198,8 +199,8 @@ class ViewTodayTasks : Fragment() {
     private lateinit var today: TextView
     private lateinit var taskRecyclerView: RecyclerView
     private lateinit var adapter: TaskListAdapter1
-    private lateinit var previousDateButton: ImageView
-    private lateinit var nextDateButton: ImageView
+    private lateinit var previousDateButton: Button
+    private lateinit var nextDateButton: Button
     private lateinit var taskText: TextView
     private lateinit var tasksList: List<Task>
     private lateinit var originalTasksList: List<Task>
