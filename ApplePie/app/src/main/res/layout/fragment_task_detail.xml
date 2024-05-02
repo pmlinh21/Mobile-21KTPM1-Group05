@@ -71,9 +71,9 @@
                 android:id="@+id/list_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="8dp"
                 android:drawableStart="@drawable/ic_tag"
-                android:text=" List Title"
+                android:text="List Title"
                 android:textColor="@color/grey"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -228,42 +228,13 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/whitenoise_description"
+                android:id="@+id/attachment_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:padding="8dp"
                 android:text="@string/attachment"
                 android:textSize="18dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="320dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/task_detail_layout_4">
-
-<!--            <TextView-->
-<!--                android:id="@+id/soundmusic_text"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginBottom="5dp"-->
-<!--                android:text="Turn on/off sound and music"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:textSize="20dp"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <Switch-->
-<!--                android:id="@+id/soundmusic_switch"-->
-<!--                android:layout_width="55dp"-->
-<!--                android:layout_height="55dp"-->
-<!--                android:contentDescription=" "-->
-<!--                android:trackTint="@color/green"-->
-<!--                tools:ignore="UseSwitchCompatOrMaterialXml" />-->
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

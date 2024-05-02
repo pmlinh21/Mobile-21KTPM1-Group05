@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
@@ -22,7 +23,7 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
     interface OnItemClickListener{
         fun onItemClick(task: Task)
     }
-    var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClickListener? = null
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskTitleTextView: TextView = itemView.findViewById(R.id.taskTitleTextView)
@@ -75,7 +76,13 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
 //        holder.listTextView.text = listName
 
         holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(currentTask)
+//            onItemClickListener?.onItemClick(currentTask)
+            val fragment = TaskDetails.newInstance(position, listName)
+            (context as MainActivity).supportFragmentManager
+            .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
