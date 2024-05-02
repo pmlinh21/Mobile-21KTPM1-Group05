@@ -1,22 +1,28 @@
 package com.example.applepie
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 import com.example.applepie.model.TaskList
+import java.util.ArrayList
 
 private const val ARG_PARAM1 = "taskIndex"
 private const val ARG_PARAM2 = "listName"
+private const val ARG_PARAM3 = "idList"
 /**
  * A simple [Fragment] subclass.
  * Use the [TaskDetails.newInstance] factory method to
@@ -26,12 +32,14 @@ class TaskDetails : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var param3: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+            param3 = it.getString(ARG_PARAM3)
         }
     }
 
@@ -48,7 +56,7 @@ class TaskDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         taskIndex = arguments?.getInt(ARG_PARAM1) ?: -1
-        taskInfo = FirebaseManager.getUserTask()[taskIndex]
+        taskInfo = FirebaseManager.getUserTask().filter { it.id_list == param3 }[taskIndex]
 
         listNameTV = view.findViewById(R.id.list_text)
         listNameTV.text = arguments?.getString(ARG_PARAM2)
@@ -69,8 +77,15 @@ class TaskDetails : Fragment() {
 
         attachmentTV = view.findViewById(R.id.attachment_text)
         val link = taskInfo.link
+        Toast.makeText(requireContext(), taskInfo.link, Toast.LENGTH_SHORT).show()
         val htmlString = "<a href=\"$link\">$link</a>"
         attachmentTV.text = Html.fromHtml(htmlString)
+        val webView = view.findViewById<WebView>(R.id.webView)
+        attachmentTV.setOnClickListener {
+            webView.settings.javaScriptEnabled = true
+            webView.settings.setSupportZoom(true)
+            webView.loadUrl(taskInfo.link)
+        }
 
 //        backButton = view.findViewById(R.id.back_button)
 
@@ -102,9 +117,10 @@ class TaskDetails : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: Int, param2: String) =
+        fun newInstance(idList: String, param1: Int, param2: String) =
             TaskDetails().apply {
                 arguments = Bundle().apply {
+                    putString(ARG_PARAM3, idList)
                     putInt(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)
                 }
