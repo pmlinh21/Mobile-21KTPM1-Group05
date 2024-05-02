@@ -73,9 +73,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:drawableStart="@drawable/ic_tag"
+                android:drawablePadding="8dp"
                 android:text="List Title"
                 android:textColor="@color/grey"
-                android:textSize="16dp"
+                android:textSize="18dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -242,7 +243,7 @@
     <WebView
         android:id="@+id/webView"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="0dp"/>
 
 </FrameLayout>

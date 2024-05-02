@@ -1,24 +1,19 @@
 package com.example.applepie
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
-import com.example.applepie.model.TaskList
-import java.util.ArrayList
+
 
 private const val ARG_PARAM1 = "taskIndex"
 private const val ARG_PARAM2 = "listName"
@@ -77,14 +72,17 @@ class TaskDetails : Fragment() {
 
         attachmentTV = view.findViewById(R.id.attachment_text)
         val link = taskInfo.link
-        Toast.makeText(requireContext(), taskInfo.link, Toast.LENGTH_SHORT).show()
+//        Toast.makeText(requireContext(), taskInfo.link, Toast.LENGTH_SHORT).show()
         val htmlString = "<a href=\"$link\">$link</a>"
         attachmentTV.text = Html.fromHtml(htmlString)
         val webView = view.findViewById<WebView>(R.id.webView)
         attachmentTV.setOnClickListener {
-            webView.settings.javaScriptEnabled = true
-            webView.settings.setSupportZoom(true)
-            webView.loadUrl(taskInfo.link)
+//            webView.settings.javaScriptEnabled = true
+//            webView.settings.setSupportZoom(true)
+//            webView.loadUrl(taskInfo.link)
+            val uri = Uri.parse(link)
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
         }
 
 //        backButton = view.findViewById(R.id.back_button)
