@@ -9,6 +9,7 @@
     <string name="description">
         Introduce the app: Briefly describe the purpose and objectives of the app.\n\nDetailed features: Develop main feature screens
     </string>
+    <string name="attachment"><a href="https://www.facebook.com/impnq">https://www.facebook.com/impnq</a></string>
     <string name="select_report">Select Report</string>
     <string name="original_price"><strike>$19.99</strike></string>
     <string name="discount_price">$9.99</string>
