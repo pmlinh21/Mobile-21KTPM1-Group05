@@ -3,6 +3,7 @@ package com.example.applepie
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
@@ -16,6 +17,7 @@ import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Task
@@ -180,19 +182,12 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         minutePicker.minValue = 0
         minutePicker.maxValue = 59
 
-//        Log.i("account", (reminder/60).toString())
-//        Log.i("account", (reminder%60).toString())
-//        hourPicker.value = reminder / 60
-//        minutePicker.value = reminder % 60
-
         val builder = AlertDialog.Builder(requireContext())
         builder.setView(dialogView)
         builder.setPositiveButton("OK") { dialog, _ ->
             val selectedHour = hourPicker.value
             val selectedMinute = minutePicker.value
             duration = selectedHour * 60 + selectedMinute
-
-//            Toasty.success(requireContext(), "Reminder: " + duration, Toast.LENGTH_SHORT, true).show()
 
             timePickerListener?.onTimePicked(duration)
             val reminderText = "$selectedHour:$selectedMinute"
@@ -205,6 +200,9 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         }
         val dialog = builder.create()
         dialog.show()
+
+        val negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
+        negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
     }
 
     private lateinit var tieTitle: TextInputEditText

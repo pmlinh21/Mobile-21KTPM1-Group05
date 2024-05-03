@@ -99,6 +99,8 @@ class Stopwatch : Fragment() {
                 if (preferenceManager.getMusicStatus() == true) {
                     val playIntent = Intent(context, MusicService::class.java).apply {
                         putExtra("ACTION", "PLAY")
+                        putExtra("MUSIC_RES_ID", FirebaseManager.getUserMusic().resourceId)
+//                        Log.i("MusicService", FirebaseManager.getUserMusic().resourceId.toString())
                     }
                     context?.startService(playIntent)
                 }

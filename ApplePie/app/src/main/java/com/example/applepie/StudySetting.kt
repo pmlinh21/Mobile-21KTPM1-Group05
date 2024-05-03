@@ -94,6 +94,7 @@ class StudySetting : Fragment() {
             if (PomodoroTimer.isStarted() || StopwatchTimer.isStarted()){
                 val playIntent = Intent(context, MusicService::class.java).apply {
                     putExtra("ACTION", "PLAY")
+                    putExtra("MUSIC_RES_ID", FirebaseManager.getUserMusic().resourceId)
                 }
                 context?.startService(playIntent)
             }
