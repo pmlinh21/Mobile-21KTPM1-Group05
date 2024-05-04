@@ -70,6 +70,10 @@ object PomodoroTimer {
         return !isStarted
     }
 
+    fun isStarted(): Boolean{
+        return isStarted && secondsRemaining > 0
+    }
+
     fun isTimeOver(): Boolean{
         Log.i("pomodoro", secondsRemaining.toString())
         return isStarted && !isPaused && secondsRemaining < 0

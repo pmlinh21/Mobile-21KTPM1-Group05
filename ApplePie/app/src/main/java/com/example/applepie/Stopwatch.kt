@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +81,8 @@ class Stopwatch : Fragment() {
             // TODO:  add study timer to firebase, reset timer
             storeTimeInFirebase()
             StopwatchTimer.stopTimer()
+            val stopIntent = Intent(context, MusicService::class.java)
+            context?.stopService(stopIntent)
         }
 
         pauseButton.setOnClickListener {
@@ -92,6 +95,15 @@ class Stopwatch : Fragment() {
             // TODO:  start timer
             if (StopwatchTimer.isPause()) {
                 StopwatchTimer.resumeTimer()
+            } else{
+                if (preferenceManager.getMusicStatus() == true) {
+                    val playIntent = Intent(context, MusicService::class.java).apply {
+                        putExtra("ACTION", "PLAY")
+                        putExtra("MUSIC_RES_ID", FirebaseManager.getUserMusic().resourceId)
+//                        Log.i("MusicService", FirebaseManager.getUserMusic().resourceId.toString())
+                    }
+                    context?.startService(playIntent)
+                }
             }
 
             start_time = getCurrentDateTime()

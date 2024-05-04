@@ -171,6 +171,13 @@ class MainActivity : AppCompatActivity() {
         baseContext.resources.updateConfiguration(config, baseContext.resources.displayMetrics)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        val stopIntent = Intent(baseContext, MusicService::class.java)
+        baseContext.stopService(stopIntent)
+    }
+
+
     private var index: Int = -1
     private var isUserListDataReceived = false
     private var isUserTaskDataReceived = false

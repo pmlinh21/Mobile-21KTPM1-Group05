@@ -44,6 +44,10 @@ object StopwatchTimer {
         return !isPaused && isStarted
     }
 
+    fun isStarted(): Boolean{
+        return isStarted
+    }
+
     fun isStop(): Boolean{
         return !isStarted
     }

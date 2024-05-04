@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Paint
 import android.util.Log
@@ -8,9 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.FirebaseManager
+import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
+import es.dmoral.toasty.Toasty
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -22,7 +27,7 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
     interface OnItemClickListener{
         fun onItemClick(task: Task)
     }
-    var onItemClickListener: OnItemClickListener? = null
+    private var onItemClickListener: OnItemClickListener? = null
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val taskTitleTextView: TextView = itemView.findViewById(R.id.taskTitleTextView)
@@ -31,7 +36,39 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
 //        val listTextView: TextView = itemView.findViewById(R.id.listTextView)
         val taskStatus: ImageView = itemView.findViewById(R.id.taskStatus)
         val taskStatus_1: ImageView = itemView.findViewById(R.id.taskStatus_1)
+        val taskDelete: ImageView = itemView.findViewById(R.id.taskDelete)
         val priorityImageView: ImageView = itemView.findViewById(R.id.priorityImageView)
+
+        val preferenceManager = PreferenceManager(context)
+
+        init {
+            taskStatus.setOnClickListener {
+                val task = tasks[absoluteAdapterPosition]
+//                FirebaseManager.setTaskStatus(preferenceManager.getIndex(), task.id_task, !task.isDone)
+                FirebaseManager.updateTaskStatus(task.id_task, !task.isDone)
+                Toasty.success(context, "Task completed", Toasty.LENGTH_SHORT).show()
+            }
+            taskDelete.setOnClickListener {
+                val task = tasks[absoluteAdapterPosition]
+
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Confirm Deletion")
+                builder.setMessage("Are you sure you want to delete this task?")
+
+                builder.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+                builder.setPositiveButton("Delete") { dialog, _ ->
+                    FirebaseManager.deleteTask(task.id_task)
+                    Toasty.success(context, "Task deleted", Toasty.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+
+                val dialog = builder.create()
+                dialog.show()
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -75,7 +112,13 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
 //        holder.listTextView.text = listName
 
         holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(currentTask)
+//            onItemClickListener?.onItemClick(currentTask)
+            val fragment = TaskDetails.newInstance(currentTask.id_list, position, listName)
+            (context as MainActivity).supportFragmentManager
+            .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
