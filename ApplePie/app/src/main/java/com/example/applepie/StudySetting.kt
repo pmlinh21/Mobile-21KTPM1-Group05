@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -87,34 +88,48 @@ class StudySetting : Fragment() {
     }
 
     private fun controlMusic(isChecked: Boolean, preferenceManager: PreferenceManager){
+        Log.i("music", isChecked.toString())
         if (isChecked) {
             // Turn on music
-            startSoundMusic()
+            if (PomodoroTimer.isStarted() || StopwatchTimer.isStarted()){
+                val playIntent = Intent(context, MusicService::class.java).apply {
+                    putExtra("ACTION", "PLAY")
+                    putExtra("MUSIC_RES_ID", FirebaseManager.getUserMusic().resourceId)
+                }
+                context?.startService(playIntent)
+            }
             preferenceManager.setMusicStatus(true)
         } else {
             // Turn off music
-            stopSoundMusic()
+            val pauseIntent = Intent(context, MusicService::class.java).apply {
+                putExtra("ACTION", "PAUSE")
+            }
+            context?.startService(pauseIntent)
+
             preferenceManager.setMusicStatus(false)
         }
     }
 
     private fun startSoundMusic(){
-        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true)
-
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(requireContext(), R.raw.music_1)
-            mediaPlayer?.isLooping = true
+            mediaPlayer?.apply {
+                isLooping = true
+                setOnErrorListener { mp, what, extra ->
+                    Log.e("MediaPlayer", "Error occurred: What $what, Extra $extra")
+                    true
+                }
+                setOnPreparedListener {
+                    start()
+                }
+            }
+        } else {
+            mediaPlayer?.start()
         }
-
-        mediaPlayer?.start()
     }
 
-    private fun stopSoundMusic(){
-        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false)
-
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
+    private fun stopSoundMusic() {
+        mediaPlayer?.pause() // This will pause the media player
     }
 
     private fun previousRedFragment(){

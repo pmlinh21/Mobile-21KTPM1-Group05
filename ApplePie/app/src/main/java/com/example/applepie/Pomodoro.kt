@@ -1,6 +1,7 @@
 package com.example.applepie
 
 import PomodoroTimer
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -87,12 +88,21 @@ class Pomodoro : Fragment() {
             // TODO: save firebase, reset timer
             storeTimeInFirebase()
             PomodoroTimer.stopTimer()
+            val stopIntent = Intent(context, MusicService::class.java)
+            context?.stopService(stopIntent)
         }
 
         playButton.setOnClickListener {
             // TODO:  start timer
             if (PomodoroTimer.isPause())
                 PomodoroTimer.resumeTimer()
+            else{
+                val playIntent = Intent(context, MusicService::class.java).apply {
+                    putExtra("ACTION", "PLAY")
+                    putExtra("MUSIC_RES_ID", FirebaseManager.getUserMusic().resourceId)
+                }
+                context?.startService(playIntent)
+            }
 
             setStartTime()
             PomodoroTimer.startTimer()

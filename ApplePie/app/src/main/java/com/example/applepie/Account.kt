@@ -15,6 +15,8 @@ import android.widget.NumberPicker
 import android.widget.TextView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
+import com.example.applepie.model.DateTime
+import java.util.Calendar
 import kotlin.properties.Delegates
 
 // TODO: Rename parameter arguments, choose names that match
@@ -39,6 +41,8 @@ class Account : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         reminder = FirebaseManager.getUserReminder()
+        pomodoro = FirebaseManager.getUserPomodoro()
+        stopwatch = FirebaseManager.getUserStopwatch()
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,7 +67,25 @@ class Account : Fragment() {
         setUI()
         handleEventListener()
 
+        extractMonthYearFromCalendar(calendar.date)
+
+        calendar.setOnDateChangeListener { view, year, month, dayOfMonth ->
+            val readableMonth = month + 1
+            Log.i("CalendarView", "Selected - Year: $year, Month: $readableMonth")
+
+
+        }
+
         return rootView
+    }
+
+    private fun extractMonthYearFromCalendar(dateMillis: Long) {
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = dateMillis
+
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH) + 1
+        Log.i("CalendarView", "Currently viewing - Year: $year, Month: $month")
     }
 
     private fun setUI(){
@@ -182,6 +204,7 @@ class Account : Fragment() {
     private lateinit var calendar: CalendarView
 
     private var reminder by Delegates.notNull<Int>()
-
+    private lateinit var pomodoro: List<DateTime>
+    private lateinit var stopwatch: List<DateTime>
     private lateinit var preferenceManager: PreferenceManager
 }
