@@ -104,7 +104,7 @@ class WeeklyReport : Fragment() {
             taskText.visibility = View.INVISIBLE
         }
 
-        adapter = TaskListAdapter(requireContext(), tasksList, lists)
+        adapter = TaskListAdapter(requireContext(), originTaskList, lists)
 
         taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
