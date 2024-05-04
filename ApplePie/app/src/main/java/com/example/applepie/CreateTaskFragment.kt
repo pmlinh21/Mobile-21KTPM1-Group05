@@ -202,7 +202,10 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         dialog.show()
 
         val negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
+        val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
     }
 
     private lateinit var tieTitle: TextInputEditText
