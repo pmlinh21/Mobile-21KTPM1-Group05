@@ -387,6 +387,140 @@ class MonthlyReport : Fragment() {
             }
         }
 
+        // study time
+        val pomodoroTimeByDay = mutableMapOf<Int, Long>()
+        val stopwatchTimeByDay = mutableMapOf<Int, Long>()
+
+        for (i in 0 until 4) {
+            pomodoroTimeByDay[i] = 0L
+            stopwatchTimeByDay[i] = 0L
+        }
+
+        val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
+        val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
+
+        Log.d("firstWeekFirstDay: ", firstWeekFirstDay.toString())
+        Log.d("firstWeekLastDay: ", firstWeekLastDay.toString())
+
+        val sdf_1 = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+        for (pomodoro in pomodoroTimes) {
+            val startDate = dateTimeFormat.parse(pomodoro.start_time)
+            val endDate = dateTimeFormat.parse(pomodoro.end_time)
+            Log.d("startDate: ", startDate.toString())
+
+            if(startDate in firstWeekFirstDay..firstWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[0] = pomodoroTimeByDay.getOrDefault(0, 0L) + durationInSeconds
+            }
+            else if(startDate in secondWeekFirstDay..secondWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else if(startDate in thirdWeekFirstDay..thirdWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else {
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+        }
+        Log.d("pomodoroTimeByDay: ", pomodoroTimeByDay.toString())
+
+
+        for (stopwatch in stopwatchTimes) {
+            val startDate = dateTimeFormat.parse(stopwatch.start_time)
+            val endDate = dateTimeFormat.parse(stopwatch.end_time)
+
+            if(startDate in firstWeekFirstDay..firstWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[0] = stopwatchTimeByDay.getOrDefault(0, 0L) + durationInSeconds
+            }
+            else if(startDate in secondWeekFirstDay..secondWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else if(startDate in thirdWeekFirstDay..thirdWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else {
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+
+        }
+        Log.d("stopwatchTimeByDay: ", stopwatchTimeByDay.toString())
+//
+//        val pomodoroEntries = ArrayList<BarEntry>()
+//        val stopwatchEntries = ArrayList<BarEntry>()
+//
+//        daysOfWeek.forEachIndexed { index, day ->
+//            pomodoroEntries.add(BarEntry(index.toFloat(), pomodoroTimeByDay[day]!!.toFloat()))
+//            stopwatchEntries.add(BarEntry(index.toFloat() + 0.4f, stopwatchTimeByDay[day]!!.toFloat()))
+//        }
+//
+//        val pomodoroDataSet = BarDataSet(pomodoroEntries, "Pomodoro").apply {
+//            color = Color.parseColor("#319F43")
+//        }
+//        val stopwatchDataSet = BarDataSet(stopwatchEntries, "Stopwatch").apply {
+//            color = Color.parseColor("#C6E9C7")
+//        }
+//
+//        val timeBarData = BarData(pomodoroDataSet, stopwatchDataSet)
+//        timeBarData.setValueTextSize(12f)
+//        timeBarData.barWidth = 0.4f
+//
+//        timeBarData.setValueFormatter(object : ValueFormatter() {
+//            override fun getFormattedValue(value: Float): String {
+//                return value.toInt().toString() + "s"
+//            }
+//        })
+//
+//        val timeBarChart: BarChart = rootView.findViewById(R.id.timeBarChart)
+//        timeBarChart.axisRight.setDrawLabels(false)
+//        timeBarChart.axisLeft.setDrawGridLines(false)
+//        timeBarChart.axisRight.setDrawGridLines(false)
+//        timeBarChart.xAxis.setDrawGridLines(false)
+//
+//        timeBarChart.xAxis.textSize = 14f
+//        timeBarChart.axisLeft.textSize = 13f
+//
+//        val yAxis_2: YAxis = timeBarChart.axisLeft
+//        yAxis_2.setDrawGridLines(false)
+//        yAxis_2.setDrawAxisLine(false)
+//
+//        yAxis_2.axisMinimum = 0f
+//        //yAxis_2.axisMaximum = maxTime + 100f
+//
+////        val maxLabelCount_1 = if (yAxis_2.axisMaximum < 500) 3 else 5
+////
+////        yAxis_2.setLabelCount(maxLabelCount_1)
+//
+////        yAxis_2.setValueFormatter(object : ValueFormatter() {
+////            override fun getFormattedValue(value: Float): String {
+////                return value.toInt().toString()
+////            }
+////        })
+//
+//        val xAxis: XAxis = timeBarChart.xAxis
+//        xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        xAxis.setYOffset(10f)
+//
+//        timeBarChart.description.isEnabled = false
+//        timeBarChart.legend.isEnabled = false;
+//
+//        timeBarChart.data = timeBarData
+//        //timeBarChart.groupBars(0f, 0.3f, 0.03f)
+//
+//        timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
+//        timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+//        timeBarChart.xAxis.granularity = 1f
+//        timeBarChart.xAxis.isGranularityEnabled = true
+//        timeBarChart.invalidate()
+
         return rootView
     }
 
