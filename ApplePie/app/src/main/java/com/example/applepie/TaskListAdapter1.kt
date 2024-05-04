@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Paint
 import android.util.Log
@@ -48,8 +49,23 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
             }
             taskDelete.setOnClickListener {
                 val task = tasks[absoluteAdapterPosition]
-                Toasty.error(context, "Task deleted", Toasty.LENGTH_SHORT).show()
-                FirebaseManager.deleteTask(preferenceManager.getIndex(), task.id_task)
+
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Confirm Deletion")
+                builder.setMessage("Are you sure you want to delete this task?")
+
+                builder.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+
+                builder.setPositiveButton("Delete") { dialog, _ ->
+                    FirebaseManager.deleteTask(preferenceManager.getIndex(), task.id_task)
+                    Toasty.success(context, "Task deleted", Toasty.LENGTH_SHORT).show()
+                    dialog.dismiss()
+                }
+
+                val dialog = builder.create()
+                dialog.show()
             }
         }
     }
