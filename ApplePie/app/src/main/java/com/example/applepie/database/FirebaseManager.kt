@@ -396,10 +396,27 @@ object FirebaseManager {
         taskRef.setValue(isDone)
     }
 
-    fun deleteTask(index: Int, taskId: String) {
-        val task = userTask.find { it.id_task == taskId }
-        val taskIndex = userTask.indexOf(task)
-        userTasksRef.child(taskIndex.toString()).removeValue()
+    fun deleteTask(taskId: String) {
+        userTasksRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (taskSnapshot in dataSnapshot.children) {
+                        val userTask = taskSnapshot.getValue(Task::class.java)
+                        if (userTask != null && userTask.id_task == taskId) {
+                            taskSnapshot.ref.removeValue()
+                            return
+                        }
+                    }
+                    Log.d("UserTask", "Task with id $taskId not found")
+                } else {
+                    Log.d("UserTask", "User task not found for UID")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("data",databaseError.message)
+            }
+        })
     }
 
     fun getHighPriorityUndoneTasks(): List<Task> {
