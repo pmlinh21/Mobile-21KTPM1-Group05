@@ -508,9 +508,9 @@ class MonthlyReport : Fragment() {
         yAxis_2.axisMinimum = 0f
         //yAxis_2.axisMaximum = maxTime + 100f
 
-//        val maxLabelCount_1 = if (yAxis_2.axisMaximum < 500) 3 else 5
-//
-//        yAxis_2.setLabelCount(maxLabelCount_1)
+        //val maxLabelCount_1 = if (yAxis_2.axisMaximum < 5000) 5 else
+
+        yAxis_2.setLabelCount(5)
 
 //        yAxis_2.setValueFormatter(object : ValueFormatter() {
 //            override fun getFormattedValue(value: Float): String {
