@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.applepie.database.FirebaseManager
@@ -75,7 +76,7 @@ class TaskDetails : Fragment() {
 //        Toast.makeText(requireContext(), taskInfo.link, Toast.LENGTH_SHORT).show()
         val htmlString = "<a href=\"$link\">$link</a>"
         attachmentTV.text = Html.fromHtml(htmlString)
-        val webView = view.findViewById<WebView>(R.id.webView)
+//        val webView = view.findViewById<WebView>(R.id.webView)
         attachmentTV.setOnClickListener {
 //            webView.settings.javaScriptEnabled = true
 //            webView.settings.setSupportZoom(true)
@@ -85,11 +86,12 @@ class TaskDetails : Fragment() {
             startActivity(intent)
         }
 
-//        backButton = view.findViewById(R.id.back_button)
+        backButton = view.findViewById(R.id.back_btn)
+        editButton = view.findViewById(R.id.edit_btn)
 
 
-//        setupBackButton()
-//        setupMoreButton()
+        setupBackButton()
+        setupEditButton()
     }
 
     private fun setupBackButton() {
@@ -98,8 +100,8 @@ class TaskDetails : Fragment() {
         }
     }
 
-    private fun setupMoreButton() {
-        moreButton.setOnClickListener {
+    private fun setupEditButton() {
+        editButton.setOnClickListener {
 
         }
     }
@@ -135,5 +137,5 @@ class TaskDetails : Fragment() {
     private lateinit var descriptionTV: TextView
     private lateinit var attachmentTV: TextView
     private lateinit var backButton: Button
-    private lateinit var moreButton: Button
+    private lateinit var editButton: ImageView
 }

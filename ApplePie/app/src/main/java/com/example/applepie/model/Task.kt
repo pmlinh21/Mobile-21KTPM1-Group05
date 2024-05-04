@@ -7,7 +7,7 @@ data class Task(
     val due_datetime: String = "",
     val id_list: String = "",
     val id_task: String = "",
-    @get:PropertyName("isDone") val isDone: Boolean = false,
+    @get:PropertyName("isDone") var isDone: Boolean = false,
     val link: String = "",
     val priority: String = "",
     val title: String = "",

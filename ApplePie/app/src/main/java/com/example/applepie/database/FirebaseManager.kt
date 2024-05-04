@@ -359,6 +359,12 @@ object FirebaseManager {
         taskRef.setValue(isDone)
     }
 
+    fun deleteTask(index: Int, taskId: String) {
+        val task = userTask.find { it.id_task == taskId }
+        val taskIndex = userTask.indexOf(task)
+        userTasksRef.child(taskIndex.toString()).removeValue()
+    }
+
     fun getHighPriorityUndoneTasks(): List<Task> {
         val tasks = userTask.filter { it.priority == "high" && !it.isDone }.sortedByDescending { it.due_datetime }
 
@@ -369,5 +375,11 @@ object FirebaseManager {
         }
 
         return tasks
+    }
+
+    fun updateTask(taskId: String, isDone: Boolean) {
+        val task = userTask.find { it.id_task == taskId }
+        val taskIndex = userTask.indexOf(task)
+        userTasksRef.child(taskIndex.toString()).child("isDone").setValue(isDone)
     }
 }
