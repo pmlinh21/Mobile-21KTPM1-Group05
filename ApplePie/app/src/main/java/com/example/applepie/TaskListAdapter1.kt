@@ -44,8 +44,9 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
         init {
             taskStatus.setOnClickListener {
                 val task = tasks[absoluteAdapterPosition]
+//                FirebaseManager.setTaskStatus(preferenceManager.getIndex(), task.id_task, !task.isDone)
+                FirebaseManager.updateTaskStatus(task.id_task, !task.isDone)
                 Toasty.success(context, "Task completed", Toasty.LENGTH_SHORT).show()
-                FirebaseManager.setTaskStatus(preferenceManager.getIndex(), task.id_task, !task.isDone)
             }
             taskDelete.setOnClickListener {
                 val task = tasks[absoluteAdapterPosition]
