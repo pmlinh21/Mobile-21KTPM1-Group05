@@ -225,6 +225,8 @@ class MonthlyReport : Fragment() {
         barChart.legend.isEnabled = false;
         barChart.invalidate()
 
+        barChart.setExtraOffsets(0f,0f,0f,15f)
+
         barChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         barChart.xAxis.granularity = 1f
@@ -369,6 +371,8 @@ class MonthlyReport : Fragment() {
         barChartDone.description.isEnabled = false
         barChartDone.legend.isEnabled = false;
         barChartDone.invalidate()
+
+        barChartDone.setExtraOffsets(0f,0f,0f,15f)
 
         barChartDone.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         barChartDone.xAxis.position = XAxis.XAxisPosition.BOTTOM

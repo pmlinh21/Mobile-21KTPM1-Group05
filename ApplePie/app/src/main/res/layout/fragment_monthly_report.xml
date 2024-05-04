@@ -51,8 +51,7 @@
                     android:id="@+id/barChart"
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="15dp" />
+                    android:layout_marginBottom="5dp" />
 
                 <TextView
                     android:id="@+id/yAxisLabel_1"
@@ -68,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="15dp"/>
+                    android:layout_marginBottom="0dp"/>
             </LinearLayout>
 
             <LinearLayout
