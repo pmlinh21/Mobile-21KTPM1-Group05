@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         getInfoFromFirebase()
         setLanguage()
+        setLayout()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -69,14 +71,12 @@ class MainActivity : AppCompatActivity() {
         button.background = resources.getDrawable(R.drawable.bg_button_active)
     }
 
-    private fun setUI(){
+    private fun setLayout(){
         homeButton = findViewById(R.id.home_icon)
         studyButton = findViewById(R.id.study_icon)
         createTaskButton = findViewById(R.id.create_task_icon)
         reportButton = findViewById(R.id.report_icon)
         accountButton = findViewById(R.id.account_icon)
-
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).commit()
 
         homeButton.setOnClickListener {
             handleNavbarClick(homeButton)
@@ -106,6 +106,19 @@ class MainActivity : AppCompatActivity() {
         accountButton.setOnClickListener {
             handleNavbarClick(accountButton)
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Account()).addToBackStack(null).commit()
+        }
+    }
+
+    private fun setUI(){
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+
+        if (currentFragment is DataUpdateListener) {
+            currentFragment.updateData() // This calls updateData on whichever fragment is currently displayed
+        } else if (currentFragment == null) {
+            // If no fragment is currently displayed, launch the Dashboard
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Dashboard())
+                .commit()
         }
     }
 
@@ -181,6 +194,6 @@ class MainActivity : AppCompatActivity() {
     private var index: Int = -1
     private var isUserListDataReceived = false
     private var isUserTaskDataReceived = false
-
+    private var isInitApp = true
 
 }

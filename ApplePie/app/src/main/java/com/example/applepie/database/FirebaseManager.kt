@@ -35,6 +35,9 @@ object FirebaseManager {
     private lateinit var userBlockNotiApp: List<String>
     private lateinit var userMusic: Music
     private var userReminder: Int = 1
+
+    private val listeners = mutableListOf<DataUpdateListener>()
+
     /*
 
     setter :
@@ -68,6 +71,20 @@ object FirebaseManager {
 
     fun setUserTasksRef(index: Int) {
         userTasksRef = FirebaseDatabase.getInstance().getReference("users/$index/tasks")
+    }
+
+    fun addDataUpdateListener(listener: DataUpdateListener) {
+        if (!listeners.contains(listener)) {
+            listeners.add(listener)
+        }
+    }
+
+    fun removeDataUpdateListener(listener: DataUpdateListener) {
+        listeners.remove(listener)
+    }
+
+    private fun notifyDataChanged() {
+        listeners.forEach { it.updateData() }
     }
 
     fun setUserInfo(callback: DataCallback<User>) {
@@ -105,6 +122,7 @@ object FirebaseManager {
                 }
                 userList = tempList
                 callback.onDataReceived(userList)
+                notifyDataChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -130,6 +148,7 @@ object FirebaseManager {
                 }
                 userTask= tempTask
                 callback.onDataReceived(userTask)
+                notifyDataChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -361,7 +380,7 @@ object FirebaseManager {
             task.reminder
         )
 
-        userTasksRef.addValueEventListener(object : ValueEventListener {
+        userTasksRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (taskSnapshot in dataSnapshot.children) {
@@ -371,9 +390,9 @@ object FirebaseManager {
                             return
                         }
                     }
-                    Log.d("UserTask", "Task with id ${task.id_task} not found")
+                    Log.d("firebase", "Task with id ${task.id_task} not found")
                 } else {
-                    Log.d("UserTask", "User task not found for UID")
+                    Log.d("firebase", "User task not found for UID")
                 }
             }
 
@@ -420,7 +439,7 @@ object FirebaseManager {
     }
 
     fun updateTaskStatus(taskId: String, isDone: Boolean) {
-        userTasksRef.addValueEventListener(object : ValueEventListener {
+        userTasksRef.addListenerForSingleValueEvent (object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     for (taskSnapshot in dataSnapshot.children) {

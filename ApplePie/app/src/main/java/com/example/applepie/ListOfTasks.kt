@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
 
@@ -22,7 +23,7 @@ private const val ARG_PARAM1 = "listIndex"
  * Use the [ListOfTasks.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListOfTasks : Fragment() {
+class ListOfTasks : Fragment(), DataUpdateListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
 
@@ -45,10 +46,10 @@ class ListOfTasks : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         listIndex = arguments?.getInt(ARG_PARAM1) ?: -1
-        listInfo = FirebaseManager.getUserList()[listIndex]
+//        listInfo = FirebaseManager.getUserList()[listIndex]
 
         listNameTV = view.findViewById(R.id.list_name_text_view)
-        listNameTV.text = listInfo.list_name
+//        listNameTV.text = listInfo.list_name
 
         backButton = view.findViewById(R.id.back_button)
         moreButton = view.findViewById(R.id.more_button)
@@ -56,11 +57,13 @@ class ListOfTasks : Fragment() {
         taskRV = view.findViewById(R.id.task_recycler_view)
         taskRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
-        val lists = FirebaseManager.getUserList()?: listOf()
+//        val lists = FirebaseManager.getUserList()?: listOf()
 //        val tasksList = FirebaseManager.getUserTask()?: listOf()
-        val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
+//        val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
+        FirebaseManager.addDataUpdateListener(this)
 
-        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
+//        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
+        displayData()
         setupBackButton()
         setupMoreButton()
     }
@@ -75,6 +78,24 @@ class ListOfTasks : Fragment() {
         moreButton.setOnClickListener {
 
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        FirebaseManager.removeDataUpdateListener(this)
+    }
+
+    override fun updateData() {
+        displayData()
+    }
+
+    fun displayData(){
+        listInfo = FirebaseManager.getUserList()[listIndex]
+        listNameTV.text = listInfo.list_name
+
+        val lists = FirebaseManager.getUserList()?: listOf()
+        val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
+        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
     }
 
     companion object {
