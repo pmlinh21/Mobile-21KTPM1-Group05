@@ -105,7 +105,6 @@ class MonthlyReport : Fragment() {
 
         val barChart: BarChart = rootView.findViewById(R.id.barChart)
         barChart.axisRight.setDrawLabels(false)
-
         barChart.axisLeft.setDrawGridLines(false)
         barChart.axisRight.setDrawGridLines(false)
         barChart.xAxis.setDrawGridLines(false)

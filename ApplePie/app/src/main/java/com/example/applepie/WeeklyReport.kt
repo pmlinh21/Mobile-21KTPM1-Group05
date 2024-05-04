@@ -324,6 +324,7 @@ class WeeklyReport : Fragment() {
 
         barChartDone.renderer = RoundedBarChart(barChartDone, barChartDone.animator, barChartDone.viewPortHandler)
 
+        // View all button
         viewAllButton = view.findViewById(R.id.task_all)
         viewAllButton.setOnClickListener {
             adapter.updateData(originTaskList)
@@ -335,6 +336,7 @@ class WeeklyReport : Fragment() {
             }
         }
 
+        // Study time
         val pomodoroTimeByDay = mutableMapOf<String, Long>()
         val stopwatchTimeByDay = mutableMapOf<String, Long>()
 
@@ -412,15 +414,40 @@ class WeeklyReport : Fragment() {
         timeBarChart.axisRight.setDrawGridLines(false)
         timeBarChart.xAxis.setDrawGridLines(false)
 
+        timeBarChart.xAxis.textSize = 14f
+        timeBarChart.axisLeft.textSize = 13f
+
+        val yAxis_2: YAxis = timeBarChart.axisLeft
+        yAxis_2.setDrawGridLines(false)
+        yAxis_2.setDrawAxisLine(false)
+
+        yAxis_2.axisMinimum = 0f
+        //yAxis_2.axisMaximum = maxTime + 100f
+
+//        val maxLabelCount_1 = if (yAxis_2.axisMaximum < 500) 3 else 5
+//
+//        yAxis_2.setLabelCount(maxLabelCount_1)
+
+//        yAxis_2.setValueFormatter(object : ValueFormatter() {
+//            override fun getFormattedValue(value: Float): String {
+//                return value.toInt().toString()
+//            }
+//        })
+
+        val xAxis: XAxis = timeBarChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setYOffset(10f)
+
         timeBarChart.description.isEnabled = false
         timeBarChart.legend.isEnabled = false;
 
         timeBarChart.data = timeBarData
-        timeBarChart.groupBars(0f, 0.1f, 0.02f)
+        //timeBarChart.groupBars(0f, 0.3f, 0.03f)
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-
+        timeBarChart.xAxis.granularity = 1f
+        timeBarChart.xAxis.isGranularityEnabled = true
         timeBarChart.invalidate()
 
     }
