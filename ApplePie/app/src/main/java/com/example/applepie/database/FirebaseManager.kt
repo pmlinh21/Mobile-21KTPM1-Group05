@@ -346,6 +346,43 @@ object FirebaseManager {
         userTasksRef.child(userTask.size.toString()).setValue(newTask)
     }
 
+    fun updateTask(task: Task) {
+        val newTask = Task(
+            task.description,
+            task.due_datetime,
+            task.id_list,
+            task.id_task,
+            task.isDone,
+            task.link,
+            task.priority,
+            task.title,
+            task.listName,
+            task.list_color,
+            task.reminder
+        )
+
+        userTasksRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (taskSnapshot in dataSnapshot.children) {
+                        val userTask = taskSnapshot.getValue(Task::class.java)
+                        if (userTask != null && userTask.id_task == task.id_task) {
+                            taskSnapshot.ref.setValue(newTask)
+                            return
+                        }
+                    }
+                    Log.d("UserTask", "Task with id ${task.id_task} not found")
+                } else {
+                    Log.d("UserTask", "User task not found for UID")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("data",databaseError.message)
+            }
+        })
+    }
+
     fun setUserPremium(index: Int) {
         val userPremiumRef = FirebaseDatabase.getInstance().getReference("users/$index/info/isPremium")
         userPremiumRef.setValue(true)
@@ -375,11 +412,5 @@ object FirebaseManager {
         }
 
         return tasks
-    }
-
-    fun updateTask(taskId: String, isDone: Boolean) {
-        val task = userTask.find { it.id_task == taskId }
-        val taskIndex = userTask.indexOf(task)
-        userTasksRef.child(taskIndex.toString()).child("isDone").setValue(isDone)
     }
 }

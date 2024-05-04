@@ -29,8 +29,15 @@ import es.dmoral.toasty.Toasty
 import java.time.LocalDateTime
 import java.util.Calendar
 
-class CreateTaskFragment : BottomSheetDialogFragment() {
+
+interface TimePickerListener {
+    fun onTimePicked(duration: Int)
+}
+
+
+class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
     private var timePickerListener: TimePickerListener? = null
+    private var taskInfo: Task = taskInfo
 
     fun setTimePickerListener(listener: TimePickerListener) {
         this.timePickerListener = listener
@@ -41,11 +48,12 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_create_task, container, false)
+        return inflater.inflate(R.layout.fragment_edit_task, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val bottomSheet: View = view.parent as View
         bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR;
@@ -66,8 +74,35 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         spnList = view.findViewById(R.id.spn_list)
         tieReminder = view.findViewById(R.id.tie_reminder)
         tieAttachment = view.findViewById(R.id.tie_attachment)
-        btnCreateTask = view.findViewById(R.id.btn_createTask)
+        btnSaveTask = view.findViewById(R.id.btn_saveTask)
         btnCancel = view.findViewById(R.id.btn_cancel)
+
+        val spinnerItems = listOf("None", "Low", "Medium", "High")
+
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, spinnerItems)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        spnPriority.adapter = adapter
+
+        tieTitle.setText(taskInfo.title)
+        tieDescription.setText(taskInfo.description)
+        val dueDateTime = taskInfo.due_datetime.split(" ")
+        tieDuedate.setText(dueDateTime[0])
+        tieTime.setText(dueDateTime[1])
+
+        val priorityIndex = spinnerItems.indexOf(taskInfo.priority.capitalize())
+//        Toast.makeText(requireContext(), "Priority: " + taskInfo.priority, Toast.LENGTH_SHORT).show()
+        if (priorityIndex != -1) {
+            spnPriority.setSelection(priorityIndex)
+        }
+
+        val reminderHour = taskInfo.reminder / 60
+        val reminderMinute = taskInfo.reminder % 60
+        val reminderTime = String.format("%02d:%02d", reminderHour, reminderMinute)
+
+        tieReminder.setText(reminderTime)
+        tieAttachment.setText(taskInfo.link)
+
 
         // format date: yyyy-MM-dd
         tieDuedate.setOnClickListener {
@@ -106,13 +141,6 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             showTimePickerDialog()
         }
 
-        val spinnerItems = listOf("None", "Low", "Medium", "High")
-
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, spinnerItems)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        spnPriority.adapter = adapter
-
         val taskLists = FirebaseManager.getUserList()
 
         val listNames = mutableListOf<String>()
@@ -127,12 +155,18 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
 
         val adt = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listNames)
         adt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
         spnList.adapter = adt
+
+        val position = listNames.indexOfFirst { listNameToIdMap[it] == taskInfo.id_list }
+        if (position != -1) {
+            spnList.setSelection(position)
+        } else {
+            Log.d("Spinner", "id_list ${taskInfo.id_list} not found")
+        }
 
 //        Log.i("duration", duration.toString())
 
-        btnCreateTask.setOnClickListener {
+        btnSaveTask.setOnClickListener {
             val title = tieTitle.text.toString()
             val description = tieDescription.text.toString()
             val duedate = tieDuedate.text.toString()
@@ -142,8 +176,8 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             val idList = listNameToIdMap[listName]
             val attachment = tieAttachment.text.toString()
 
-            val newTask = Task(
-                id_task = LocalDateTime.now().toString().replace("-", "").replace("T", "").replace(":", "").split(".")[0],
+            val updatedTask = Task(
+                id_task = taskInfo.id_task,
                 id_list = idList!!,
                 description = description,
                 due_datetime = duedate + ' ' + time,
@@ -152,11 +186,11 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
                 title = title,
                 reminder = duration
             )
-            FirebaseManager.addNewTask(newTask)
+            FirebaseManager.updateTask(updatedTask)
 
 //            Toasty.success(requireContext(), "Duration: " + duration, Toast.LENGTH_SHORT, true).show()
 
-            Toasty.success(requireContext(), "Created task successfully!", Toast.LENGTH_SHORT, true).show()
+            Toasty.success(requireContext(), "Updated task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()
         }
 
@@ -207,7 +241,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
     private lateinit var spnList: Spinner
     private lateinit var tieReminder: TextInputEditText
     private lateinit var tieAttachment: TextInputEditText
-    private lateinit var btnCreateTask: Button
+    private lateinit var btnSaveTask: Button
     private lateinit var btnCancel: Button
 
     private var myCalendar: Calendar = Calendar.getInstance()
@@ -216,7 +250,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
     private var day = myCalendar.get(Calendar.DAY_OF_MONTH)
     private var hourOfDay = myCalendar.get(Calendar.HOUR_OF_DAY)
     private var minute = myCalendar.get(Calendar.MINUTE)
-    private var duration = 0
+    private var duration = taskInfo.reminder
 
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var databaseReference: DatabaseReference

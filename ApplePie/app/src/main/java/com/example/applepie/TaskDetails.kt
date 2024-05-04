@@ -91,7 +91,7 @@ class TaskDetails : Fragment() {
 
 
         setupBackButton()
-        setupEditButton()
+        setupEditButton(taskInfo)
     }
 
     private fun setupBackButton() {
@@ -100,9 +100,11 @@ class TaskDetails : Fragment() {
         }
     }
 
-    private fun setupEditButton() {
+    private fun setupEditButton(taskInfo: Task) {
         editButton.setOnClickListener {
-
+//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CreateTask()).addToBackStack(null).commit()
+            val editTaskFragment = EditTaskFragment(taskInfo)
+            editTaskFragment.show(parentFragmentManager, editTaskFragment.tag)
         }
     }
 
