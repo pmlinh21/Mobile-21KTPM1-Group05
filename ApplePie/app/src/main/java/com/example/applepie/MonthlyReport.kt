@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
@@ -517,19 +518,25 @@ class MonthlyReport : Fragment() {
 //            }
 //        })
 
-        val xAxis: XAxis = timeBarChart.xAxis
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.setYOffset(10f)
+
 
         timeBarChart.description.isEnabled = false
-        timeBarChart.legend.isEnabled = false;
+        timeBarChart.legend.isEnabled = true;
+        timeBarChart.legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        timeBarChart.legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        timeBarChart.legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        timeBarChart.legend.xEntrySpace = 30f
+        timeBarChart.legend.textSize = 12f
+        timeBarChart.legend.yOffset = 2f
+
+        timeBarChart.setExtraOffsets(0f,5f,0f,15f)
 
         timeBarChart.data = timeBarData
-        timeBarChart.groupBars(0f, 0.2f, 0.1f)
+        timeBarChart.groupBars(-0.5f, 0.1f, 0.1f)
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        timeBarChart.xAxis.granularity = 1f
+        timeBarChart.xAxis.granularity = 1.1f
         timeBarChart.xAxis.isGranularityEnabled = true
         timeBarChart.invalidate()
 
