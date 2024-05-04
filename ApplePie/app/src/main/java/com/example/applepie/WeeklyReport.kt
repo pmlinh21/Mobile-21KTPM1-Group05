@@ -404,7 +404,16 @@ class WeeklyReport : Fragment() {
 
         timeBarData.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return value.toInt().toString() + "s"
+                val totalSeconds = value.toInt()
+                val hours = totalSeconds / 3600
+                val minutes = (totalSeconds % 3600) / 60
+                val seconds = totalSeconds % 60
+
+                return when {
+                    hours > 0 -> "${hours}h${minutes}m"  // Hiển thị giờ và phút nếu có giờ
+                    minutes > 0 -> "${minutes}m${seconds}s"  // Hiển thị phút và giây nếu không có giờ nhưng có phút
+                    else -> "${seconds}s"  // Hiển thị chỉ giây nếu thời gian dưới 1 phút
+                }
             }
         })
 
@@ -442,7 +451,7 @@ class WeeklyReport : Fragment() {
         timeBarChart.legend.isEnabled = false;
 
         timeBarChart.data = timeBarData
-        //timeBarChart.groupBars(0f, 0.3f, 0.03f)
+        timeBarChart.groupBars(0f, 0.3f, 0.03f)
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM

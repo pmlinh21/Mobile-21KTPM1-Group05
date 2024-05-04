@@ -453,73 +453,85 @@ class MonthlyReport : Fragment() {
 
         }
         Log.d("stopwatchTimeByDay: ", stopwatchTimeByDay.toString())
+
+        val pomodoroEntries = ArrayList<BarEntry>()
+        val stopwatchEntries = ArrayList<BarEntry>()
+
+        for ((index, timeInSeconds) in pomodoroTimeByDay) {
+            pomodoroEntries.add(BarEntry(index.toFloat(), timeInSeconds.toFloat()))
+        }
+
+        for ((index, timeInSeconds) in stopwatchTimeByDay) {
+            stopwatchEntries.add(BarEntry(index.toFloat() + 0.4f, timeInSeconds.toFloat()))
+        }
+
+        val pomodoroDataSet = BarDataSet(pomodoroEntries, "Pomodoro").apply {
+            color = Color.parseColor("#319F43")
+        }
+        val stopwatchDataSet = BarDataSet(stopwatchEntries, "Stopwatch").apply {
+            color = Color.parseColor("#C6E9C7")
+        }
+
+        val timeBarData = BarData(pomodoroDataSet, stopwatchDataSet)
+        timeBarData.setValueTextSize(12f)
+        timeBarData.barWidth = 0.4f
+
+        timeBarData.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                val totalSeconds = value.toInt()
+                val hours = totalSeconds / 3600
+                val minutes = (totalSeconds % 3600) / 60
+                val seconds = totalSeconds % 60
+
+                return when {
+                    hours > 0 -> "${hours}h${minutes}m"  // Hiển thị giờ và phút nếu có giờ
+                    minutes > 0 -> "${minutes}m${seconds}s"  // Hiển thị phút và giây nếu không có giờ nhưng có phút
+                    else -> "${seconds}s"  // Hiển thị chỉ giây nếu thời gian dưới 1 phút
+                }
+            }
+        })
+
+        val timeBarChart: BarChart = rootView.findViewById(R.id.timeBarChart)
+        timeBarChart.axisRight.setDrawLabels(false)
+        timeBarChart.axisLeft.setDrawGridLines(false)
+        timeBarChart.axisRight.setDrawGridLines(false)
+        timeBarChart.xAxis.setDrawGridLines(false)
+
+        timeBarChart.xAxis.textSize = 14f
+        timeBarChart.axisLeft.textSize = 13f
+
+        val yAxis_2: YAxis = timeBarChart.axisLeft
+        yAxis_2.setDrawGridLines(false)
+        yAxis_2.setDrawAxisLine(false)
+
+        yAxis_2.axisMinimum = 0f
+        //yAxis_2.axisMaximum = maxTime + 100f
+
+//        val maxLabelCount_1 = if (yAxis_2.axisMaximum < 500) 3 else 5
 //
-//        val pomodoroEntries = ArrayList<BarEntry>()
-//        val stopwatchEntries = ArrayList<BarEntry>()
-//
-//        daysOfWeek.forEachIndexed { index, day ->
-//            pomodoroEntries.add(BarEntry(index.toFloat(), pomodoroTimeByDay[day]!!.toFloat()))
-//            stopwatchEntries.add(BarEntry(index.toFloat() + 0.4f, stopwatchTimeByDay[day]!!.toFloat()))
-//        }
-//
-//        val pomodoroDataSet = BarDataSet(pomodoroEntries, "Pomodoro").apply {
-//            color = Color.parseColor("#319F43")
-//        }
-//        val stopwatchDataSet = BarDataSet(stopwatchEntries, "Stopwatch").apply {
-//            color = Color.parseColor("#C6E9C7")
-//        }
-//
-//        val timeBarData = BarData(pomodoroDataSet, stopwatchDataSet)
-//        timeBarData.setValueTextSize(12f)
-//        timeBarData.barWidth = 0.4f
-//
-//        timeBarData.setValueFormatter(object : ValueFormatter() {
+//        yAxis_2.setLabelCount(maxLabelCount_1)
+
+//        yAxis_2.setValueFormatter(object : ValueFormatter() {
 //            override fun getFormattedValue(value: Float): String {
-//                return value.toInt().toString() + "s"
+//                return value.toInt().toString()
 //            }
 //        })
-//
-//        val timeBarChart: BarChart = rootView.findViewById(R.id.timeBarChart)
-//        timeBarChart.axisRight.setDrawLabels(false)
-//        timeBarChart.axisLeft.setDrawGridLines(false)
-//        timeBarChart.axisRight.setDrawGridLines(false)
-//        timeBarChart.xAxis.setDrawGridLines(false)
-//
-//        timeBarChart.xAxis.textSize = 14f
-//        timeBarChart.axisLeft.textSize = 13f
-//
-//        val yAxis_2: YAxis = timeBarChart.axisLeft
-//        yAxis_2.setDrawGridLines(false)
-//        yAxis_2.setDrawAxisLine(false)
-//
-//        yAxis_2.axisMinimum = 0f
-//        //yAxis_2.axisMaximum = maxTime + 100f
-//
-////        val maxLabelCount_1 = if (yAxis_2.axisMaximum < 500) 3 else 5
-////
-////        yAxis_2.setLabelCount(maxLabelCount_1)
-//
-////        yAxis_2.setValueFormatter(object : ValueFormatter() {
-////            override fun getFormattedValue(value: Float): String {
-////                return value.toInt().toString()
-////            }
-////        })
-//
-//        val xAxis: XAxis = timeBarChart.xAxis
-//        xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        xAxis.setYOffset(10f)
-//
-//        timeBarChart.description.isEnabled = false
-//        timeBarChart.legend.isEnabled = false;
-//
-//        timeBarChart.data = timeBarData
-//        //timeBarChart.groupBars(0f, 0.3f, 0.03f)
-//
-//        timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
-//        timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-//        timeBarChart.xAxis.granularity = 1f
-//        timeBarChart.xAxis.isGranularityEnabled = true
-//        timeBarChart.invalidate()
+
+        val xAxis: XAxis = timeBarChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setYOffset(10f)
+
+        timeBarChart.description.isEnabled = false
+        timeBarChart.legend.isEnabled = false;
+
+        timeBarChart.data = timeBarData
+        timeBarChart.groupBars(0f, 0.2f, 0.1f)
+
+        timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
+        timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        timeBarChart.xAxis.granularity = 1f
+        timeBarChart.xAxis.isGranularityEnabled = true
+        timeBarChart.invalidate()
 
         return rootView
     }
