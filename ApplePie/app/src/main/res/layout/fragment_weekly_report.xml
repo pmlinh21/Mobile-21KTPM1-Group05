@@ -171,10 +171,10 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"/>
 
-                <com.github.mikephil.charting.charts.BarChart
+                <com.github.mikephil.charting.charts.HorizontalBarChart
                     android:id="@+id/timeBarChart"
                     android:layout_width="match_parent"
-                    android:layout_height="230dp"
+                    android:layout_height="300dp"
                     android:layout_marginTop="0dp"
                     android:layout_marginBottom="15dp" />
             </LinearLayout>

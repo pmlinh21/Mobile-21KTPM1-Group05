@@ -98,6 +98,8 @@ class MonthlyReport : Fragment() {
             taskText.visibility = View.GONE
         }
 
+        Log.d("tasksList: ", tasksList.toString())
+
         taskRecyclerView = rootView.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter(requireContext(), tasksList, lists)
 
@@ -118,9 +120,13 @@ class MonthlyReport : Fragment() {
         calendar.time = firstDayOfMonth
         val firstWeekFirstDay = calendar.time
 
+        //Log.d("firstWeekFirstDay: ", firstWeekFirstDay.toString())
+
         // Tìm ngày cuối của tuần đầu tiên
         calendar.add(Calendar.DAY_OF_MONTH, 6)
         val firstWeekLastDay = calendar.time
+
+        //Log.d("firstWeekLastDay: ", firstWeekLastDay.toString())
 
         // Lấy ngày đầu của tuần thứ hai
         calendar.add(Calendar.DAY_OF_MONTH, 1)
@@ -239,7 +245,7 @@ class MonthlyReport : Fragment() {
                 if (e == null) return
 
                 val index = e.x.toInt()
-                Log.d("index: ", index.toString())
+                //Log.d("index: ", index.toString())
 
                 var tasksForSelectedWeek: List<Task>
                 if(index == 0){
@@ -266,7 +272,7 @@ class MonthlyReport : Fragment() {
                         taskDueDate in fourthWeekFirstDay..lastDayOfMonth
                     }
                 }
-                Log.d("tasksForSelectedWeek: ", tasksForSelectedWeek.toString())
+                //Log.d("tasksForSelectedWeek: ", tasksForSelectedWeek.toString())
 
                 updateRecyclerView(tasksForSelectedWeek)
             }
@@ -404,6 +410,9 @@ class MonthlyReport : Fragment() {
         val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
         val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
 
+//        Log.d("pomodoroTimes: ", pomodoroTimes.toString())
+//        Log.d("stopwatchTimes: ", stopwatchTimes.toString())
+
         val timeBarChart: BarChart = rootView.findViewById(R.id.timeBarChart)
 
         timeText = rootView.findViewById(R.id.yAxisLabel_2)
@@ -414,32 +423,37 @@ class MonthlyReport : Fragment() {
             timeText.visibility = View.GONE
         }
 
-        Log.d("firstWeekFirstDay: ", firstWeekFirstDay.toString())
-        Log.d("firstWeekLastDay: ", firstWeekLastDay.toString())
-
         val sdf_1 = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
         for (pomodoro in pomodoroTimes) {
             val startDate = dateTimeFormat.parse(pomodoro.start_time)
             val endDate = dateTimeFormat.parse(pomodoro.end_time)
-            Log.d("startDate: ", startDate.toString())
+            //Log.d("startDate: ", startDate.toString())
 
-            if(startDate in firstWeekFirstDay..firstWeekLastDay){
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                pomodoroTimeByDay[0] = pomodoroTimeByDay.getOrDefault(0, 0L) + durationInSeconds
-            }
-            else if(startDate in secondWeekFirstDay..secondWeekLastDay){
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
-            }
-            else if(startDate in thirdWeekFirstDay..thirdWeekLastDay){
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
-            }
-            else {
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            val durationInSeconds = (endDate.time - startDate.time) / 1000
+
+            when {
+                startDate in firstWeekFirstDay..firstWeekLastDay -> {
+                    pomodoroTimeByDay[0] = pomodoroTimeByDay.getOrDefault(0, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 0: ", durationInSeconds.toString())
+//                    Log.d("pomodoroTimeByDay[0]: ", pomodoroTimeByDay[0].toString())
+                }
+                startDate in secondWeekFirstDay..secondWeekLastDay -> {
+                    pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 1: ", durationInSeconds.toString())
+//                    Log.d("pomodoroTimeByDay[1]: ", pomodoroTimeByDay[1].toString())
+                }
+                startDate in thirdWeekFirstDay..thirdWeekLastDay -> {
+                    pomodoroTimeByDay[2] = pomodoroTimeByDay.getOrDefault(2, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 2: ", durationInSeconds.toString())
+//                    Log.d("pomodoroTimeByDay[2]: ", pomodoroTimeByDay[2].toString())
+                }
+                startDate in fourthWeekFirstDay..lastDayOfMonth -> {
+                    pomodoroTimeByDay[3] = pomodoroTimeByDay.getOrDefault(3, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 3: ", durationInSeconds.toString())
+//                    Log.d("pomodoroTimeByDay[3]: ", pomodoroTimeByDay[3].toString())
+                }
             }
         }
         Log.d("pomodoroTimeByDay: ", pomodoroTimeByDay.toString())
@@ -449,21 +463,29 @@ class MonthlyReport : Fragment() {
             val startDate = dateTimeFormat.parse(stopwatch.start_time)
             val endDate = dateTimeFormat.parse(stopwatch.end_time)
 
-            if(startDate in firstWeekFirstDay..firstWeekLastDay){
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                stopwatchTimeByDay[0] = stopwatchTimeByDay.getOrDefault(0, 0L) + durationInSeconds
-            }
-            else if(startDate in secondWeekFirstDay..secondWeekLastDay){
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
-            }
-            else if(startDate in thirdWeekFirstDay..thirdWeekLastDay){
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
-            }
-            else {
-                val durationInSeconds = (endDate.time - startDate.time) / 1000
-                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            val durationInSeconds = (endDate.time - startDate.time) / 1000
+
+            when {
+                startDate in firstWeekFirstDay..firstWeekLastDay -> {
+                    stopwatchTimeByDay[0] = stopwatchTimeByDay.getOrDefault(0, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 0: ", durationInSeconds.toString())
+//                    Log.d("stopwatchTimeByDay[0]: ", stopwatchTimeByDay[0].toString())
+                }
+                startDate in secondWeekFirstDay..secondWeekLastDay -> {
+                    pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 1: ", durationInSeconds.toString())
+//                    Log.d("stopwatchTimeByDay[1]: ", stopwatchTimeByDay[1].toString())
+                }
+                startDate in thirdWeekFirstDay..thirdWeekLastDay -> {
+                    pomodoroTimeByDay[2] = pomodoroTimeByDay.getOrDefault(2, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 2: ", durationInSeconds.toString())
+//                    Log.d("stopwatchTimeByDay[2]: ", stopwatchTimeByDay[2].toString())
+                }
+                startDate in fourthWeekFirstDay..lastDayOfMonth -> {
+                    pomodoroTimeByDay[3] = pomodoroTimeByDay.getOrDefault(3, 0L) + durationInSeconds
+//                    Log.d("durationInSeconds 3: ", durationInSeconds.toString())
+//                    Log.d("stopwatchTimeByDay[3]: ", stopwatchTimeByDay[3].toString())
+                }
             }
 
         }
@@ -552,7 +574,7 @@ class MonthlyReport : Fragment() {
         timeBarChart.setExtraOffsets(0f,5f,0f,15f)
 
         timeBarChart.data = timeBarData
-        timeBarChart.groupBars(-0.5f, 0.1f, 0.1f)
+        timeBarChart.groupBars(-0.6f, 0.1f, 0.14f)
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
