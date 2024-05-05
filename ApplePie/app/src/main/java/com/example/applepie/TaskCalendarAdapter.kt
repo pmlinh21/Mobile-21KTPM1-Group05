@@ -42,8 +42,8 @@ class TaskCalendarAdapter (context: Context, tasks: List<Task>, lists: List<Task
         holder.taskTitleTextView.text = currentTask.title
         if (currentTask.isDone) {
             holder.taskTitleTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.taskStatus.setImageResource(R.drawable.ic_circular_full)
-            holder.taskStatus_1.visibility = View.VISIBLE
+//            holder.taskStatus.setImageResource(R.drawable.ic_circular_full)
+//            holder.taskStatus_1.visibility = View.VISIBLE
         }
 
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
@@ -51,6 +51,10 @@ class TaskCalendarAdapter (context: Context, tasks: List<Task>, lists: List<Task
         val outputFormat = SimpleDateFormat("EEE'\n'dd MMM'\n'HH:mm", Locale.getDefault())
         val formattedDateString = outputFormat.format(formattedDate)
         holder.dueDateTextView.text = formattedDateString
+
+        if (currentTask.priority == "low") {
+            holder.dueDateTextView.setTextColor(context.getColorCompat(R.color.black))
+        }
 
         val matchingList = lists.find { it.id_list == currentTask.id_list }
         val listName = matchingList?.list_name ?: "Unknown List"
