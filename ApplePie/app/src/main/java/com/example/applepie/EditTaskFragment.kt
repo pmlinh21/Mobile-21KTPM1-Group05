@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase
 import es.dmoral.toasty.Toasty
 import java.time.LocalDateTime
 import java.util.Calendar
+import java.util.Locale
 
 
 interface TimePickerListener {
@@ -98,7 +99,7 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
 
         val reminderHour = taskInfo.reminder / 60
         val reminderMinute = taskInfo.reminder % 60
-        val reminderTime = String.format("%02d:%02d", reminderHour, reminderMinute)
+        val reminderTime = String.format(Locale.getDefault(), "%02d:%02d", reminderHour, reminderMinute)
 
         tieReminder.setText(reminderTime)
         tieAttachment.setText(taskInfo.link)

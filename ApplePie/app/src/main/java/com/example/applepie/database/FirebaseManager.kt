@@ -390,32 +390,10 @@ object FirebaseManager {
     }
 
     fun addNewTask(task: Task) {
-        val newTask = Task(
-            task.description,
-            task.due_datetime,
-            task.id_list,
-            task.id_task,
-            task.isDone,
-            task.link,
-            task.priority,
-            task.title,
-            task.reminder
-        )
-        userTasksRef.child(userTask.size.toString()).setValue(newTask)
+        userTasksRef.child(userTask.size.toString()).setValue(task)
     }
 
     fun updateTask(task: Task) {
-        val newTask = Task(
-            task.description,
-            task.due_datetime,
-            task.id_list,
-            task.id_task,
-            task.isDone,
-            task.link,
-            task.priority,
-            task.title,
-            task.reminder
-        )
 
         userTasksRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -423,7 +401,7 @@ object FirebaseManager {
                     for (taskSnapshot in dataSnapshot.children) {
                         val userTask = taskSnapshot.getValue(Task::class.java)
                         if (userTask != null && userTask.id_task == task.id_task) {
-                            taskSnapshot.ref.setValue(newTask)
+                            taskSnapshot.ref.setValue(task)
                             return
                         }
                     }

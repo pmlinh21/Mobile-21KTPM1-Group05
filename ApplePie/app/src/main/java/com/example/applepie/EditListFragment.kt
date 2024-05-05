@@ -179,14 +179,13 @@ class EditListFragment(val list: TaskList) : BottomSheetDialogFragment() {
             }
             else {
                 val editList = TaskList(
-                    LocalDateTime.now().toString().replace("-", "").replace("T", "").replace(":", "").split(".")[0],
+                    list.id_list,
                     chosenColorButton?.backgroundTintList!!.defaultColor ?: list.list_color,
                     chosenIconButton?.text.toString() ?: list.list_icon,
                     listNameET.text.toString()
                 )
                 FirebaseManager.editList(editList)
             }
-
             dismiss()
         }
     }
