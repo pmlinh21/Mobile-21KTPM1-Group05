@@ -108,9 +108,10 @@ class Stopwatch : Fragment() {
                     context?.startService(playIntent)
                 }
             }
-
             start_time = getCurrentDateTime()
+            Log.i("start_time", start_time)
             preferenceManager.setStartTime(start_time)
+            preferenceManager.getStartTime()?.let { it1 -> Log.i("start_time", it1) }
             StopwatchTimer.startTimer()
         }
 

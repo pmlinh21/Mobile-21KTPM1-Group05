@@ -18,9 +18,14 @@ import androidx.annotation.RequiresApi
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.DateTime
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import kotlin.properties.Delegates
 
 // TODO: Rename parameter arguments, choose names that match
@@ -44,10 +49,8 @@ class Account : Fragment() {
             indexUser = it.getInt(ARG_INDEX_USER)
             param2 = it.getString(ARG_PARAM2)
         }
-
-        pomodoro = FirebaseManager.getUserPomodoro()
-        stopwatch = FirebaseManager.getUserStopwatch()
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,6 +70,7 @@ class Account : Fragment() {
 
         preferenceManager = PreferenceManager(this.activity)
 
+        getStudyTime()
         setUI()
         handleEventListener()
 
@@ -91,6 +95,33 @@ class Account : Fragment() {
         Log.i("CalendarView", "Currently viewing - Year: $year, Month: $month")
     }
 
+    private fun getStudyTime(){
+        pomodoroTime = FirebaseManager.getUserPomodoro()?: listOf()
+        stopwatchTime = FirebaseManager.getUserStopwatch()?: listOf()
+
+        val allTimes: List<DateTime> = pomodoroTime + stopwatchTime
+
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+        val totalSecondsByDate: Map<LocalDate, Long> = allTimes
+            .groupBy { LocalDateTime.parse(it.start_time, dateTimeFormatter).toLocalDate() }
+            .mapValues { (_, times) ->
+                times.sumOf { calculateSeconds(it.start_time, it.end_time, dateTimeFormatter) }
+            }
+            .filter { (_, totalSeconds) -> totalSeconds > 60 }
+
+        // Print the results
+        totalSecondsByDate.forEach { (date, totalSeconds) ->
+            Log.i("streak","Date: $date, Total Seconds: $totalSeconds")
+        }
+    }
+
+    fun calculateSeconds(start: String, end: String, dateTimeFormatter: DateTimeFormatter): Long {
+        val startTime = LocalDateTime.parse(start, dateTimeFormatter)
+        val endTime = LocalDateTime.parse(end, dateTimeFormatter)
+        return ChronoUnit.SECONDS.between(startTime, endTime)
+    }
+
     private fun setUI(){
         usernameInput.setText(FirebaseManager.getUserInfo().username)
         emailInput.setText(FirebaseManager.getUserInfo().email)
@@ -106,6 +137,7 @@ class Account : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleEventListener(){
         subscriptionButton.setOnClickListener {
             val subscribeActivity = Intent(this.activity, SubscribeActivity::class.java)
@@ -118,8 +150,6 @@ class Account : Fragment() {
             builder.setMessage("Are you sure you want to log out?")
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
-                    preferenceManager.removeData()
-
                     if (!StopwatchTimer.isStop()){
                         storeStopwatchTimeInFirebase()
                         StopwatchTimer.stopTimer()
@@ -132,6 +162,8 @@ class Account : Fragment() {
 
                     val stopIntent = Intent(context, MusicService::class.java)
                     context?.stopService(stopIntent)
+
+                    preferenceManager.removeData()
 
                     val loginActivity = Intent(this.activity, LoginActivity::class.java)
                     startActivity(loginActivity)
@@ -206,7 +238,7 @@ class Account : Fragment() {
 
     private lateinit var calendar: CalendarView
 
-    private lateinit var pomodoro: List<DateTime>
-    private lateinit var stopwatch: List<DateTime>
+    private lateinit var pomodoroTime: List<DateTime>
+    private lateinit var stopwatchTime: List<DateTime>
     private lateinit var preferenceManager: PreferenceManager
 }
