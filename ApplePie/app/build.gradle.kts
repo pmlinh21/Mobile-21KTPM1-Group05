@@ -103,4 +103,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-scalars:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Email
+    implementation("com.sun.mail:android-mail:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
 }

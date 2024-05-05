@@ -13,6 +13,7 @@ import android.widget.CalendarView
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TextView
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.DateTime
@@ -29,7 +30,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [Account.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Account : Fragment() {
+class Account : Fragment(), DataUpdateListener {
     // TODO: Rename and change types of parameters
     private var indexUser: Int? = null
     private var param2: String? = null
@@ -62,6 +63,8 @@ class Account : Fragment() {
         calendar = rootView.findViewById(R.id.calendarView)
 
         preferenceManager = PreferenceManager(this.activity)
+
+        FirebaseManager.addDataUpdateListener(this)
 
         setUI()
         handleEventListener()
@@ -162,4 +165,7 @@ class Account : Fragment() {
     private lateinit var pomodoro: List<DateTime>
     private lateinit var stopwatch: List<DateTime>
     private lateinit var preferenceManager: PreferenceManager
+    override fun updateData() {
+        setUI()
+    }
 }
