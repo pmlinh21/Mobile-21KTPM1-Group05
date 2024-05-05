@@ -552,7 +552,7 @@ class MonthlyReport : Fragment() {
         timeBarChart.setExtraOffsets(0f,5f,0f,15f)
 
         timeBarChart.data = timeBarData
-        timeBarChart.groupBars(-0.5f, 0.1f, 0.1f)
+        timeBarChart.groupBars(-0.6f, 0.1f, 0.14f)
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
