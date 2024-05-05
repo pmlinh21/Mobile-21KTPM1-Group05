@@ -3,6 +3,7 @@ package com.example.applepie.database
 
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.toMutableStateList
 import com.example.applepie.database.FirebaseManager.userList
 import com.example.applepie.model.DateTime
 import com.example.applepie.model.Music
@@ -142,8 +143,17 @@ object FirebaseManager {
         userTasksRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val tempTask = ArrayList<Task>()
-                lengthTask = dataSnapshot.childrenCount.toInt()
+                var count: Int = 0
+                val lengthTask = dataSnapshot.childrenCount
                 Log.i("firebse length", lengthTask.toString())
+
+                for (childSnapshot in dataSnapshot.children) {
+                    if (childSnapshot.exists()) {
+                        count++
+                    }
+                }
+                Log.i("firebse length", count.toString())
+
                 for (snapshot in dataSnapshot.children) {
                     val task = snapshot.getValue(Task::class.java)
                     Log.i("firebse length", "a")
@@ -308,14 +318,25 @@ object FirebaseManager {
         val userPomodoroRef =  FirebaseDatabase.getInstance().getReference("users/$index/pomodoro")
         userPomodoroRef.setValue(mutablePomodoroList.toList())
     }
-    fun updateUserReminder(index: Int, duration: Int) {
-        val userReminder =  FirebaseDatabase.getInstance().getReference("users/$index/reminder")
-
-        userReminder.setValue(duration)
-    }
 
     fun addList(list: TaskList) {
-        userListsRef.child(userList.size.toString()).setValue(list)
+        val tempUserList = userList.toMutableStateList()
+        tempUserList.add(list)
+        val tasklistMapList = tempUserList.map { list ->
+            mapOf(
+                "id_list" to list.id_list,
+                "list_color" to list.list_color,
+                "list_icon" to list.list_icon,
+                "list_name" to list.list_name,
+            )
+        }
+
+        userListsRef.setValue(tasklistMapList)
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firebase", "Error writing lists to Firebase: $e")
+            }
     }
 
     fun editList(list: TaskList) {
@@ -369,7 +390,28 @@ object FirebaseManager {
     }
 
     fun addNewTask(task: Task) {
-        userTasksRef.child(userTask.size.toString()).setValue(task)
+        val tempUserTask = userTask.toMutableStateList()
+        tempUserTask.add(task)
+        val taskMapList = tempUserTask.map { task ->
+            mapOf(
+                "description" to task.description,
+                "due_datetime" to task.due_datetime,
+                "id_list" to task.id_list,
+                "id_task" to task.id_task,
+                "isDone" to task.isDone,
+                "link" to task.link,
+                "priority" to task.priority,
+                "title" to task.title,
+                "reminder" to task.reminder,
+            )
+        }
+
+        userTasksRef.setValue(taskMapList)
+            .addOnSuccessListener {
+            }
+            .addOnFailureListener { e ->
+                Log.e("Firebase", "Error writing tasks to Firebase: $e")
+            }
     }
 
     fun updateTask(task: Task) {
