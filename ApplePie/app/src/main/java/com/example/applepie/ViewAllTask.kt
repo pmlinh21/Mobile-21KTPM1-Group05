@@ -113,11 +113,12 @@ class ViewAllTask : Fragment() {
     }
 
     private fun updateAdapterForDate(date: LocalDate?) {
+        Log.d("date: ", date.toString())
         val newTaskList = originalTasksList.filter { task ->
             val taskDueDate = LocalDate.parse(task.due_datetime.substring(0, 10))
             taskDueDate == date
         }.sortedWith(compareByDescending<Task> { it.due_datetime.substring(11) })
-        //Log.d("newTaskList: ", newTaskList.toString())
+        Log.d("newTaskList: ", newTaskList.toString())
         adapter.updateData(newTaskList)
     }
 
