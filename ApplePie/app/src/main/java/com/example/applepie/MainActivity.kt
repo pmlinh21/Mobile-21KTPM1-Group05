@@ -25,6 +25,11 @@ import com.example.applepie.model.TaskList
 import com.example.applepie.model.Task
 import com.example.applepie.model.User
 import com.google.firebase.database.DatabaseError
+import java.time.Duration
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Date
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +45,61 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val CHANNEL_ID = "reminder_channel"
         private const val CHANNEL_NAME = "Task Reminders"
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        @SuppressLint("ServiceCast", "ScheduleExactAlarm")
+        fun scheduleNotification(context: Context, dateTime: Date, notificationId: Int, content: String) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, AlarmReceiver::class.java).apply {
+                putExtra(Notification.EXTRA_NOTIFICATION_ID, notificationId)
+                putExtra("notificationContent", content)
+            }
+            val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                PendingIntent.getBroadcast(
+                    context,
+                    notificationId,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            } else {
+                PendingIntent.getBroadcast(
+                    context,
+                    notificationId,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            }
+
+            Log.i("reminder3",dateTime.time.toString())
+
+            try {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    dateTime.time - 60000,
+                    pendingIntent
+                )
+            } catch (e: Exception) {
+                Log.e("AlarmManager", "Error setting alarm: ${e.message}")
+                e.printStackTrace()
+            }
+        }
+
+        fun calculateReminderTime(dateTimeStr: String, durationInMinutes: Int): LocalDateTime? {
+            try {
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                val dateTime = LocalDateTime.parse(dateTimeStr, formatter)
+
+                // Create a duration using the provided minutes
+                val duration = Duration.ofMinutes(durationInMinutes.toLong())
+
+                // Subtract the duration from the date time
+                return dateTime.minus(duration)
+            } catch (e: Exception) {
+                // Handle parsing errors
+                e.printStackTrace()
+            }
+            return null
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -65,44 +125,6 @@ class MainActivity : AppCompatActivity() {
         setLanguage()
         setLayout()
         createNotificationChannel()
-
-        scheduleNotification(this, 5000, 101)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("ServiceCast", "ScheduleExactAlarm")
-    private fun scheduleNotification(context: Context, delay: Long, notificationId: Int) {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra(Notification.EXTRA_NOTIFICATION_ID, notificationId)
-        }
-        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getBroadcast(
-                context,
-                notificationId,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-        } else {
-            PendingIntent.getBroadcast(
-                context,
-                notificationId,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-        }
-
-        try {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + delay,
-                pendingIntent
-            )
-        } catch (e: Exception) {
-            Log.e("AlarmManager", "Error setting alarm: ${e.message}")
-            e.printStackTrace()
-        }
-
 
     }
 
