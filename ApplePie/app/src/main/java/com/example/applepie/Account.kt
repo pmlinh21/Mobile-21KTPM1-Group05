@@ -79,7 +79,7 @@ class Account : Fragment(), DataUpdateListener {
         currentStreakText = rootView.findViewById(R.id.current_streak_text)
         longestStreakText = rootView.findViewById(R.id.longest_streak_text)
 
-        selectedDates = listOf("2024-05-03", "2024-05-06", "2024-05-01").map { LocalDate.parse(it) }
+        getStudyTime()
 
         val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
@@ -116,27 +116,23 @@ class Account : Fragment(), DataUpdateListener {
         }
 
         preferenceManager = PreferenceManager(this.activity)
-
-        getStudyTime()
-
         FirebaseManager.addDataUpdateListener(this)
 
         setUI()
-
         handleEventListener()
 
         return rootView
     }
 
     private fun getStudyTime(){
-        pomodoroTime = FirebaseManager.getUserPomodoro()?: listOf()
-        stopwatchTime = FirebaseManager.getUserStopwatch()?: listOf()
+        val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+        pomodoroTime = FirebaseManager.getUserPomodoro() ?: listOf()
+        stopwatchTime = FirebaseManager.getUserStopwatch() ?: listOf()
 
         val allTimes: List<DateTime> = pomodoroTime + stopwatchTime
 
-        val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-
-        totalSecondsByDate = allTimes
+        val totalSecondsByDate = allTimes
             .groupBy { LocalDateTime.parse(it.start_time, dateTimeFormatter).toLocalDate() }
             .mapValues { (_, times) ->
                 times.sumOf { calculateSeconds(it.start_time, it.end_time, dateTimeFormatter) }
@@ -146,6 +142,7 @@ class Account : Fragment(), DataUpdateListener {
         totalSecondsByDate.forEach { (date: LocalDate, totalSeconds: Long) ->
             Log.i("streak", "Date: $date, Total Seconds: $totalSeconds")
         }
+        selectedDates = totalSecondsByDate.keys.toList()
     }
 
     private fun configureBinders(rootView: View, daysOfWeek: List<DayOfWeek>) {
