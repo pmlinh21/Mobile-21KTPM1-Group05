@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -351,7 +352,7 @@ class WeeklyReport : Fragment() {
         val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
         val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
 
-        val timeBarChart: BarChart = view.findViewById(R.id.timeBarChart)
+        val timeBarChart: HorizontalBarChart = view.findViewById(R.id.timeBarChart)
 
         timeText = view.findViewById(R.id.yAxisLabel_2)
         if (pomodoroTimes.isEmpty() && stopwatchTimes.isEmpty()) {
@@ -464,14 +465,14 @@ class WeeklyReport : Fragment() {
         timeBarChart.legend.textSize = 12f
         timeBarChart.legend.yOffset = 2f
 
-        timeBarChart.setExtraOffsets(0f,5f,0f,15f)
+        timeBarChart.setExtraOffsets(0f,5f,25f,15f)
 
         timeBarChart.data = timeBarData
-        timeBarChart.groupBars(-0.5f, 0.15f, 0.05f)
+        timeBarChart.groupBars(-0.63f, 0.17f, 0.04f)
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        timeBarChart.xAxis.granularity = 1.05f
+        timeBarChart.xAxis.granularity = 1.03f
         timeBarChart.xAxis.isGranularityEnabled = true
         timeBarChart.invalidate()
 
