@@ -28,13 +28,14 @@ object FirebaseManager {
 
     private lateinit var userInfo: User
     private lateinit var userList: List<TaskList>
+    private var lengthList: Int = 0
     private lateinit var userTask: List<Task>
+    private var lengthTask: Int = 0
     private lateinit var userPomodoro: List<DateTime>
     private lateinit var userStopwatch: List<DateTime>
     private lateinit var userStreak: List<DateTime>
     private lateinit var userBlockNotiApp: List<String>
     private lateinit var userMusic: Music
-    private var userReminder: Int = 1
 
     private val listeners = mutableListOf<DataUpdateListener>()
 
@@ -141,8 +142,11 @@ object FirebaseManager {
         userTasksRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val tempTask = ArrayList<Task>()
+                lengthTask = dataSnapshot.childrenCount.toInt()
+                Log.i("firebse length", lengthTask.toString())
                 for (snapshot in dataSnapshot.children) {
                     val task = snapshot.getValue(Task::class.java)
+                    Log.i("firebse length", "a")
                     task?.let {
                         tempTask.add(it)
                     }
@@ -303,31 +307,6 @@ object FirebaseManager {
 
         val userPomodoroRef =  FirebaseDatabase.getInstance().getReference("users/$index/pomodoro")
         userPomodoroRef.setValue(mutablePomodoroList.toList())
-    }
-
-    fun setUserReminder(index: Int) {
-        val userReminderRef = FirebaseDatabase.getInstance().getReference("users/$index/reminder")
-
-        userReminderRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val reminderValue = dataSnapshot.getValue(Int::class.java)
-                if (reminderValue != null) {
-                    userReminder = reminderValue
-                    Log.d("Firebase", "Reminder value: $reminderValue")
-                } else {
-                    Log.d("Firebase", "Reminder value is null")
-                }
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.e("Firebase",databaseError.message)
-            }
-        })
-    }
-
-    fun getUserReminder(): Int{
-        return userReminder
     }
     fun updateUserReminder(index: Int, duration: Int) {
         val userReminder =  FirebaseDatabase.getInstance().getReference("users/$index/reminder")

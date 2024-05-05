@@ -164,16 +164,6 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/steak_text" />
 
-                    <TextView
-                        android:id="@+id/username_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="Username"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
                     <EditText
                         android:id="@+id/username_input"
                         android:layout_width="match_parent"
@@ -242,34 +232,6 @@
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:layout_marginBottom="15dp"/>
-
-                    <TextView
-                        android:id="@+id/reminder_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="Reminder"
-                        android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/reminder_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="You will receive a notification from the app when a task is approaching its deadline within a set duration, with the default being 1 hour."
-                        android:textColor="@color/grey"
-                        android:textSize="16sp" />
-
-                    <Button
-                        android:id="@+id/reminder_btn"
-                        android:layout_width="180dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_rounded_corner_green"
-                        android:text="Change duration"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
 
                     <Button
                         android:id="@+id/logout_btn"

@@ -50,37 +50,43 @@ class MainActivity : AppCompatActivity() {
         @SuppressLint("ServiceCast", "ScheduleExactAlarm")
         fun scheduleNotification(context: Context, dateTime: Date, notificationId: Int, content: String) {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val intent = Intent(context, AlarmReceiver::class.java).apply {
-                putExtra(Notification.EXTRA_NOTIFICATION_ID, notificationId)
-                putExtra("notificationContent", content)
-            }
-            val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                PendingIntent.getBroadcast(
-                    context,
-                    notificationId,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
+
+            Log.d("reminder", System.currentTimeMillis().toString())
+            if (dateTime.time > System.currentTimeMillis()) {
+                val intent = Intent(context, AlarmReceiver::class.java).apply {
+                    putExtra(Notification.EXTRA_NOTIFICATION_ID, notificationId)
+                    putExtra("notificationContent", content)
+                }
+                val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PendingIntent.getBroadcast(
+                        context,
+                        notificationId,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+                } else {
+                    PendingIntent.getBroadcast(
+                        context,
+                        notificationId,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                }
+
+                Log.i("AlarmManager 3", dateTime.time.toString())
+
+                try {
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        dateTime.time - 60000,
+                        pendingIntent
+                    )
+                } catch (e: Exception) {
+                    Log.e("AlarmManager", "Error setting alarm: ${e.message}")
+                    e.printStackTrace()
+                }
             } else {
-                PendingIntent.getBroadcast(
-                    context,
-                    notificationId,
-                    intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT
-                )
-            }
-
-            Log.i("reminder3",dateTime.time.toString())
-
-            try {
-                alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    dateTime.time - 60000,
-                    pendingIntent
-                )
-            } catch (e: Exception) {
-                Log.e("AlarmManager", "Error setting alarm: ${e.message}")
-                e.printStackTrace()
+                Log.w("AlarmManager", "Scheduled time is in the past. Notification not scheduled.")
             }
         }
 
@@ -248,7 +254,7 @@ class MainActivity : AppCompatActivity() {
             FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<TaskList>> {
                 override fun onDataReceived(data: List<TaskList>) {
                     // Handle received user list data
-                    Log.i("data", FirebaseManager.getUserList().toString())
+                    Log.i("data", FirebaseManager.getUserList().size.toString())
 
                     isUserListDataReceived = true
                     setUI()
@@ -262,7 +268,9 @@ class MainActivity : AppCompatActivity() {
             FirebaseManager.setUserTask(object : FirebaseManager.DataCallback<List<Task>> {
                 override fun onDataReceived(data: List<Task>) {
                     // Handle received user list data
-                    Log.i("data", FirebaseManager.getUserTask().toString())
+                    data.forEachIndexed { index, task ->
+                        Log.i("FirebaseManager", "Task $index: $task")
+                    }
 
                     isUserTaskDataReceived = true
                     setUI()
