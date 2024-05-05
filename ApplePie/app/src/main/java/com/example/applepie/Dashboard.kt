@@ -138,7 +138,7 @@ class Dashboard : Fragment(), DataUpdateListener {
         )
 
         adapter.onItemClick = { taskList ->
-            val fragment = ListDetail.newInstance(taskLists.indexOf(taskList))
+            val fragment = ListDetail.newInstance(taskList.id_list)
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)

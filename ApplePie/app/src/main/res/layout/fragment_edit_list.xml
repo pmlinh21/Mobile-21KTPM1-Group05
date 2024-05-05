@@ -168,9 +168,9 @@
                         android:id="@+id/list_color_button_4"
                         android:layout_width="42dp"
                         android:layout_height="42dp"
-                        android:background="@drawable/shape_circle_border"
+                        android:background="@drawable/shape_circle"
                         android:backgroundTint="@color/list_color_4"
-                        android:backgroundTintMode="screen"
+                        android:backgroundTintMode="src_atop"
                         android:layout_marginHorizontal="5dp"
                         android:layout_weight="1"/>
 
@@ -296,7 +296,7 @@
                         android:layout_height="42dp"
                         android:background="@drawable/shape_circle_border"
                         android:backgroundTint="@color/light_greyer"
-                        android:backgroundTintMode="screen"
+                        android:backgroundTintMode="src_atop"
                         android:fontFamily="@font/font_awesome_solid"
                         android:text="@string/list_icon_1"
                         android:textColor="@color/dark_grey"

@@ -104,7 +104,7 @@ class CreateListFragment : BottomSheetDialogFragment() {
 
     private fun setupBackButton() {
         cancelButton.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            dismiss()
         }
     }
 
