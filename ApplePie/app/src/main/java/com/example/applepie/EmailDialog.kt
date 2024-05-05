@@ -38,7 +38,7 @@ class EmailDialog : DialogFragment() {
     ): View {
         // Inflate the layout to use as a dialog or embedded fragment.
         val view = inflater.inflate(R.layout.layout_email, container, false)
-        setStyle(STYLE_NO_TITLE, R.style.customDialogFragment)
+//        setStyle(STYLE_NO_TITLE, R.style.customDialogFragment)
         emailET = view.findViewById(R.id.email_edit_text)
         confirmBtn = view.findViewById(R.id.confirm_button)
 

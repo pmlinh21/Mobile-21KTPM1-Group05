@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.applepie.database.DataUpdateListener
@@ -78,6 +79,8 @@ class Account : Fragment(), DataUpdateListener {
         currentStreakText = rootView.findViewById(R.id.current_streak_text)
         longestStreakText = rootView.findViewById(R.id.longest_streak_text)
 
+        selectedDates = listOf("2024-05-03", "2024-05-06", "2024-05-01").map { LocalDate.parse(it) }
+
         val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
         val startMonth = currentMonth.minusMonths(200)
@@ -119,7 +122,7 @@ class Account : Fragment(), DataUpdateListener {
         FirebaseManager.addDataUpdateListener(this)
 
         setUI()
-        setCalendar()
+
         handleEventListener()
 
         return rootView
@@ -145,12 +148,6 @@ class Account : Fragment(), DataUpdateListener {
         }
     }
 
-    private fun setCalendar() {
-//        val selectedDates = listOf("2024-05-03", "2024-05-06", "2024-05-01")
-//        val preselectedDates = selectedDates.map { LocalDate.parse(it) }
-
-    }
-
     private fun configureBinders(rootView: View, daysOfWeek: List<DayOfWeek>) {
         val calendarView = rootView.findViewById<com.kizitonwose.calendar.view.CalendarView>(R.id.exFiveCalendar)
         // Container for each day view in the calendar
@@ -158,24 +155,6 @@ class Account : Fragment(), DataUpdateListener {
             lateinit var day: CalendarDay
             val textView = view.findViewById<TextView>(R.id.exFiveDayText)
             val layout = view.findViewById<View>(R.id.exFiveDayLayout)
-            init {
-                view.setOnClickListener {
-                    if (day.position == DayPosition.MonthDate) {
-                        //Log.d("Click: ", selectedDate.toString())
-                        if (selectedDate != day.date) {
-                            val oldDate = selectedDate
-                            selectedDate = day.date
-                            //Log.d("Click after: ", selectedDate.toString())
-                            calendarView.notifyDateChanged(day.date)
-                            // You can notify the CalendarView to update here if needed
-                            oldDate?.let {
-                                // Notify the CalendarView to update the old date if needed
-                                calendarView.notifyDateChanged(it)
-                            }
-                        }
-                    }
-                }
-            }
         }
 
         calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
@@ -185,7 +164,20 @@ class Account : Fragment(), DataUpdateListener {
                 val context = container.textView.context
                 container.textView.text = data.date.dayOfMonth.toString()
 
-                val TopView = container.layout.findViewById<View>(R.id.exFiveDayTop)
+                val frameLayout = container.layout.findViewById<FrameLayout>(R.id.exFiveDayFrame)
+
+                if (data.position == DayPosition.MonthDate) {
+
+                    if (selectedDates.contains(data.date)) {
+                        container.textView.setTextColorRes(R.color.green)
+                        frameLayout.setBackgroundResource(R.color.light_light_green)
+                    }
+
+
+                } else {
+                    container.textView.setTextColorRes(R.color.black)
+                    frameLayout.setBackgroundResource(R.color.white)
+                }
             }
         }
 
@@ -337,6 +329,7 @@ class Account : Fragment(), DataUpdateListener {
     private lateinit var currentStreakText: TextView
     private lateinit var longestStreakText: TextView
 
+    private lateinit var selectedDates: List<LocalDate>
     private var selectedDate: LocalDate? = null
     private lateinit var calendarView: com.kizitonwose.calendar.view.CalendarView
     //    private lateinit var calendar: CalendarView
