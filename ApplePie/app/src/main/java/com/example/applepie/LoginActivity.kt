@@ -3,6 +3,7 @@ package com.example.applepie
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.example.applepie.database.PreferenceManager
@@ -26,6 +27,7 @@ class LoginActivity : ComponentActivity() {
         usernameInput = findViewById(R.id.usernameInput)
         passwordInput = findViewById(R.id.passwordInput)
         loginButton = findViewById(R.id.loginButton)
+        forgotPasswordButton = findViewById(R.id.forgotPasswordButton)
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users")
         auth = FirebaseAuth.getInstance()
@@ -136,12 +138,18 @@ class LoginActivity : ComponentActivity() {
 //            finish()
         }
 
+        forgotPasswordButton.setOnClickListener {
+//            val forgotPasswordActivity = Intent(this, ForgotPasswordActivity::class.java)
+//            startActivity(forgotPasswordActivity)
+        }
+
     }
 
     private lateinit var usernameInput: TextInputEditText
     private lateinit var passwordInput: TextInputEditText
     private lateinit var loginButton: MaterialButton
     private lateinit var signupText: MaterialTextView
+    private lateinit var forgotPasswordButton: Button
 
     private lateinit var databaseReference: DatabaseReference
     private lateinit var auth: FirebaseAuth
