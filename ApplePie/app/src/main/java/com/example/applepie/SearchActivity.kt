@@ -1,20 +1,19 @@
 package com.example.applepie
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
+
 
 class SearchActivity : AppCompatActivity() {
     private lateinit var searchATCTV: AutoCompleteTextView
@@ -78,12 +77,12 @@ class SearchActivity : AppCompatActivity() {
         searchResultRV.adapter = adapter
         searchResultRV.layoutManager = LinearLayoutManager(this)
 
-//        adapter.onItemClick = { task ->
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, ListOfTasks.newInstance(tasks.indexOf(task)))
-//                .addToBackStack(null)
-//                .commit()
-//        }
+        adapter.onItemClick = { task ->
+            val returnIntent = Intent()
+            returnIntent.putExtra("taskId", task.id_task)
+            setResult(RESULT_OK, returnIntent)
+            finish()
+        }
     }
     override fun onResume() {
         super.onResume()
