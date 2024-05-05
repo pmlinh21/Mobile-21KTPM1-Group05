@@ -70,7 +70,13 @@ class TaskCalendarAdapter (context: Context, tasks: List<Task>, lists: List<Task
         holder.dueDateTextView.setBackgroundColor(context.getColorCompat(priorityColor))
 
         holder.itemView.setOnClickListener {
-            onItemClickListener?.onItemClick(currentTask)
+//            onItemClickListener?.onItemClick(currentTask)
+            val fragment = TaskDetails.newInstance(currentTask.id_task)
+            (context as MainActivity).supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
