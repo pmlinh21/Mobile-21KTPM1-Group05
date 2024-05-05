@@ -115,6 +115,10 @@ class Account : Fragment() {
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
                     preferenceManager.removeData()
+
+                    val stopIntent = Intent(context, MusicService::class.java)
+                    context?.stopService(stopIntent)
+
                     val loginActivity = Intent(this.activity, LoginActivity::class.java)
                     startActivity(loginActivity)
                 }

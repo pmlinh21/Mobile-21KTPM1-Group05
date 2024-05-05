@@ -31,7 +31,9 @@ class MusicService : Service() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action = intent?.getStringExtra("ACTION")
-        val musicResId = intent?.getIntExtra("MUSIC_RES_ID", R.raw.music_1) ?: R.raw.music_1
+        var musicResId = intent?.getIntExtra("MUSIC_RES_ID", 2131820550) ?: 2131820550
+        if (musicResId == 0)
+            musicResId = 2131820550
         Log.d("MusicService", "Action: $action, Music Resource ID: $musicResId")
         when (action) {
             "PLAY" -> playMusic(musicResId)
