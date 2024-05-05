@@ -1,7 +1,9 @@
 package com.example.applepie
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +11,11 @@ import android.widget.CheckBox
 import android.widget.RadioButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultRegistry
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
@@ -32,12 +39,14 @@ class TaskRecyclerAdapter(private val context: Context, private var tasks: List<
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(tasks[absoluteAdapterPosition])
-                Toast.makeText(context, "Go to task details page", Toast.LENGTH_SHORT).show()
             }
 
             taskStatusCB.setOnClickListener {
                 val task = tasks[absoluteAdapterPosition]
-                Toasty.success(context, "Task completed", Toasty.LENGTH_SHORT).show()
+                if (taskStatusCB.isChecked)
+                    Toasty.success(context, "Task completed", Toasty.LENGTH_SHORT).show()
+                else
+                    Toasty.success(context, "Task uncompleted", Toasty.LENGTH_SHORT).show()
                 FirebaseManager.setTaskStatus(preferenceManager.getIndex(), task.id_task, !task.isDone)
             }
         }

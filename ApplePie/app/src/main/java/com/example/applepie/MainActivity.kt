@@ -33,7 +33,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class MainActivity() : AppCompatActivity() {
     private lateinit var homeButton: Button
     private lateinit var studyButton: Button
     private lateinit var createTaskButton: Button
@@ -144,8 +144,6 @@ class MainActivity : AppCompatActivity() {
 
         preferenceManager = PreferenceManager(this)
 
-        Toast.makeText(this, "onCreate ${preferenceManager.getIndex()}", Toast.LENGTH_SHORT).show()
-
         if (preferenceManager.isLogin() == false ) {
             val loginActivity = Intent(this, LoginActivity::class.java)
             startActivity(loginActivity)
@@ -162,11 +160,6 @@ class MainActivity : AppCompatActivity() {
         setLayout()
         createNotificationChannel()
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Toast.makeText(this, "onResume ${preferenceManager.getIndex()}", Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -315,6 +308,20 @@ class MainActivity : AppCompatActivity() {
         baseContext.stopService(stopIntent)
     }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        // Go to task detail
+        Log.d("dsafa", requestCode.toString())
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            val result = data?.getStringExtra("taskId")
+            val fragment = TaskDetails.newInstance(result!!)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
 
     private var index: Int = -1
     private var isUserListDataReceived = false

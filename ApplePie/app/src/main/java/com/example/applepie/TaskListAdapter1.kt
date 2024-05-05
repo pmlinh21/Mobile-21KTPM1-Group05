@@ -114,7 +114,7 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
 
         holder.itemView.setOnClickListener {
 //            onItemClickListener?.onItemClick(currentTask)
-            val fragment = TaskDetails.newInstance(currentTask.id_list, position, listName)
+            val fragment = TaskDetails.newInstance(currentTask.id_task)
             (context as MainActivity).supportFragmentManager
             .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
