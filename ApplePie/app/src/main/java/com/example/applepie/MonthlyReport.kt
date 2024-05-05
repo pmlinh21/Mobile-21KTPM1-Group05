@@ -404,6 +404,16 @@ class MonthlyReport : Fragment() {
         val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
         val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
 
+        val timeBarChart: BarChart = rootView.findViewById(R.id.timeBarChart)
+
+        timeText = rootView.findViewById(R.id.yAxisLabel_2)
+        if (pomodoroTimes.isEmpty() && stopwatchTimes.isEmpty()) {
+            timeText.text = "Start a Pomodoro or Stopwatch session to see your progress here"
+            timeBarChart.visibility = View.GONE
+        } else {
+            timeText.visibility = View.GONE
+        }
+
         Log.d("firstWeekFirstDay: ", firstWeekFirstDay.toString())
         Log.d("firstWeekLastDay: ", firstWeekLastDay.toString())
 
@@ -496,8 +506,8 @@ class MonthlyReport : Fragment() {
             }
         })
 
-        val timeBarChart: BarChart = rootView.findViewById(R.id.timeBarChart)
         timeBarChart.axisRight.setDrawLabels(false)
+        timeBarChart.axisLeft.setDrawLabels(false)
         timeBarChart.axisLeft.setDrawGridLines(false)
         timeBarChart.axisRight.setDrawGridLines(false)
         timeBarChart.xAxis.setDrawGridLines(false)
@@ -518,11 +528,17 @@ class MonthlyReport : Fragment() {
 
 //        yAxis_2.setValueFormatter(object : ValueFormatter() {
 //            override fun getFormattedValue(value: Float): String {
-//                return value.toInt().toString()
+//                val totalSeconds = value.toInt()
+//                val hours = totalSeconds / 3600
+//                val remainingMinutes = (totalSeconds % 3600) / 60
+//
+//                return if (hours > 0) {
+//                    "${hours}h"
+//                } else {
+//                    "${remainingMinutes}m"
+//                }
 //            }
 //        })
-
-
 
         timeBarChart.description.isEnabled = false
         timeBarChart.legend.isEnabled = true;
@@ -540,7 +556,7 @@ class MonthlyReport : Fragment() {
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        timeBarChart.xAxis.granularity = 1.1f
+        timeBarChart.xAxis.granularity = 1.15f
         timeBarChart.xAxis.isGranularityEnabled = true
         timeBarChart.invalidate()
 
@@ -583,4 +599,5 @@ class MonthlyReport : Fragment() {
     private lateinit var viewAllButton: Button
     private lateinit var originTaskList: List<Task>
     private val xValues = listOf("Week1", "Week2", "Week3", "Week4")
+    private  lateinit var timeText: TextView
 }

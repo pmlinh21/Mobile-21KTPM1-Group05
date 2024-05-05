@@ -17,6 +17,7 @@ import android.os.SystemClock
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
@@ -149,6 +150,8 @@ class MainActivity : AppCompatActivity() {
 
         preferenceManager = PreferenceManager(this)
 
+        Toast.makeText(this, "onCreate ${preferenceManager.getIndex()}", Toast.LENGTH_SHORT).show()
+
         if (preferenceManager.isLogin() == false ) {
             val loginActivity = Intent(this, LoginActivity::class.java)
             startActivity(loginActivity)
@@ -157,7 +160,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         username = preferenceManager.getUsername().toString()
-        index = preferenceManager.getIndex()!!
+        index = preferenceManager.getIndex()
         Log.i("index", index.toString())
 
         getInfoFromFirebase()
@@ -165,6 +168,11 @@ class MainActivity : AppCompatActivity() {
         setLayout()
         createNotificationChannel()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Toast.makeText(this, "onResume ${preferenceManager.getIndex()}", Toast.LENGTH_SHORT).show()
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
