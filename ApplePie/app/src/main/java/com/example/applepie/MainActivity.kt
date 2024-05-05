@@ -84,6 +84,39 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        fun cancelReminderNoti(context: Context, id_task: String) {
+            val notificationId = Math.abs(id_task.hashCode())
+            Log.i("reminder-cancel", notificationId.toString())
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, AlarmReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+
+            // Cancel the pending intent
+            alarmManager.cancel(pendingIntent)
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun makeReminderNoti(context: Context, newDateTime: String, newDuration: Int, id_task: String, title: String){
+            val newReminderTime = calculateReminderTime(newDateTime, newDuration)
+            if (newReminderTime != null) {
+                val formatReminderTime = Date.from(newReminderTime.atZone(ZoneId.systemDefault()).toInstant())
+                val notificationId = Math.abs(id_task.hashCode())
+                Log.i("reminder-make", notificationId.toString())
+                scheduleNotification(
+                    context,
+                    formatReminderTime,
+                    notificationId,
+                    "Your task $title is soon due"
+                )
+            }
+
+        }
+
         fun calculateReminderTime(dateTimeStr: String, durationInMinutes: Int): LocalDateTime? {
             try {
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")

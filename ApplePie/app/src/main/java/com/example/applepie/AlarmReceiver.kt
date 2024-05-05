@@ -24,11 +24,11 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
 
-        
+
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Task reminder")
+            .setContentTitle("ApplePie Reminder")
             .setContentText(notificationContent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
