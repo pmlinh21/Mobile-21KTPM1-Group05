@@ -22,11 +22,13 @@ import org.w3c.dom.Comment
 object FirebaseManager {
     private val database: FirebaseDatabase by lazy { FirebaseDatabase.getInstance("https://applepie-231df-default-rtdb.asia-southeast1.firebasedatabase.app/") }
 
+    private lateinit var allUserRef: DatabaseReference
     private lateinit var userRef: DatabaseReference
     private lateinit var userInfoRef: DatabaseReference
     private lateinit var userListsRef: DatabaseReference
     private lateinit var userTasksRef: DatabaseReference
 
+    private lateinit var allUser: List<User>
     private lateinit var userInfo: User
     private lateinit var userList: List<TaskList>
     private var lengthList: Int = 0
@@ -59,6 +61,10 @@ object FirebaseManager {
         return database
     }
 
+    fun setAllUserRef() {
+        allUserRef = FirebaseDatabase.getInstance().getReference("users")
+    }
+
     fun setUserRef(index: Int) {
         userRef =  FirebaseDatabase.getInstance().getReference("users/$index")
     }
@@ -87,6 +93,32 @@ object FirebaseManager {
 
     private fun notifyDataChanged() {
         listeners.forEach { it.updateData() }
+    }
+
+    fun setAllUser(callback: DataCallback<List<User>>) {
+        allUserRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val tempList = ArrayList<User>()
+                for (snapshot in dataSnapshot.children) {
+                    val user = snapshot.getValue(User::class.java)
+                    user?.let {
+                        tempList.add(it)
+                    }
+                }
+                allUser = tempList
+                callback.onDataReceived(allUser)
+                notifyDataChanged()
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                callback.onError(databaseError)
+                Log.e("Firebase", "Error retrieving user info: ${databaseError.message}")
+            }
+        })
+    }
+
+    fun getAllUser(): List<User> {
+        return allUser
     }
 
     fun setUserInfo(callback: DataCallback<User>) {
@@ -500,5 +532,10 @@ object FirebaseManager {
     fun getHighPriorityUndoneTasks(): List<Task> {
         val tasks = userTask.filter { it.priority == "high" && !it.isDone }.sortedByDescending { it.due_datetime }
         return tasks
+    }
+
+    fun setUserPassword(index: Int, password: String) {
+        val userPasswordRef = FirebaseDatabase.getInstance().getReference("users/$index/info/password")
+        userPasswordRef.setValue(password)
     }
 }

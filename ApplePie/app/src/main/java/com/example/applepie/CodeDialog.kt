@@ -16,12 +16,13 @@ import androidx.fragment.app.DialogFragment
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.mail.EmailService
 import com.example.applepie.model.mail.sendEmail
+import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.mail.internet.InternetAddress
 
 
-class CodeDialog(private val email: String, private val code: String) : DialogFragment() {
+class CodeDialog(private val email: String, private val code: String, private val userId: Int) : DialogFragment() {
 
     // The system calls this to get the DialogFragment's layout, regardless of
     // whether it's being displayed as a dialog or an embedded fragment.
@@ -102,6 +103,8 @@ class CodeDialog(private val email: String, private val code: String) : DialogFr
         }
 
         resendCode.setOnClickListener {
+            resendCode.isEnabled = false
+            Toasty.info(requireContext(), "Resending code...", Toast.LENGTH_SHORT, true).show()
             sendEmail(email, code)
         }
         isCancelable = false
@@ -119,7 +122,7 @@ class CodeDialog(private val email: String, private val code: String) : DialogFr
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         if (buttonClicked) {
-            val passwordDialog = PasswordDialog()
+            val passwordDialog = PasswordDialog(userId)
             passwordDialog.show(parentFragmentManager, "password_dialog")
         }
     }

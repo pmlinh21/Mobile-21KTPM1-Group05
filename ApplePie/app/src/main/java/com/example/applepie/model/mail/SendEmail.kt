@@ -4,8 +4,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.mail.internet.InternetAddress
 
-private val username = "ngo.ngoclien@outlook.com"
-private val password = "Ngongoclien7423nnl"
+private val username = "applepie.hcmus@outlook.com"
+private val password = "123@applepie"
 
 fun sendEmail(toEmail: String, code: String) {
     // Send email confirmation
