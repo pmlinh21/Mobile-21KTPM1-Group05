@@ -57,6 +57,9 @@ class TaskListAdapter(context: Context, tasks: List<Task>, lists: List<TaskList>
 
         holder.listTextView.text = listName
 
+        val priorityColor = getPriorityColor(currentTask.priority)
+        holder.dueDateTextView.setTextColor(context.getColorCompat(priorityColor))
+
         holder.itemView.setOnClickListener {
             onItemClickListener?.onItemClick(currentTask)
         }
@@ -75,5 +78,15 @@ class TaskListAdapter(context: Context, tasks: List<Task>, lists: List<TaskList>
     fun updateData(newTasks: List<Task>) {
         tasks = newTasks
         notifyDataSetChanged()
+    }
+
+    fun getPriorityColor(priority: String): Int {
+        return when (priority) {
+            "none" -> R.color.none_color
+            "low" -> R.color.low_color
+            "medium" -> R.color.medium_color
+            "high" -> R.color.high_color
+            else -> R.color.none_color
+        }
     }
 }

@@ -42,8 +42,8 @@ class TaskCalendarAdapter (context: Context, tasks: List<Task>, lists: List<Task
         holder.taskTitleTextView.text = currentTask.title
         if (currentTask.isDone) {
             holder.taskTitleTextView.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.taskStatus.setImageResource(R.drawable.ic_circular_full)
-            holder.taskStatus_1.visibility = View.VISIBLE
+//            holder.taskStatus.setImageResource(R.drawable.ic_circular_full)
+//            holder.taskStatus_1.visibility = View.VISIBLE
         }
 
         val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
