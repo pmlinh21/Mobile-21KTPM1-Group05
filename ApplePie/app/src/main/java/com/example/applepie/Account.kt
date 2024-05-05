@@ -180,10 +180,6 @@ class Account : Fragment(), DataUpdateListener {
         }
     }
 
-    override fun updateData(){
-        
-    }
-
     fun storeStopwatchTimeInFirebase(){
         val index = preferenceManager.getIndex()
 
