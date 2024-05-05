@@ -52,6 +52,10 @@ class TaskCalendarAdapter (context: Context, tasks: List<Task>, lists: List<Task
         val formattedDateString = outputFormat.format(formattedDate)
         holder.dueDateTextView.text = formattedDateString
 
+        if (currentTask.priority == "low") {
+            holder.dueDateTextView.setTextColor(context.getColorCompat(R.color.black))
+        }
+
         val matchingList = lists.find { it.id_list == currentTask.id_list }
         val listName = matchingList?.list_name ?: "Unknown List"
 
