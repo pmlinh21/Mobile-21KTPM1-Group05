@@ -3,6 +3,7 @@ package com.example.applepie
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -159,13 +160,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
 
             FirebaseManager.addNewTask(newTask)
 
-            val reminder_time = MainActivity.calculateReminderTime("$duedate $time", duration)
-            if (reminder_time != null) {
-                val formatReminderTime = Date.from(reminder_time.atZone(ZoneId.systemDefault()).toInstant())
-                Log.i("reminder", Math.abs(id_task.hashCode()).toString())
-                Log.i("reminder", formatReminderTime.toString())
-                MainActivity.scheduleNotification(requireContext(), formatReminderTime, 101, "$title is soon due")
-            }
+            MainActivity.makeReminderNoti(requireContext(), "$duedate $time", duration, id_task, title)
 
             Toasty.success(requireContext(), "Created task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()
@@ -175,6 +170,8 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             dismiss()
         }
     }
+
+
 
     private fun showTimePickerDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_time_picker, null)

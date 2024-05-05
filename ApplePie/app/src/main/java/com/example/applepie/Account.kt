@@ -40,7 +40,7 @@ class Account : Fragment() {
             indexUser = it.getInt(ARG_INDEX_USER)
             param2 = it.getString(ARG_PARAM2)
         }
-        reminder = FirebaseManager.getUserReminder()
+
         pomodoro = FirebaseManager.getUserPomodoro()
         stopwatch = FirebaseManager.getUserStopwatch()
     }
@@ -54,7 +54,6 @@ class Account : Fragment() {
 
         subscriptionDescription = rootView.findViewById(R.id.subscription_description)
         subscriptionButton = rootView.findViewById(R.id.subscription_btn)
-        reminderButton = rootView.findViewById(R.id.reminder_btn)
         logoutButton = rootView.findViewById(R.id.logout_btn)
         usernameInput = rootView.findViewById(R.id.username_input)
         emailInput = rootView.findViewById(R.id.email_input)
@@ -109,11 +108,6 @@ class Account : Fragment() {
             startActivity(subscribeActivity)
         }
 
-        reminderButton.setOnClickListener {
-            // TODO:  pop up input field for user to change
-            showTimePickerDialog()
-        }
-
         logoutButton.setOnClickListener {
             // TODO:  delete index from preferences
             val builder = AlertDialog.Builder(this.activity)
@@ -131,43 +125,6 @@ class Account : Fragment() {
             val alert = builder.create()
             alert.show()
         }
-    }
-
-    private fun showTimePickerDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_time_picker, null)
-        val hourPicker = dialogView.findViewById<NumberPicker>(R.id.hourPicker)
-        val minutePicker = dialogView.findViewById<NumberPicker>(R.id.minutePicker)
-
-        hourPicker.minValue = 0
-        hourPicker.maxValue = 23
-
-        minutePicker.minValue = 0
-        minutePicker.maxValue = 59
-
-        Log.i("account", (reminder/60).toString())
-        Log.i("account", (reminder%60).toString())
-        hourPicker.value = reminder / 60
-        minutePicker.value = reminder % 60
-
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setView(dialogView)
-        builder.setPositiveButton("OK") { dialog, _ ->
-            val selectedHour = hourPicker.value
-            val selectedMinute = minutePicker.value
-            val duration = selectedHour * 60 + selectedMinute
-
-            Log.i("account", duration.toString())
-
-            val index = preferenceManager.getIndex()
-            FirebaseManager.updateUserReminder(index, duration)
-
-            dialog.dismiss()
-        }
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-        val dialog = builder.create()
-        dialog.show()
     }
 
     companion object {
@@ -192,7 +149,6 @@ class Account : Fragment() {
 
     private lateinit var subscriptionDescription: TextView
     private lateinit var subscriptionButton: Button
-    private lateinit var reminderButton: Button
     private lateinit var logoutButton: Button
 
     private lateinit var usernameInput: EditText
@@ -203,7 +159,6 @@ class Account : Fragment() {
 
     private lateinit var calendar: CalendarView
 
-    private var reminder by Delegates.notNull<Int>()
     private lateinit var pomodoro: List<DateTime>
     private lateinit var stopwatch: List<DateTime>
     private lateinit var preferenceManager: PreferenceManager

@@ -94,7 +94,7 @@ class WeeklyReport : Fragment() {
         })
 
         originTaskList = tasksList
-
+        Log.d("originTaskList", originTaskList.toString())
         taskText = view.findViewById(R.id.task_text)
         taskRecyclerView = view.findViewById(R.id.recyclerView)
 
@@ -102,7 +102,7 @@ class WeeklyReport : Fragment() {
             taskText.text = "There are no tasks for this week"
             taskRecyclerView.visibility = View.INVISIBLE
         } else {
-            taskText.visibility = View.INVISIBLE
+            taskText.visibility = View.GONE
         }
 
         adapter = TaskListAdapter(requireContext(), originTaskList, lists)
@@ -210,20 +210,19 @@ class WeeklyReport : Fragment() {
                 if (e == null) return
 
                 val index = e.x.toInt()
+                Log.d("index: ", index.toString())
 
                 val calendar = Calendar.getInstance()
-                val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1 // 0-based indexing
-
-                val dayOffset = index + 1 - currentDayOfWeek
-
-                calendar.add(Calendar.DAY_OF_WEEK, dayOffset)
+                calendar.time = firstDayOfWeek
+                calendar.add(Calendar.DAY_OF_WEEK, index)
 
                 val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+                Log.d("selectedDate: ", selectedDate)
 
                 val tasksForSelectedDay = tasksList.filter { task ->
                     task.due_datetime.startsWith(selectedDate)
                 }
-
+                Log.d("tasksForSelectedDay: ", tasksForSelectedDay.toString())
                 updateRecyclerView(tasksForSelectedDay)
             }
 
@@ -352,8 +351,8 @@ class WeeklyReport : Fragment() {
         val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
         val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
 
-        Log.d("firstDayOfWeek: ", firstDayOfWeek.toString())
-        Log.d("lastDayOfWeek: ", lastDayOfWeek.toString())
+//        Log.d("firstDayOfWeek: ", firstDayOfWeek.toString())
+//        Log.d("lastDayOfWeek: ", lastDayOfWeek.toString())
 
         val sdf_1 = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -370,7 +369,7 @@ class WeeklyReport : Fragment() {
                 }
             }
         }
-        Log.d("pomodoroTimeByDay: ", pomodoroTimeByDay.toString())
+        //Log.d("pomodoroTimeByDay: ", pomodoroTimeByDay.toString())
 
 
         for (stopwatch in stopwatchTimes) {
@@ -385,7 +384,7 @@ class WeeklyReport : Fragment() {
                 }
             }
         }
-        Log.d("stopwatchTimeByDay: ", stopwatchTimeByDay.toString())
+        //Log.d("stopwatchTimeByDay: ", stopwatchTimeByDay.toString())
 
         val pomodoroEntries = ArrayList<BarEntry>()
         val stopwatchEntries = ArrayList<BarEntry>()

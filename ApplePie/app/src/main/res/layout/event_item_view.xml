@@ -36,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/dueDateTextView"
-            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintDimensionRatio="W,0.2:1"
             app:layout_constraintStart_toEndOf="@id/dueDateTextView"
             app:layout_constraintTop_toTopOf="@id/dueDateTextView">
 
@@ -45,7 +45,8 @@
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_circular" />
+                android:src="@drawable/ic_circular"
+                android:visibility="invisible" />
 
             <ImageView
                 android:id="@+id/taskStatus_1"

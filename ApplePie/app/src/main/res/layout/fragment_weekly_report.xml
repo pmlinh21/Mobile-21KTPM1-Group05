@@ -124,7 +124,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="15dp"
                     android:text="Tasks text"
                     android:textColor="@android:color/black"
                     android:textSize="14sp" />

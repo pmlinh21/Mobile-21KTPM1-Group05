@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
@@ -52,6 +54,7 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_edit_task, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -188,6 +191,9 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
                 reminder = duration
             )
             FirebaseManager.updateTask(updatedTask)
+
+            MainActivity.cancelReminderNoti(requireContext(),taskInfo.id_task)
+            MainActivity.makeReminderNoti(requireContext(), "$duedate $time", duration, taskInfo.id_task, title)
 
             Toasty.success(requireContext(), "Updated task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()
