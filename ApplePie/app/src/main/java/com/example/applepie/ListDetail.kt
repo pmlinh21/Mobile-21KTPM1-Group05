@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.view.menu.MenuPopupHelper
@@ -23,7 +24,7 @@ import es.dmoral.toasty.Toasty
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "listIndex"
+private const val ARG_PARAM1 = "listId"
 
 /**
  * A simple [Fragment] subclass.
@@ -53,7 +54,9 @@ class ListDetail : Fragment(), DataUpdateListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        listIndex = arguments?.getInt(ARG_PARAM1) ?: -1
+        listId = param1!!
+
+        FirebaseManager.addDataUpdateListener(this)
 
         listNameTV = view.findViewById(R.id.list_name_text_view)
         backButton = view.findViewById(R.id.back_button)
@@ -61,8 +64,6 @@ class ListDetail : Fragment(), DataUpdateListener {
 
         taskRV = view.findViewById(R.id.task_recycler_view)
         taskRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-
-        FirebaseManager.addDataUpdateListener(this)
 
 //        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
         displayData()
@@ -86,7 +87,7 @@ class ListDetail : Fragment(), DataUpdateListener {
         popupMenu.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.edit_list -> {
-                    val editListFragment = EditListFragment()
+                    val editListFragment = EditListFragment(listInfo)
                     editListFragment.show(parentFragmentManager, editListFragment.tag)
                 }
                 R.id.delete_list -> {
@@ -129,7 +130,7 @@ class ListDetail : Fragment(), DataUpdateListener {
     }
 
     private fun displayData(){
-        listInfo = FirebaseManager.getUserList()[listIndex]
+        listInfo = FirebaseManager.getUserList().find { it.id_list == listId }!!
         listNameTV.text = listInfo.list_name
 
         val lists = FirebaseManager.getUserList()?: listOf()
@@ -143,21 +144,20 @@ class ListDetail : Fragment(), DataUpdateListener {
          * this fragment using the provided parameters.
          *
          * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
          * @return A new instance of fragment ListOfTasks.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: Int) =
+        fun newInstance(param1: String) =
             ListDetail().apply {
                 arguments = Bundle().apply {
-                    putInt(ARG_PARAM1, param1)
+                    putString(ARG_PARAM1, param1)
                 }
             }
     }
 
     private lateinit var listInfo: TaskList
-    private var listIndex: Int = -1
+    private var listId: String = ""
 
     private lateinit var listNameTV: TextView
     private lateinit var backButton: Button
