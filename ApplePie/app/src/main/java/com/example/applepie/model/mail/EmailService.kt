@@ -1,4 +1,4 @@
-package com.example.applepie.model
+package com.example.applepie.model.mail
 
 import java.util.*
 import javax.mail.*
