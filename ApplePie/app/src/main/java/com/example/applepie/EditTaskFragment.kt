@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,9 +21,11 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Task
+import com.example.applepie.model.TaskList
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
@@ -38,7 +41,7 @@ interface TimePickerListener {
 }
 
 
-class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
+class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment(), DataUpdateListener {
     private var timePickerListener: TimePickerListener? = null
     private var taskInfo: Task = taskInfo
 
@@ -57,7 +60,7 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        FirebaseManager.addDataUpdateListener(this)
 
         val bottomSheet: View = view.parent as View
         bottomSheet.backgroundTintMode = PorterDuff.Mode.CLEAR;
@@ -81,7 +84,7 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
         btnSaveTask = view.findViewById(R.id.btn_saveTask)
         btnCancel = view.findViewById(R.id.btn_cancel)
 
-        val spinnerItems = listOf("None", "Low", "Medium", "High")
+
 
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, spinnerItems)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -103,7 +106,7 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
         val reminderHour = taskInfo.reminder / 60
         val reminderMinute = taskInfo.reminder % 60
         val reminderTime = String.format(Locale.getDefault(), "%02d:%02d", reminderHour, reminderMinute)
-
+        Log.i("reminderTime", reminderTime)
         tieReminder.setText(reminderTime)
         tieAttachment.setText(taskInfo.link)
 
@@ -145,7 +148,7 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
             showTimePickerDialog()
         }
 
-        val taskLists = FirebaseManager.getUserList()
+        taskLists = FirebaseManager.getUserList()
 
         val listNames = mutableListOf<String>()
         val listNameToIdMap = mutableMapOf<String, String>()
@@ -192,8 +195,8 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
             )
             FirebaseManager.updateTask(updatedTask)
 
-            MainActivity.cancelReminderNoti(requireContext(),taskInfo.id_task)
-            MainActivity.makeReminderNoti(requireContext(), "$duedate $time", duration, taskInfo.id_task, title)
+            if (duration > 0)
+                MainActivity.makeReminderNoti(requireContext(), "$duedate $time", duration, taskInfo.id_task, title)
 
             Toasty.success(requireContext(), "Updated task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()
@@ -201,6 +204,52 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
 
         btnCancel.setOnClickListener {
             dismiss()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        FirebaseManager.removeDataUpdateListener(this)
+    }
+
+    override fun updateData() {
+        displayData(spinnerItems)
+    }
+
+    fun displayData(spinnerItems: List<String>){
+        tieTitle.setText(taskInfo.title)
+        tieDescription.setText(taskInfo.description)
+        val dueDateTime = taskInfo.due_datetime.split(" ")
+        tieDuedate.setText(dueDateTime[0])
+        tieTime.setText(dueDateTime[1])
+
+        val priorityIndex = spinnerItems.indexOf(taskInfo.priority.capitalize())
+//        Toast.makeText(requireContext(), "Priority: " + taskInfo.priority, Toast.LENGTH_SHORT).show()
+        if (priorityIndex != -1) {
+            spnPriority.setSelection(priorityIndex)
+        }
+
+        val reminderHour = taskInfo.reminder / 60
+        val reminderMinute = taskInfo.reminder % 60
+        val reminderTime = String.format(Locale.getDefault(), "%02d:%02d", reminderHour, reminderMinute)
+        Log.i("reminderTime", reminderTime)
+        tieReminder.setText(reminderTime)
+        tieAttachment.setText(taskInfo.link)
+
+        val listNames = mutableListOf<String>()
+        val listNameToIdMap = mutableMapOf<String, String>()
+        for (taskList in taskLists) {
+            val listName = taskList.list_name
+            if (listName.isNotEmpty()) {
+                listNames.add(listName)
+                listNameToIdMap[listName] = taskList.id_list
+            }
+        }
+        val position = listNames.indexOfFirst { listNameToIdMap[it] == taskInfo.id_list }
+        if (position != -1) {
+            spnList.setSelection(position)
+        } else {
+            Log.d("Spinner", "id_list ${taskInfo.id_list} not found")
         }
     }
 
@@ -235,7 +284,10 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
         dialog.show()
 
         val negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE)
-        negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        negativeButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
+        val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
+        positiveButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
     }
 
     private lateinit var tieTitle: TextInputEditText
@@ -256,6 +308,9 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
     private var hourOfDay = myCalendar.get(Calendar.HOUR_OF_DAY)
     private var minute = myCalendar.get(Calendar.MINUTE)
     private var duration = taskInfo.reminder
+
+    private val spinnerItems = listOf("None", "Low", "Medium", "High")
+    private lateinit var taskLists: List<TaskList>
 
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var databaseReference: DatabaseReference
