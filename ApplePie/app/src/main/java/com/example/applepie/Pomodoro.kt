@@ -88,20 +88,28 @@ class Pomodoro : Fragment() {
             // TODO: save firebase, reset timer
             storeTimeInFirebase()
             PomodoroTimer.stopTimer()
-            val stopIntent = Intent(context, MusicService::class.java)
-            context?.stopService(stopIntent)
+
+            if (preferenceManager.getMusicStatus() == true){
+                val stopIntent = Intent(context, MusicService::class.java)
+                context?.stopService(stopIntent)
+            }
+
         }
 
         playButton.setOnClickListener {
             // TODO:  start timer
-            if (PomodoroTimer.isPause())
+            if (PomodoroTimer.isPause()){
                 PomodoroTimer.resumeTimer()
+            }
+
             else{
-                val playIntent = Intent(context, MusicService::class.java).apply {
-                    putExtra("ACTION", "PLAY")
-                    putExtra("MUSIC_RES_ID", FirebaseManager.getUserMusic().resourceId)
+                if (preferenceManager.getMusicStatus() == true) {
+                    val playIntent = Intent(context, MusicService::class.java).apply {
+                        putExtra("ACTION", "PLAY")
+                        putExtra("MUSIC_RES_ID", FirebaseManager.getUserMusic().resourceId)
+                    }
+                    context?.startService(playIntent)
                 }
-                context?.startService(playIntent)
             }
 
             setStartTime()
@@ -110,6 +118,7 @@ class Pomodoro : Fragment() {
 
         forwardButton.setOnClickListener {
             // TODO:  start timer for break or study, save firebase
+
             storeTimeInFirebase()
             PomodoroTimer.switchMinute()
             PomodoroTimer.stopTimer()
@@ -117,6 +126,7 @@ class Pomodoro : Fragment() {
 
         pauseButton.setOnClickListener {
             // TODO:  pause timer for break or study
+
             storeTimeInFirebase()
             PomodoroTimer.pauseTimer()
         }

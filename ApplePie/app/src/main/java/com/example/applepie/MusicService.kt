@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat
 
 class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
+    private var isMusicPlaying = false
     private val CHANNEL_ID = "MusicPlaybackChannel"
 
     override fun onCreate() {
@@ -36,9 +37,15 @@ class MusicService : Service() {
             musicResId = 2131820550
         Log.d("MusicService", "Action: $action, Music Resource ID: $musicResId")
         when (action) {
-            "PLAY" -> playMusic(musicResId)
+            "PLAY" -> {
+                // Check if music is already playing
+                if (!isMusicPlaying) {
+                    playMusic(musicResId)
+                }
+            }
             "PAUSE" -> pauseMusic()
             "STOP" -> stopSelf()
+//            "RESUME" -> resumeMusic()
         }
 
         return START_STICKY
@@ -50,6 +57,7 @@ class MusicService : Service() {
             Log.e("MusicService", "Failed to gain audio focus")
             return
         }
+        isMusicPlaying = true
 
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, musicResId)
@@ -82,8 +90,11 @@ class MusicService : Service() {
     private fun pauseMusic() {
         if (mediaPlayer?.isPlaying == true) {
             mediaPlayer?.pause()
+
+            isMusicPlaying = false
         }
     }
+
 
     @SuppressLint("ForegroundServiceType")
     private fun startForegroundService() {
@@ -101,6 +112,7 @@ class MusicService : Service() {
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
+        isMusicPlaying = false
         super.onDestroy()
     }
 
@@ -122,8 +134,14 @@ class MusicService : Service() {
                 build()
             }
         )
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            Log.d("MusicService", "Audio focus gained")
+        } else {
+            Log.e("MusicService", "Failed to gain audio focus")
+        }
         return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
     }
+
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
