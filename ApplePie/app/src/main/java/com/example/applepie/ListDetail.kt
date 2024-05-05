@@ -1,18 +1,25 @@
 package com.example.applepie
 
+import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.view.menu.MenuPopupHelper
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
+import es.dmoral.toasty.Toasty
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,10 +27,10 @@ private const val ARG_PARAM1 = "listIndex"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ListOfTasks.newInstance] factory method to
+ * Use the [ListDetail.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListOfTasks : Fragment(), DataUpdateListener {
+class ListDetail : Fragment(), DataUpdateListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
 
@@ -39,27 +46,22 @@ class ListOfTasks : Fragment(), DataUpdateListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_of_tasks, container, false)
+        return inflater.inflate(R.layout.fragment_list_detail, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         listIndex = arguments?.getInt(ARG_PARAM1) ?: -1
-//        listInfo = FirebaseManager.getUserList()[listIndex]
 
         listNameTV = view.findViewById(R.id.list_name_text_view)
-//        listNameTV.text = listInfo.list_name
-
         backButton = view.findViewById(R.id.back_button)
         moreButton = view.findViewById(R.id.more_button)
 
         taskRV = view.findViewById(R.id.task_recycler_view)
         taskRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
-//        val lists = FirebaseManager.getUserList()?: listOf()
-//        val tasksList = FirebaseManager.getUserTask()?: listOf()
-//        val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
         FirebaseManager.addDataUpdateListener(this)
 
 //        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
@@ -74,9 +76,46 @@ class ListOfTasks : Fragment(), DataUpdateListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun setupMoreButton() {
-        moreButton.setOnClickListener {
+        val popupMenu = PopupMenu(requireContext(), moreButton)
+        popupMenu.inflate(R.menu.popup_menu)
 
+        popupMenu.setForceShowIcon(true)
+
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.edit_list -> {
+                    val editListFragment = EditListFragment()
+                    editListFragment.show(parentFragmentManager, editListFragment.tag)
+                }
+                R.id.delete_list -> {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setTitle("Confirm Deletion")
+                    builder.setMessage("Are you sure you want to delete this list? All tasks in this list will be deleted as well.")
+
+                    builder.setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+
+                    builder.setPositiveButton("Delete") { dialog, _ ->
+                        val tasksInList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
+                        for (task in tasksInList) {
+                            FirebaseManager.deleteTask(task.id_task)
+                        }
+                        FirebaseManager.deleteList(listInfo.id_list)
+                        Toasty.success(requireContext(), "List deleted", Toasty.LENGTH_SHORT).show()
+                        parentFragmentManager.popBackStack()
+                    }
+                    val dialog = builder.create()
+                    dialog.show()
+                }
+            }
+            true
+        }
+
+        moreButton.setOnClickListener {
+            popupMenu.show()
         }
     }
 
@@ -89,7 +128,7 @@ class ListOfTasks : Fragment(), DataUpdateListener {
         displayData()
     }
 
-    fun displayData(){
+    private fun displayData(){
         listInfo = FirebaseManager.getUserList()[listIndex]
         listNameTV.text = listInfo.list_name
 
@@ -110,7 +149,7 @@ class ListOfTasks : Fragment(), DataUpdateListener {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: Int) =
-            ListOfTasks().apply {
+            ListDetail().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PARAM1, param1)
                 }

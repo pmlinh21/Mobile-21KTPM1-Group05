@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.ApplePie" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.ApplePie" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:popupMenuStyle">@style/popupBGStyle</item>
+    </style>
 
+    <style name="popupBGStyle" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_task</item>
+    </style>
 </resources>

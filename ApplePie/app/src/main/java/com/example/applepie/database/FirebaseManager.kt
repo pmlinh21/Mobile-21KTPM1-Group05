@@ -335,7 +335,7 @@ object FirebaseManager {
         userReminder.setValue(duration)
     }
 
-    fun addUserList(taskList: TaskList) {
+    fun addList(taskList: TaskList) {
         val newList = TaskList(
             taskList.id_list,
             taskList.list_color,
@@ -343,6 +343,29 @@ object FirebaseManager {
             taskList.list_name
         )
         userListsRef.child(userList.size.toString()).setValue(newList)
+    }
+
+    fun deleteList(listId: String) {
+        userListsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (listSnapshot in dataSnapshot.children) {
+                        val userTaskList = listSnapshot.getValue(TaskList::class.java)
+                        if (userTaskList != null && userTaskList.id_list == listId) {
+                            listSnapshot.ref.removeValue()
+                            return
+                        }
+                    }
+                    Log.d("UserTaskList", "List with id $listId not found")
+                } else {
+                    Log.d("UserTaskList", "User task list not found for UID")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("data",databaseError.message)
+            }
+        })
     }
 
     fun countTasksOfList(listId: String): Int {
@@ -359,8 +382,6 @@ object FirebaseManager {
             task.link,
             task.priority,
             task.title,
-            task.listName,
-            task.list_color,
             task.reminder
         )
         userTasksRef.child(userTask.size.toString()).setValue(newTask)
@@ -376,8 +397,6 @@ object FirebaseManager {
             task.link,
             task.priority,
             task.title,
-            task.listName,
-            task.list_color,
             task.reminder
         )
 
@@ -464,13 +483,6 @@ object FirebaseManager {
 
     fun getHighPriorityUndoneTasks(): List<Task> {
         val tasks = userTask.filter { it.priority == "high" && !it.isDone }.sortedByDescending { it.due_datetime }
-
-        for (task in tasks) {
-            val matchingList = userList.find { it.id_list == task.id_list }
-            task.listName = matchingList?.list_name ?: "Unknown List"
-            task.list_color = matchingList?.list_color ?: -1
-        }
-
         return tasks
     }
 }

@@ -2,22 +2,21 @@ package com.example.applepie
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.text.TextUtils.replace
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.compose.ui.text.capitalize
-import androidx.core.view.ViewCompat.canScrollVertically
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -29,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [Dashboard.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Dashboard : Fragment() {
+class Dashboard : Fragment(), DataUpdateListener {
     private lateinit var todayTV: TextView
     private lateinit var searchBtn: Button
     private lateinit var addListTV: TextView
@@ -139,8 +138,9 @@ class Dashboard : Fragment() {
         )
 
         adapter.onItemClick = { taskList ->
+            val fragment = ListDetail.newInstance(taskLists.indexOf(taskList))
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ListOfTasks.newInstance(taskLists.indexOf(taskList)))
+                .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
         }
@@ -186,11 +186,6 @@ class Dashboard : Fragment() {
             highPriorityRV.visibility = View.VISIBLE
             highPriorityEmptyTV.visibility = View.INVISIBLE
         }
-        for (task in highPriorityTasks) {
-            val matchingList = lists.find { it.id_list == task.id_list }
-            task.listName = matchingList?.list_name ?: "Unknown List"
-            task.list_color = matchingList?.list_color ?: -1
-        }
 
         val adapter = PriorityRecyclerAdapter(requireContext(), highPriorityTasks)
         highPriorityRV.adapter = adapter
@@ -205,16 +200,6 @@ class Dashboard : Fragment() {
                 dividerColor = resources.getColor(R.color.light_grey)
             }
         )
-
-//        highPriorityRV.layoutManager = object: LinearLayoutManager(requireContext()) { override fun canScrollVertically() = false }
-
-//        adapter.onItemClick = { task ->
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, TaskDetails.newInstance(task.id_task))
-//                .addToBackStack(null)
-//                .commit()
-//        }\
-
     }
 
     private fun updateHighPriorityTasks() {
@@ -275,5 +260,8 @@ class Dashboard : Fragment() {
                 }
             }
     }
-
+    override fun updateData() {
+        updateTaskLists()
+        updateHighPriorityTasks()
+    }
 }

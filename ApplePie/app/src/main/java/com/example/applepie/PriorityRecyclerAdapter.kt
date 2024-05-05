@@ -12,11 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Task
+import com.example.applepie.model.TaskList
 import es.dmoral.toasty.Toasty
 
 class PriorityRecyclerAdapter(private val context: Context, private var tasks: List<Task>): RecyclerView.Adapter<PriorityRecyclerAdapter.ViewHolder>() {
 
     var onItemClick: ((Task) -> Unit)? = null
+    private var lists: List<TaskList> = FirebaseManager.getUserList()
 
     inner class ViewHolder(listItemView: View): RecyclerView.ViewHolder(listItemView) {
         val taskStatusCB: CheckBox = listItemView.findViewById<CheckBox>(R.id.task_status_check_box)
@@ -54,18 +56,14 @@ class PriorityRecyclerAdapter(private val context: Context, private var tasks: L
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val task = tasks[position]
+        val list = lists.find { it.id_list == task.id_list }!!
         holder.taskStatusCB.isChecked = task.isDone
         holder.taskTitleTV.text = task.title
-        holder.listNameTV.text = task.listName
+        holder.listNameTV.text = list.list_name
         holder.dueDateTV.text = task.due_datetime
 
-        if (task.list_color == -1){
-            holder.listIconTV.setTextColor(context.getColor(R.color.green))
-            holder.listNameTV.setTextColor(context.getColor(R.color.green))
-        } else {
-            holder.listIconTV.setTextColor(task.list_color - 0x1000000)
-            holder.listNameTV.setTextColor(task.list_color - 0x1000000)
-        }
+        holder.listIconTV.setTextColor(list.list_color - 0x1000000)
+        holder.listNameTV.setTextColor(list.list_color - 0x1000000)
     }
 
     @SuppressLint("NotifyDataSetChanged")

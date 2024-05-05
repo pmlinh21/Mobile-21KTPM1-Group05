@@ -135,8 +135,6 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
 
         spnList.adapter = adt
 
-//        Log.i("duration", duration.toString())
-
         btnCreateTask.setOnClickListener {
             val title = tieTitle.text.toString()
             val description = tieDescription.text.toString()

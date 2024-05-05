@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var tasks: List<Task>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val intent = intent
+
         setContentView(R.layout.activity_search)
 
         tasks = FirebaseManager.getUserTask()
@@ -47,25 +51,10 @@ class SearchActivity : AppCompatActivity() {
                 if (searchATCTV.text.isEmpty()) {
                     val adapter = searchResultRV.adapter as TaskRecyclerAdapter
                     adapter.setTasks(listOf())
-//                    if (isRecyclerView) {
-//                        val adapter = studentRV.adapter as StudentRecyclerAdapter
-//                        adapter.setStudents(students)
-//                    } else {
-//                        val adapter = studentGV.adapter as StudentGridAdapter
-//                        adapter.setStudents(students)
-//                    }
                 } else {
                     val searchResult = tasks.filter { it.title.lowercase().contains(searchATCTV.text.toString().lowercase()) }
                     val adapter = searchResultRV.adapter as TaskRecyclerAdapter
                     adapter.setTasks(searchResult)
-//                    val searchResult = students.filter { it.name.lowercase().contains(searchATCTV.text.toString().lowercase()) }
-//                    if (isRecyclerView) {
-//                        val adapter = studentRV.adapter as StudentRecyclerAdapter
-//                        adapter.setStudents(searchResult)
-//                    } else {
-//                        val adapter = studentGV.adapter as StudentGridAdapter
-//                        adapter.setStudents(searchResult)
-//                    }
                 }
             }
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -73,26 +62,10 @@ class SearchActivity : AppCompatActivity() {
                 if (searchATCTV.text.isEmpty()) {
                     val adapter = searchResultRV.adapter as TaskRecyclerAdapter
                     adapter.setTasks(listOf())
-//                    if (isRecyclerView) {
-//                        val adapter = studentRV.adapter as StudentRecyclerAdapter
-//                        adapter.setStudents(students)
-//                    } else {
-//                        val adapter = studentGV.adapter as StudentGridAdapter
-//                        adapter.setStudents(students)
-//                    }
                 } else {
                     val searchResult = tasks.filter { it.title.lowercase().contains(searchATCTV.text.toString().lowercase()) }
                     val adapter = searchResultRV.adapter as TaskRecyclerAdapter
                     adapter.setTasks(searchResult)
-
-//                    val searchResult = students.filter { it.name.lowercase().contains(searchATCTV.text.toString().lowercase()) }
-//                    if (isRecyclerView) {
-//                        val adapter = studentRV.adapter as StudentRecyclerAdapter
-//                        adapter.setStudents(searchResult)
-//                    } else {
-//                        val adapter = studentGV.adapter as StudentGridAdapter
-//                        adapter.setStudents(searchResult)
-//                    }
                 }
             }
         })
@@ -101,7 +74,7 @@ class SearchActivity : AppCompatActivity() {
     private fun setupSearchResultRecyclerView() {
         searchResultRV = findViewById<RecyclerView>(R.id.search_result_recycler_view)
 
-        val adapter = TaskRecyclerAdapter(this, listOf())
+        val adapter = TaskRecyclerAdapter(this, tasks)
         searchResultRV.adapter = adapter
         searchResultRV.layoutManager = LinearLayoutManager(this)
 
@@ -112,6 +85,20 @@ class SearchActivity : AppCompatActivity() {
 //                .commit()
 //        }
     }
+    override fun onResume() {
+        super.onResume()
+        updateTaskLists()
+    }
 
-
+    private fun updateTaskLists() {
+        tasks = FirebaseManager.getUserTask()
+        if (searchATCTV.text.isEmpty()) {
+            val adapter = searchResultRV.adapter as TaskRecyclerAdapter
+            adapter.setTasks(listOf())
+        } else {
+            val searchResult = tasks.filter { it.title.lowercase().contains(searchATCTV.text.toString().lowercase()) }
+            val adapter = searchResultRV.adapter as TaskRecyclerAdapter
+            adapter.setTasks(searchResult)
+        }
+    }
 }

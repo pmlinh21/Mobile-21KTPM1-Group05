@@ -19,13 +19,13 @@ import com.example.applepie.model.TaskList
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.time.LocalDateTime
 
-class CreateListFragment : BottomSheetDialogFragment() {
+class EditListFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_create_list, container, false)
+        return inflater.inflate(R.layout.fragment_edit_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class CreateListFragment : BottomSheetDialogFragment() {
 
     private fun setupUI(view: View) {
         cancelButton = view.findViewById<Button>(R.id.cancel_button)
-        addButton = view.findViewById<Button>(R.id.add_button)
+        doneButton = view.findViewById<Button>(R.id.done_button)
 
         listIconTV = view.findViewById<TextView>(R.id.list_icon_text_view)
         listNameET = view.findViewById<EditText>(R.id.list_name_edit_text)
@@ -109,7 +109,7 @@ class CreateListFragment : BottomSheetDialogFragment() {
     }
 
     private fun setupDoneButton() {
-        addButton.setOnClickListener {
+        doneButton.setOnClickListener {
             // TODO: add list to database
             if (listNameET.text.isEmpty()) {
                 Toast.makeText(context, "List name required", Toast.LENGTH_SHORT).show()
@@ -159,7 +159,7 @@ class CreateListFragment : BottomSheetDialogFragment() {
     }
 
     private lateinit var cancelButton: Button
-    private lateinit var addButton: Button
+    private lateinit var doneButton: Button
 
     private lateinit var listIconTV: TextView
     private lateinit var listNameET: EditText

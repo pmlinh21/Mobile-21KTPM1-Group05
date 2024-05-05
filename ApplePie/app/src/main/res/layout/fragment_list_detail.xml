@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ListOfTasks">
+    tools:context=".ListDetail">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
@@ -37,11 +37,13 @@
             android:layout_height="wrap_content"
             android:minHeight="0dp"
             android:minWidth="0dp"
+            android:paddingEnd="15dp"
+            android:paddingVertical="10dp"
             android:fontFamily="@font/font_awesome_solid"
             android:text="chevron-left"
             android:textSize="24sp"
-            android:background="@drawable/bg_invisible"
             android:textColor="@color/white"
+            android:background="@drawable/bg_invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
@@ -52,6 +54,8 @@
             android:layout_height="wrap_content"
             android:minHeight="0dp"
             android:minWidth="0dp"
+            android:paddingStart="10dp"
+            android:paddingVertical="10dp"
             android:fontFamily="@font/font_awesome_solid"
             android:text="ellipsis-h"
             android:textSize="24sp"
