@@ -93,6 +93,7 @@ object FirebaseManager {
                 if (dataSnapshot.exists()) {
                     userInfo = dataSnapshot.getValue(User::class.java)!!
                     callback.onDataReceived(userInfo)
+                    notifyDataChanged()
 //                    Log.i("data",userInfo.toString())
                 } else {
                     Log.d("UserInfo", "User info not found for UID")
