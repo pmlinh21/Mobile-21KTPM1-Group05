@@ -239,6 +239,8 @@ class MainActivity() : AppCompatActivity() {
                 override fun onDataReceived(data: User) {
                     // Handle received user list data
                     Log.i("data", FirebaseManager.getUserInfo().toString())
+                    isUserInfoDataReceived = true
+                    setUI()
                 }
 
                 override fun onError(error: DatabaseError) {
@@ -324,6 +326,7 @@ class MainActivity() : AppCompatActivity() {
     }
 
     private var index: Int = -1
+    private var isUserInfoDataReceived = false
     private var isUserListDataReceived = false
     private var isUserTaskDataReceived = false
 }

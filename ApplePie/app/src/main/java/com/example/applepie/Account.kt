@@ -23,6 +23,8 @@ import androidx.annotation.RequiresApi
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.DateTime
+import com.example.applepie.model.Task
+import com.example.applepie.model.User
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.CalendarMonth
 import com.kizitonwose.calendar.core.DayPosition
@@ -60,6 +62,8 @@ class Account : Fragment(), DataUpdateListener {
             indexUser = it.getInt(ARG_INDEX_USER)
             param2 = it.getString(ARG_PARAM2)
         }
+        preferenceManager = PreferenceManager(requireContext())
+
     }
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -80,6 +84,31 @@ class Account : Fragment(), DataUpdateListener {
         longestStreakText = rootView.findViewById(R.id.longest_streak_text)
 
         getStudyTime()
+
+        val continuousRanges = countContinuousDateRanges(selectedDates)
+
+        val longestStreak = continuousRanges.maxOrNull() ?: 0
+        val currentStreak = continuousRanges.lastOrNull() ?: 0
+
+        longestStreakText.text = longestStreak.toString()
+        currentStreakText.text = currentStreak.toString()
+
+        userInfo = FirebaseManager.getUserInfo()
+        if (longestStreak > userInfo.longest_streak || currentStreak != userInfo.current_streak) {
+            val updateUser = User(
+                email = userInfo.email,
+                id_user = userInfo.id_user,
+                isPremium = userInfo.isPremium,
+                password = userInfo.password,
+                reminder_duration = userInfo.reminder_duration,
+                username = userInfo.username,
+                longest_streak = longestStreak,
+                current_streak = currentStreak,
+                code = userInfo.code
+            )
+            Log.i("index", preferenceManager.getIndex().toString())
+            FirebaseManager.updateUserInfo(preferenceManager.getIndex(), updateUser)
+        }
 
         val daysOfWeek = daysOfWeek()
         val currentMonth = YearMonth.now()
@@ -145,6 +174,26 @@ class Account : Fragment(), DataUpdateListener {
         selectedDates = totalSecondsByDate.keys.toList()
     }
 
+    private fun countContinuousDateRanges(dates: List<LocalDate>): List<Int> {
+        if (dates.isEmpty()) return emptyList()
+
+        val sortedDates = dates.sorted()
+        val continuousRanges = mutableListOf<Int>()
+        var currentRangeLength = 1
+
+        for (i in 1 until sortedDates.size) {
+            if (sortedDates[i] == sortedDates[i - 1].plusDays(1)) {
+                currentRangeLength++
+            } else {
+                continuousRanges.add(currentRangeLength)
+                currentRangeLength = 1
+            }
+        }
+
+        continuousRanges.add(currentRangeLength)
+
+        return continuousRanges
+    }
     private fun configureBinders(rootView: View, daysOfWeek: List<DayOfWeek>) {
         val calendarView = rootView.findViewById<com.kizitonwose.calendar.view.CalendarView>(R.id.exFiveCalendar)
         // Container for each day view in the calendar
@@ -205,7 +254,6 @@ class Account : Fragment(), DataUpdateListener {
         }
     }
 
-
     fun calculateSeconds(start: String, end: String, dateTimeFormatter: DateTimeFormatter): Long {
         val startTime = LocalDateTime.parse(start, dateTimeFormatter)
         val endTime = LocalDateTime.parse(end, dateTimeFormatter)
@@ -215,8 +263,6 @@ class Account : Fragment(), DataUpdateListener {
     private fun setUI(){
         usernameInput.setText(FirebaseManager.getUserInfo().username)
         emailInput.setText(FirebaseManager.getUserInfo().email)
-        currentStreakText.text = FirebaseManager.getUserInfo().current_streak.toString()
-        longestStreakText.text = FirebaseManager.getUserInfo().longest_streak.toString()
         if (FirebaseManager.getUserInfo().isPremium) {
             subscriptionDescription.text = getString(R.string.premium_description_paid)
             subscriptionButton.visibility = View.GONE
@@ -325,12 +371,11 @@ class Account : Fragment(), DataUpdateListener {
 
     private lateinit var currentStreakText: TextView
     private lateinit var longestStreakText: TextView
+    private lateinit var userInfo: User
 
     private lateinit var selectedDates: List<LocalDate>
     private var selectedDate: LocalDate? = null
     private lateinit var calendarView: com.kizitonwose.calendar.view.CalendarView
-    //    private lateinit var calendar: CalendarView
-    private lateinit var totalSecondsByDate: Map<LocalDate,Long>
 
     private lateinit var pomodoroTime: List<DateTime>
     private lateinit var stopwatchTime: List<DateTime>

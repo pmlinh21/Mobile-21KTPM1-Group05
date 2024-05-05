@@ -145,6 +145,10 @@ object FirebaseManager {
         return userInfo
     }
 
+    fun updateUserInfo(index: Int, userInfo: User) {
+        FirebaseDatabase.getInstance().getReference("users/$index/info").setValue(userInfo)
+    }
+
     fun setUserList(callback: DataCallback<List<TaskList>>) {
         userListsRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
