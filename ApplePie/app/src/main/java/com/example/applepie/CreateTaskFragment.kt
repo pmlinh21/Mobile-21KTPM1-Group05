@@ -7,6 +7,7 @@ import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
@@ -27,7 +29,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import es.dmoral.toasty.Toasty
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
+import java.util.Date
 
 class CreateTaskFragment : BottomSheetDialogFragment() {
     private var timePickerListener: TimePickerListener? = null
@@ -44,6 +48,7 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_create_task, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -141,9 +146,10 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
             val listName = spnList.selectedItem.toString()
             val idList = listNameToIdMap[listName]
             val attachment = tieAttachment.text.toString()
+            val id_task = LocalDateTime.now().toString().replace("-", "").replace("T", "").replace(":", "").split(".")[0]
 
             val newTask = Task(
-                id_task = LocalDateTime.now().toString().replace("-", "").replace("T", "").replace(":", "").split(".")[0],
+                id_task = id_task,
                 id_list = idList!!,
                 description = description,
                 due_datetime = duedate + ' ' + time,
@@ -152,9 +158,16 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
                 title = title,
                 reminder = duration
             )
+
             FirebaseManager.addNewTask(newTask)
 
-//            Toasty.success(requireContext(), "Duration: " + duration, Toast.LENGTH_SHORT, true).show()
+            val reminder_time = MainActivity.calculateReminderTime("$duedate $time", duration)
+            if (reminder_time != null) {
+                val formatReminderTime = Date.from(reminder_time.atZone(ZoneId.systemDefault()).toInstant())
+                Log.i("reminder", Math.abs(id_task.hashCode()).toString())
+                Log.i("reminder", formatReminderTime.toString())
+                MainActivity.scheduleNotification(requireContext(), formatReminderTime, 101, "$title is soon due")
+            }
 
             Toasty.success(requireContext(), "Created task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()
