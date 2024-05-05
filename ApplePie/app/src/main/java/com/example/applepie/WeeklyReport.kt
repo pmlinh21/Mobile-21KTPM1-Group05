@@ -157,7 +157,7 @@ class WeeklyReport : Fragment() {
         yAxis.setDrawAxisLine(false)
 
         yAxis.axisMinimum = 0f
-        yAxis.axisMaximum = maxTaskCount + 4f
+        yAxis.axisMaximum = maxTaskCount + 3f
 
         val maxLabelCount = if (yAxis.axisMaximum < 5) 3 else 5
 
@@ -351,6 +351,15 @@ class WeeklyReport : Fragment() {
         val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
         val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
 
+        val timeBarChart: BarChart = view.findViewById(R.id.timeBarChart)
+
+        timeText = view.findViewById(R.id.yAxisLabel_2)
+        if (pomodoroTimes.isEmpty() && stopwatchTimes.isEmpty()) {
+            timeText.text = "Start a Pomodoro or Stopwatch session to see your progress here"
+            timeBarChart.visibility = View.GONE
+        } else {
+            timeText.visibility = View.GONE
+        }
 //        Log.d("firstDayOfWeek: ", firstDayOfWeek.toString())
 //        Log.d("lastDayOfWeek: ", lastDayOfWeek.toString())
 
@@ -420,8 +429,8 @@ class WeeklyReport : Fragment() {
             }
         })
 
-        val timeBarChart: BarChart = view.findViewById(R.id.timeBarChart)
         timeBarChart.axisRight.setDrawLabels(false)
+        timeBarChart.axisLeft.setDrawLabels(false)
         timeBarChart.axisLeft.setDrawGridLines(false)
         timeBarChart.axisRight.setDrawGridLines(false)
         timeBarChart.xAxis.setDrawGridLines(false)
@@ -504,5 +513,6 @@ class WeeklyReport : Fragment() {
     private lateinit var viewAllButton: Button
     private lateinit var originTaskList: List<Task>
     private val xValues = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
+    private  lateinit var timeText: TextView
 }
 
