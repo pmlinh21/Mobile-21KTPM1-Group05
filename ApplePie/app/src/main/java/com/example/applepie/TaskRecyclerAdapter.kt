@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.Task
+import com.example.applepie.model.TaskList
 import es.dmoral.toasty.Toasty
 
 class TaskRecyclerAdapter(private val context: Context, private var tasks: List<Task>): RecyclerView.Adapter<TaskRecyclerAdapter.ViewHolder>() {
 
     var onItemClick: ((Task) -> Unit)? = null
+    private var lists: List<TaskList> = FirebaseManager.getUserList()
 
     inner class ViewHolder(listItemView: View): RecyclerView.ViewHolder(listItemView) {
         val preferenceManager: PreferenceManager = PreferenceManager(context)
@@ -57,16 +59,12 @@ class TaskRecyclerAdapter(private val context: Context, private var tasks: List<
         val task = tasks[position]
         holder.taskStatusCB.isChecked = task.isDone
         holder.taskTitleTV.text = task.title
-        holder.listNameTV.text = task.listName
+        holder.listNameTV.text = lists.find { it.id_list == task.id_list }?.list_name
         holder.dueDateTV.text = task.due_datetime
 
-        if (task.list_color == -1){
-            holder.listIconTV.setTextColor(context.getColor(R.color.green))
-            holder.listNameTV.setTextColor(context.getColor(R.color.green))
-        } else {
-            holder.listIconTV.setTextColor(task.list_color - 0x1000000)
-            holder.listNameTV.setTextColor(task.list_color - 0x1000000)
-        }
+        val listColor = lists.find { it.id_list == task.id_list }?.list_color ?: -1
+        holder.listIconTV.setTextColor(listColor - 0x1000000)
+        holder.listNameTV.setTextColor(listColor - 0x1000000)
     }
 
     @SuppressLint("NotifyDataSetChanged")

@@ -130,8 +130,6 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
 
         spnList.adapter = adt
 
-//        Log.i("duration", duration.toString())
-
         btnCreateTask.setOnClickListener {
             val title = tieTitle.text.toString()
             val description = tieDescription.text.toString()
@@ -153,8 +151,6 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
                 reminder = duration
             )
             FirebaseManager.addNewTask(newTask)
-
-//            Toasty.success(requireContext(), "Duration: " + duration, Toast.LENGTH_SHORT, true).show()
 
             Toasty.success(requireContext(), "Created task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()

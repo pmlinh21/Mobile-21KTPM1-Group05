@@ -1,17 +1,22 @@
 package com.example.applepie
 
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.appcompat.view.menu.MenuPopupHelper
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -19,10 +24,10 @@ private const val ARG_PARAM1 = "listIndex"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [ListOfTasks.newInstance] factory method to
+ * Use the [ListDetail.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListOfTasks : Fragment() {
+class ListDetail : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
 
@@ -38,7 +43,7 @@ class ListOfTasks : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_of_tasks, container, false)
+        return inflater.inflate(R.layout.fragment_list_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,7 +62,6 @@ class ListOfTasks : Fragment() {
         taskRV.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 
         val lists = FirebaseManager.getUserList()?: listOf()
-//        val tasksList = FirebaseManager.getUserTask()?: listOf()
         val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
 
         taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
@@ -71,9 +75,28 @@ class ListOfTasks : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun setupMoreButton() {
-        moreButton.setOnClickListener {
+        val popupMenu = PopupMenu(requireContext(), moreButton)
+        popupMenu.inflate(R.menu.popup_menu)
 
+        popupMenu.setForceShowIcon(true)
+
+        popupMenu.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.edit_list -> {
+                    val editListFragment = EditListFragment()
+                    editListFragment.show(parentFragmentManager, editListFragment.tag)
+                }
+                R.id.delete_list -> {
+
+                }
+            }
+            true
+        }
+
+        moreButton.setOnClickListener {
+            popupMenu.show()
         }
     }
 
@@ -89,7 +112,7 @@ class ListOfTasks : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: Int) =
-            ListOfTasks().apply {
+            ListDetail().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_PARAM1, param1)
                 }

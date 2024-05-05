@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/edit_list"
+        android:title="Edit List"
+        android:icon="@drawable/baseline_edit_24"/>
+    <item
+        android:id="@+id/delete_list"
+        android:title="Delete List"
+        android:background="@color/alert"
+        android:icon="@drawable/trash_alt_solid__1_"/>
+
+</menu>
+

@@ -339,8 +339,6 @@ object FirebaseManager {
             task.link,
             task.priority,
             task.title,
-            task.listName,
-            task.list_color,
             task.reminder
         )
         userTasksRef.child(userTask.size.toString()).setValue(newTask)
@@ -356,8 +354,6 @@ object FirebaseManager {
             task.link,
             task.priority,
             task.title,
-            task.listName,
-            task.list_color,
             task.reminder
         )
 
@@ -444,13 +440,6 @@ object FirebaseManager {
 
     fun getHighPriorityUndoneTasks(): List<Task> {
         val tasks = userTask.filter { it.priority == "high" && !it.isDone }.sortedByDescending { it.due_datetime }
-
-        for (task in tasks) {
-            val matchingList = userList.find { it.id_list == task.id_list }
-            task.listName = matchingList?.list_name ?: "Unknown List"
-            task.list_color = matchingList?.list_color ?: -1
-        }
-
         return tasks
     }
 }

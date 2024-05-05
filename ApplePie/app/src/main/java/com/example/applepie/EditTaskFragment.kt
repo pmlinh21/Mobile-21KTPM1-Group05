@@ -188,8 +188,6 @@ class EditTaskFragment(taskInfo: Task) : BottomSheetDialogFragment() {
             )
             FirebaseManager.updateTask(updatedTask)
 
-//            Toasty.success(requireContext(), "Duration: " + duration, Toast.LENGTH_SHORT, true).show()
-
             Toasty.success(requireContext(), "Updated task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()
         }
