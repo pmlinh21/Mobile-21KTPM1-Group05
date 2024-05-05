@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
@@ -105,7 +106,6 @@ class MonthlyReport : Fragment() {
 
         val barChart: BarChart = rootView.findViewById(R.id.barChart)
         barChart.axisRight.setDrawLabels(false)
-
         barChart.axisLeft.setDrawGridLines(false)
         barChart.axisRight.setDrawGridLines(false)
         barChart.xAxis.setDrawGridLines(false)
@@ -224,6 +224,8 @@ class MonthlyReport : Fragment() {
         barChart.description.isEnabled = false
         barChart.legend.isEnabled = false;
         barChart.invalidate()
+
+        barChart.setExtraOffsets(0f,0f,0f,15f)
 
         barChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -370,6 +372,8 @@ class MonthlyReport : Fragment() {
         barChartDone.legend.isEnabled = false;
         barChartDone.invalidate()
 
+        barChartDone.setExtraOffsets(0f,0f,0f,15f)
+
         barChartDone.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         barChartDone.xAxis.position = XAxis.XAxisPosition.BOTTOM
         barChartDone.xAxis.granularity = 1f
@@ -387,6 +391,158 @@ class MonthlyReport : Fragment() {
                 taskText.visibility = View.GONE
             }
         }
+
+        // study time
+        val pomodoroTimeByDay = mutableMapOf<Int, Long>()
+        val stopwatchTimeByDay = mutableMapOf<Int, Long>()
+
+        for (i in 0 until 4) {
+            pomodoroTimeByDay[i] = 0L
+            stopwatchTimeByDay[i] = 0L
+        }
+
+        val pomodoroTimes = FirebaseManager.getUserPomodoro() ?: listOf()
+        val stopwatchTimes = FirebaseManager.getUserStopwatch() ?: listOf()
+
+        Log.d("firstWeekFirstDay: ", firstWeekFirstDay.toString())
+        Log.d("firstWeekLastDay: ", firstWeekLastDay.toString())
+
+        val sdf_1 = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateTimeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+        for (pomodoro in pomodoroTimes) {
+            val startDate = dateTimeFormat.parse(pomodoro.start_time)
+            val endDate = dateTimeFormat.parse(pomodoro.end_time)
+            Log.d("startDate: ", startDate.toString())
+
+            if(startDate in firstWeekFirstDay..firstWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[0] = pomodoroTimeByDay.getOrDefault(0, 0L) + durationInSeconds
+            }
+            else if(startDate in secondWeekFirstDay..secondWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else if(startDate in thirdWeekFirstDay..thirdWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else {
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                pomodoroTimeByDay[1] = pomodoroTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+        }
+        Log.d("pomodoroTimeByDay: ", pomodoroTimeByDay.toString())
+
+
+        for (stopwatch in stopwatchTimes) {
+            val startDate = dateTimeFormat.parse(stopwatch.start_time)
+            val endDate = dateTimeFormat.parse(stopwatch.end_time)
+
+            if(startDate in firstWeekFirstDay..firstWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[0] = stopwatchTimeByDay.getOrDefault(0, 0L) + durationInSeconds
+            }
+            else if(startDate in secondWeekFirstDay..secondWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else if(startDate in thirdWeekFirstDay..thirdWeekLastDay){
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+            else {
+                val durationInSeconds = (endDate.time - startDate.time) / 1000
+                stopwatchTimeByDay[1] = stopwatchTimeByDay.getOrDefault(1, 0L) + durationInSeconds
+            }
+
+        }
+        Log.d("stopwatchTimeByDay: ", stopwatchTimeByDay.toString())
+
+        val pomodoroEntries = ArrayList<BarEntry>()
+        val stopwatchEntries = ArrayList<BarEntry>()
+
+        for ((index, timeInSeconds) in pomodoroTimeByDay) {
+            pomodoroEntries.add(BarEntry(index.toFloat(), timeInSeconds.toFloat()))
+        }
+
+        for ((index, timeInSeconds) in stopwatchTimeByDay) {
+            stopwatchEntries.add(BarEntry(index.toFloat() + 0.4f, timeInSeconds.toFloat()))
+        }
+
+        val pomodoroDataSet = BarDataSet(pomodoroEntries, "Pomodoro").apply {
+            color = Color.parseColor("#319F43")
+        }
+        val stopwatchDataSet = BarDataSet(stopwatchEntries, "Stopwatch").apply {
+            color = Color.parseColor("#C6E9C7")
+        }
+
+        val timeBarData = BarData(pomodoroDataSet, stopwatchDataSet)
+        timeBarData.setValueTextSize(12f)
+        timeBarData.barWidth = 0.4f
+
+        timeBarData.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                val totalSeconds = value.toInt()
+                val hours = totalSeconds / 3600
+                val minutes = (totalSeconds % 3600) / 60
+                val seconds = totalSeconds % 60
+
+                return when {
+                    hours > 0 -> "${hours}h${minutes}m"  // Hiển thị giờ và phút nếu có giờ
+                    minutes > 0 -> "${minutes}m${seconds}s"  // Hiển thị phút và giây nếu không có giờ nhưng có phút
+                    else -> "${seconds}s"  // Hiển thị chỉ giây nếu thời gian dưới 1 phút
+                }
+            }
+        })
+
+        val timeBarChart: BarChart = rootView.findViewById(R.id.timeBarChart)
+        timeBarChart.axisRight.setDrawLabels(false)
+        timeBarChart.axisLeft.setDrawGridLines(false)
+        timeBarChart.axisRight.setDrawGridLines(false)
+        timeBarChart.xAxis.setDrawGridLines(false)
+
+        timeBarChart.xAxis.textSize = 14f
+        timeBarChart.axisLeft.textSize = 13f
+
+        val yAxis_2: YAxis = timeBarChart.axisLeft
+        yAxis_2.setDrawGridLines(false)
+        yAxis_2.setDrawAxisLine(false)
+
+        yAxis_2.axisMinimum = 0f
+        //yAxis_2.axisMaximum = maxTime + 100f
+
+        //val maxLabelCount_1 = if (yAxis_2.axisMaximum < 5000) 5 else
+
+        yAxis_2.setLabelCount(5)
+
+//        yAxis_2.setValueFormatter(object : ValueFormatter() {
+//            override fun getFormattedValue(value: Float): String {
+//                return value.toInt().toString()
+//            }
+//        })
+
+
+
+        timeBarChart.description.isEnabled = false
+        timeBarChart.legend.isEnabled = true;
+        timeBarChart.legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        timeBarChart.legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        timeBarChart.legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        timeBarChart.legend.xEntrySpace = 30f
+        timeBarChart.legend.textSize = 12f
+        timeBarChart.legend.yOffset = 2f
+
+        timeBarChart.setExtraOffsets(0f,5f,0f,15f)
+
+        timeBarChart.data = timeBarData
+        timeBarChart.groupBars(-0.5f, 0.1f, 0.1f)
+
+        timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
+        timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        timeBarChart.xAxis.granularity = 1.1f
+        timeBarChart.xAxis.isGranularityEnabled = true
+        timeBarChart.invalidate()
 
         return rootView
     }

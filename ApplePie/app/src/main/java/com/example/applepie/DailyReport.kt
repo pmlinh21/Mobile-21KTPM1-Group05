@@ -16,6 +16,7 @@ import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.DateTime
 import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -145,6 +146,7 @@ class DailyReport : Fragment() {
             valueTextSize = 13f
             valueTextColor = Color.parseColor("#000000")
             valueFormatter = TimeValueFormatter()
+
         }
 
         val data = PieData(dataSet)
@@ -158,8 +160,16 @@ class DailyReport : Fragment() {
             centerText = "Time Distribution"
             setCenterTextSize(16f)
             description.isEnabled = false
-            legend.isEnabled = false
+            legend.isEnabled = true
+            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            legend.xEntrySpace = 20f
+            legend.textSize = 12f
+            legend.yOffset = 2f
+            legend.form = Legend.LegendForm.CIRCLE
             animateY(1400)
+            //setDrawEntryLabels(false)
         }
 
         return rootView
