@@ -18,9 +18,7 @@ import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 
 
-private const val ARG_PARAM1 = "taskIndex"
-private const val ARG_PARAM2 = "listName"
-private const val ARG_PARAM3 = "idList"
+private const val ARG_PARAM1 = "taskId"
 /**
  * A simple [Fragment] subclass.
  * Use the [TaskDetails.newInstance] factory method to
@@ -29,15 +27,11 @@ private const val ARG_PARAM3 = "idList"
 class TaskDetails : Fragment(), DataUpdateListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
-    private var param2: String? = null
-    private var param3: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-            param3 = it.getString(ARG_PARAM3)
         }
     }
 
@@ -46,7 +40,6 @@ class TaskDetails : Fragment(), DataUpdateListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-//        Toast.makeText(requireContext(), "TaskDetails", Toast.LENGTH_SHORT).show()
         return inflater.inflate(R.layout.fragment_task_detail, container, false)
     }
 
@@ -54,7 +47,7 @@ class TaskDetails : Fragment(), DataUpdateListener {
         super.onViewCreated(view, savedInstanceState)
         FirebaseManager.addDataUpdateListener(this)
 
-        taskIndex = arguments?.getInt(ARG_PARAM1) ?: -1
+        taskId = arguments?.getString(ARG_PARAM1).toString()
 
         listNameTV = view.findViewById(R.id.list_text)
 
@@ -110,8 +103,9 @@ class TaskDetails : Fragment(), DataUpdateListener {
     }
 
     fun displayData(){
-        taskInfo = FirebaseManager.getUserTask().filter { it.id_list == param3 }[taskIndex]
-        listNameTV.text = arguments?.getString(ARG_PARAM2)
+        taskInfo = FirebaseManager.getUserTask().filter { it.id_task == taskId }[0]
+        val listInfo = FirebaseManager.getUserList().filter { it.id_list == taskInfo.id_list }[0]
+        listNameTV.text = listInfo.list_name
 
         taskNameTV.text = taskInfo.title
 
@@ -142,18 +136,16 @@ class TaskDetails : Fragment(), DataUpdateListener {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(idList: String, param1: Int, param2: String) =
+        fun newInstance(taskId: String) =
             TaskDetails().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM3, idList)
-                    putInt(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_PARAM1, taskId)
                 }
             }
     }
 
     private lateinit var taskInfo: Task
-    private var taskIndex: Int = -1
+    private var taskId: String = ""
 
     private lateinit var listNameTV: TextView
     private lateinit var taskNameTV: TextView

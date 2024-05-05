@@ -31,7 +31,13 @@ class PriorityRecyclerAdapter(private val context: Context, private var tasks: L
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(tasks[absoluteAdapterPosition])
-
+                val currentTask = tasks[absoluteAdapterPosition]
+                val fragment = TaskDetails.newInstance(currentTask.id_task)
+                (context as MainActivity).supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(null)
+                    .commit()
             }
 
             taskStatusCB.setOnClickListener {
