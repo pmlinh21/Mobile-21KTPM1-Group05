@@ -1,5 +1,6 @@
 package com.example.applepie
 
+import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
+import es.dmoral.toasty.Toasty
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -88,7 +90,25 @@ class ListDetail : Fragment(), DataUpdateListener {
                     editListFragment.show(parentFragmentManager, editListFragment.tag)
                 }
                 R.id.delete_list -> {
+                    val builder = AlertDialog.Builder(context)
+                    builder.setTitle("Confirm Deletion")
+                    builder.setMessage("Are you sure you want to delete this list? All tasks in this list will be deleted as well.")
 
+                    builder.setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+
+                    builder.setPositiveButton("Delete") { dialog, _ ->
+                        val tasksInList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
+                        for (task in tasksInList) {
+                            FirebaseManager.deleteTask(task.id_task)
+                        }
+                        FirebaseManager.deleteList(listInfo.id_list)
+                        Toasty.success(requireContext(), "List deleted", Toasty.LENGTH_SHORT).show()
+                        parentFragmentManager.popBackStack()
+                    }
+                    val dialog = builder.create()
+                    dialog.show()
                 }
             }
             true

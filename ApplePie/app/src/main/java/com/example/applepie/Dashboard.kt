@@ -2,6 +2,7 @@ package com.example.applepie
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.replace
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import java.time.LocalDate
@@ -26,7 +28,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [Dashboard.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Dashboard : Fragment() {
+class Dashboard : Fragment(), DataUpdateListener {
     private lateinit var todayTV: TextView
     private lateinit var searchBtn: Button
     private lateinit var addListTV: TextView
@@ -136,8 +138,9 @@ class Dashboard : Fragment() {
         )
 
         adapter.onItemClick = { taskList ->
+            val fragment = ListDetail.newInstance(taskLists.indexOf(taskList))
             parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ListDetail.newInstance(taskLists.indexOf(taskList)))
+                .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit()
         }
@@ -257,5 +260,8 @@ class Dashboard : Fragment() {
                 }
             }
     }
-
+    override fun updateData() {
+        updateTaskLists()
+        updateHighPriorityTasks()
+    }
 }

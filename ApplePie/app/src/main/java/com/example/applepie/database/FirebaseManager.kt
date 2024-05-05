@@ -335,7 +335,7 @@ object FirebaseManager {
         userReminder.setValue(duration)
     }
 
-    fun addUserList(taskList: TaskList) {
+    fun addList(taskList: TaskList) {
         val newList = TaskList(
             taskList.id_list,
             taskList.list_color,
@@ -343,6 +343,29 @@ object FirebaseManager {
             taskList.list_name
         )
         userListsRef.child(userList.size.toString()).setValue(newList)
+    }
+
+    fun deleteList(listId: String) {
+        userListsRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (listSnapshot in dataSnapshot.children) {
+                        val userTaskList = listSnapshot.getValue(TaskList::class.java)
+                        if (userTaskList != null && userTaskList.id_list == listId) {
+                            listSnapshot.ref.removeValue()
+                            return
+                        }
+                    }
+                    Log.d("UserTaskList", "List with id $listId not found")
+                } else {
+                    Log.d("UserTaskList", "User task list not found for UID")
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e("data",databaseError.message)
+            }
+        })
     }
 
     fun countTasksOfList(listId: String): Int {

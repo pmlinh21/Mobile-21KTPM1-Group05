@@ -121,7 +121,7 @@ class EditListFragment : BottomSheetDialogFragment() {
                     chosenIconButton.text.toString(),
                     listNameET.text.toString()
                 )
-                FirebaseManager.addUserList(newList)
+                FirebaseManager.addList(newList)
             }
 
             dismiss()
