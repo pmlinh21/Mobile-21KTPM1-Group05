@@ -61,6 +61,7 @@ class TaskListAdapter1(context: Context, tasks: List<Task>, lists: List<TaskList
 
                 builder.setPositiveButton("Delete") { dialog, _ ->
                     FirebaseManager.deleteTask(task.id_task)
+                    MainActivity.cancelReminderNoti(context, task.id_task, "delete")
                     Toasty.success(context, "Task deleted", Toasty.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }

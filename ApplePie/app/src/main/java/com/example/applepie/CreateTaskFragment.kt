@@ -160,7 +160,8 @@ class CreateTaskFragment : BottomSheetDialogFragment() {
 
             FirebaseManager.addNewTask(newTask)
 
-            MainActivity.makeReminderNoti(requireContext(), "$duedate $time", duration, id_task, title)
+            if (duration > 0)
+                MainActivity.makeReminderNoti(requireContext(), "$duedate $time", duration, id_task, title)
 
             Toasty.success(requireContext(), "Created task successfully!", Toast.LENGTH_SHORT, true).show()
             dismiss()

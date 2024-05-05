@@ -2,6 +2,7 @@ package com.example.applepie
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,9 +15,12 @@ import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TextView
 import com.example.applepie.database.DataUpdateListener
+import androidx.annotation.RequiresApi
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.DateTime
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import kotlin.properties.Delegates
 
@@ -45,6 +49,7 @@ class Account : Fragment(), DataUpdateListener {
         pomodoro = FirebaseManager.getUserPomodoro()
         stopwatch = FirebaseManager.getUserStopwatch()
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -105,6 +110,7 @@ class Account : Fragment(), DataUpdateListener {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun handleEventListener(){
         subscriptionButton.setOnClickListener {
             val subscribeActivity = Intent(this.activity, SubscribeActivity::class.java)
@@ -118,6 +124,20 @@ class Account : Fragment(), DataUpdateListener {
                 .setCancelable(false)
                 .setPositiveButton("Yes") { dialog, id ->
                     preferenceManager.removeData()
+
+                    if (!StopwatchTimer.isStop()){
+                        storeStopwatchTimeInFirebase()
+                        StopwatchTimer.stopTimer()
+                    }
+
+                    if (!PomodoroTimer.isStop()) {
+                        storePomodoroTimeInFirebase()
+                        PomodoroTimer.stopTimer()
+                    }
+
+                    val stopIntent = Intent(context, MusicService::class.java)
+                    context?.stopService(stopIntent)
+
                     val loginActivity = Intent(this.activity, LoginActivity::class.java)
                     startActivity(loginActivity)
                 }
@@ -128,6 +148,35 @@ class Account : Fragment(), DataUpdateListener {
             val alert = builder.create()
             alert.show()
         }
+    }
+
+    fun storeStopwatchTimeInFirebase(){
+        val index = preferenceManager.getIndex()
+
+        val start_time = preferenceManager.getStartTime()!!
+        val end_time = getCurrentDateTime()
+
+        Log.i("stopwatch", "$start_time $end_time")
+        FirebaseManager.updateStopwatch(index, DateTime(end_time, start_time))
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun storePomodoroTimeInFirebase(){
+        if (PomodoroTimer.getMode() == "Focus"){
+            val index = preferenceManager.getIndex()
+            val start_time = preferenceManager.getStartTime()!!
+            val end_time = getCurrentDateTime()
+
+            Log.i("pomodoro", "$start_time $end_time")
+            FirebaseManager.updatePomodoro(index, DateTime(end_time, start_time))
+        }
+    }
+
+    fun getCurrentDateTime(): String {
+
+        val currentDateTime = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        return currentDateTime.format(formatter)
     }
 
     companion object {

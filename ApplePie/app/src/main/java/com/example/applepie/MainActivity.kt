@@ -58,21 +58,12 @@ class MainActivity() : AppCompatActivity() {
                     putExtra(Notification.EXTRA_NOTIFICATION_ID, notificationId)
                     putExtra("notificationContent", content)
                 }
-                val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PendingIntent.getBroadcast(
+                val pendingIntent = PendingIntent.getBroadcast(
                         context,
                         notificationId,
                         intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                        PendingIntent.FLAG_CANCEL_CURRENT  or PendingIntent.FLAG_IMMUTABLE
                     )
-                } else {
-                    PendingIntent.getBroadcast(
-                        context,
-                        notificationId,
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                }
 
                 Log.i("AlarmManager 3", dateTime.time.toString())
 
@@ -91,20 +82,21 @@ class MainActivity() : AppCompatActivity() {
             }
         }
 
-        fun cancelReminderNoti(context: Context, id_task: String) {
+        fun cancelReminderNoti(context: Context, id_task: String, type: String) {
             val notificationId = Math.abs(id_task.hashCode())
-            Log.i("reminder-cancel", notificationId.toString())
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, AlarmReceiver::class.java)
+
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 notificationId,
                 intent,
-                PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                 PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
             )
 
-            // Cancel the pending intent
-            alarmManager.cancel(pendingIntent)
+            pendingIntent?.let {
+                alarmManager.cancel(it)
+            }
         }
 
         @RequiresApi(Build.VERSION_CODES.O)
@@ -113,7 +105,9 @@ class MainActivity() : AppCompatActivity() {
             if (newReminderTime != null) {
                 val formatReminderTime = Date.from(newReminderTime.atZone(ZoneId.systemDefault()).toInstant())
                 val notificationId = Math.abs(id_task.hashCode())
+                Log.i("reminder-make", id_task)
                 Log.i("reminder-make", notificationId.toString())
+
                 scheduleNotification(
                     context,
                     formatReminderTime,
@@ -222,7 +216,7 @@ class MainActivity() : AppCompatActivity() {
 
     private fun setUI(){
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-
+        Log.i("current fragment", currentFragment.toString())
         if (currentFragment is DataUpdateListener) {
             currentFragment.updateData() // This calls updateData on whichever fragment is currently displayed
         } else if (currentFragment == null) {
@@ -255,7 +249,7 @@ class MainActivity() : AppCompatActivity() {
             FirebaseManager.setUserList(object : FirebaseManager.DataCallback<List<TaskList>> {
                 override fun onDataReceived(data: List<TaskList>) {
                     // Handle received user list data
-                    Log.i("data", FirebaseManager.getUserList().size.toString())
+                    Log.i("data", FirebaseManager.getUserList().toString())
 
                     isUserListDataReceived = true
                     setUI()

@@ -61,7 +61,7 @@ class Stopwatch : Fragment() {
         stopwatchTimeText = rootView.findViewById(R.id.stopwatch_time_text)
 
         start_time = preferenceManager.getStartTime()!!
-
+        Log.i("stopwatch", start_time)
         updateTimeText()
         updateButton()
         handleButtonClick()
@@ -81,8 +81,11 @@ class Stopwatch : Fragment() {
             // TODO:  add study timer to firebase, reset timer
             storeTimeInFirebase()
             StopwatchTimer.stopTimer()
-            val stopIntent = Intent(context, MusicService::class.java)
-            context?.stopService(stopIntent)
+            if (preferenceManager.getMusicStatus() == true){
+                val stopIntent = Intent(context, MusicService::class.java)
+                context?.stopService(stopIntent)
+            }
+
         }
 
         pauseButton.setOnClickListener {

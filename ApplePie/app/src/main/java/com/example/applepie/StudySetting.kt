@@ -54,7 +54,7 @@ class StudySetting : Fragment() {
 
         val preferenceManager = PreferenceManager(requireContext())
         soundmusicSwitch.isChecked = preferenceManager.getMusicStatus() == true
-        controlMusic(soundmusicSwitch.isChecked, preferenceManager)
+//        controlMusic(soundmusicSwitch.isChecked, preferenceManager)
 
         notificationButton.setOnClickListener {
             // TODO: show list app to manage noti
