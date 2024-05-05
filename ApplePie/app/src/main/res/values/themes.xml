@@ -8,4 +8,8 @@
     <style name="popupBGStyle" parent="Widget.MaterialComponents.PopupMenu">
         <item name="android:popupBackground">@drawable/bg_task</item>
     </style>
+
+    <style name="customDialogFragment" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@drawable/bg_task</item>
+    </style>
 </resources>

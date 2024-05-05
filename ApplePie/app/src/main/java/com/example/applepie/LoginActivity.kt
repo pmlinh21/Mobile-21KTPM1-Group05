@@ -6,7 +6,10 @@ import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
+import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
+import com.example.applepie.model.TaskList
 import com.example.applepie.model.User
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
@@ -19,10 +22,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import es.dmoral.toasty.Toasty
 
-class LoginActivity : ComponentActivity() {
+class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        setupFirebase()
 
         usernameInput = findViewById(R.id.usernameInput)
         passwordInput = findViewById(R.id.passwordInput)
@@ -139,10 +143,25 @@ class LoginActivity : ComponentActivity() {
         }
 
         forgotPasswordButton.setOnClickListener {
-//            val forgotPasswordActivity = Intent(this, ForgotPasswordActivity::class.java)
-//            startActivity(forgotPasswordActivity)
+            val emailDialog = EmailDialog()
+            emailDialog.show(supportFragmentManager, "email_dialog")
         }
 
+    }
+
+    private fun setupFirebase() {
+        FirebaseManager.setAllUserRef()
+
+        FirebaseManager.setAllUser(object : FirebaseManager.DataCallback<List<User>> {
+            override fun onDataReceived(data: List<User>) {
+                // Handle received user data
+                Log.i("data", FirebaseManager.getAllUser().toString())
+            }
+
+            override fun onError(error: DatabaseError) {
+                // Handle error
+            }
+        })
     }
 
     private lateinit var usernameInput: TextInputEditText

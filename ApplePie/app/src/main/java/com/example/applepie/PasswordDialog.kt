@@ -3,6 +3,7 @@ package com.example.applepie
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,13 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.DialogFragment
+import com.example.applepie.database.FirebaseManager
 import es.dmoral.toasty.Toasty
 
 
-class PasswordDialog : DialogFragment() {
+class PasswordDialog(private val userId: Int) : DialogFragment() {
 
     // The system calls this to get the DialogFragment's layout, regardless of
     // whether it's being displayed as a dialog or an embedded fragment.
@@ -27,14 +30,18 @@ class PasswordDialog : DialogFragment() {
         val view = inflater.inflate(R.layout.layout_password, container, false)
 
         passwordET = view.findViewById(R.id.password_edit_text)
+        confirmPasswordET = view.findViewById(R.id.password_confirm_edit_text)
         confirmBtn = view.findViewById(R.id.confirm_button)
 
         confirmBtn.setOnClickListener {
             val password = passwordET.text.toString()
-            if (password.isNotBlank()) {
+            val confirmPassword = confirmPasswordET.text.toString()
+            if (password.isNotBlank() && password == confirmPassword) {
+                FirebaseManager.setUserPassword(userId, password)
+                Toasty.success(requireContext(), "Password changed successfully", Toast.LENGTH_SHORT, true).show()
                 dismiss()
             } else {
-                Toast.makeText(requireContext(), "Please enter your new password", Toast.LENGTH_SHORT).show()
+                Toasty.error(requireContext(), "Passwords do not match", Toast.LENGTH_SHORT, true).show()
             }
         }
         isCancelable = false
@@ -55,5 +62,6 @@ class PasswordDialog : DialogFragment() {
     }
 
     private lateinit var passwordET: EditText
+    private lateinit var confirmPasswordET: EditText
     private lateinit var confirmBtn: Button
 }
