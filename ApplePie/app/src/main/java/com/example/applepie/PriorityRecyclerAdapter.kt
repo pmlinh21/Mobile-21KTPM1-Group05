@@ -31,7 +31,7 @@ class PriorityRecyclerAdapter(private val context: Context, private var tasks: L
         init {
             listItemView.setOnClickListener {
                 onItemClick?.invoke(tasks[absoluteAdapterPosition])
-                Toasty.info(context, "Go to task details page", Toasty.LENGTH_SHORT).show()
+
             }
 
             taskStatusCB.setOnClickListener {

@@ -70,7 +70,7 @@ class LoginActivity : ComponentActivity() {
                     } else {
                         Toasty.error(
                             this,
-                            "Username or password is incorrect 1",
+                            "Username or password is incorrect",
                             Toast.LENGTH_SHORT,
                             true
                         ).show()
@@ -100,7 +100,7 @@ class LoginActivity : ComponentActivity() {
                                     } else {
                                         Toasty.error(
                                             this@LoginActivity,
-                                            "Username or password is incorrect 2",
+                                            "Username or password is incorrect",
                                             Toast.LENGTH_SHORT,
                                             true
                                         ).show()
@@ -110,7 +110,7 @@ class LoginActivity : ComponentActivity() {
                         } else {
                             Toasty.error(
                                 this@LoginActivity,
-                                "Username or password is incorrect 3",
+                                "Username or password is incorrect",
                                 Toast.LENGTH_SHORT,
                                 true
                             ).show()
