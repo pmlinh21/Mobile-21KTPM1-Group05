@@ -44,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:text="Total tasks"
                     android:textSize="16sp"
+                    android:layout_marginTop="5dp"
                     android:textColor="@android:color/black"/>
 
                 <com.github.mikephil.charting.charts.BarChart
@@ -51,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="15dp" />
+                    android:layout_marginBottom="5dp" />
 
                 <TextView
                     android:id="@+id/yAxisLabel_1"
@@ -67,7 +68,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="230dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="15dp" />
+                    android:layout_marginBottom="0dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -158,13 +159,14 @@
                     android:textColor="@android:color/black"
                     android:textSize="22sp"
                     android:textStyle="bold"
+                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="10dp"/>
 
                 <TextView
                     android:id="@+id/yAxisLabel_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total time"
+                    android:text="Total time (s)"
                     android:textSize="16sp"
                     android:textColor="@android:color/black"
                     android:layout_marginTop="10dp"/>

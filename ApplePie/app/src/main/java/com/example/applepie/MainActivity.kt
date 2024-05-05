@@ -2,18 +2,23 @@ package com.example.applepie
 
 import PomodoroTimer
 import android.annotation.SuppressLint
-import android.app.Dialog
+import android.app.AlarmManager
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import android.view.Gravity
-import android.view.ViewGroup
-import android.view.Window
+import androidx.annotation.RequiresApi
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.TaskList
@@ -21,7 +26,6 @@ import com.example.applepie.model.Task
 import com.example.applepie.model.User
 import com.google.firebase.database.DatabaseError
 import java.util.Locale
-
 
 class MainActivity : AppCompatActivity() {
     private lateinit var homeButton: Button
@@ -33,6 +37,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var preferenceManager: PreferenceManager
     private lateinit var username: String
 
+    companion object {
+        private const val CHANNEL_ID = "reminder_channel"
+        private const val CHANNEL_NAME = "Task Reminders"
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,6 +63,47 @@ class MainActivity : AppCompatActivity() {
 
         getInfoFromFirebase()
         setLanguage()
+        setLayout()
+        createNotificationChannel()
+
+        scheduleNotification(this, 5000, 101)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("ServiceCast", "ScheduleExactAlarm")
+    private fun scheduleNotification(context: Context, delay: Long, notificationId: Int) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra(Notification.EXTRA_NOTIFICATION_ID, notificationId)
+        }
+        val pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getBroadcast(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+        } else {
+            PendingIntent.getBroadcast(
+                context,
+                notificationId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        try {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + delay,
+                pendingIntent
+            )
+        } catch (e: Exception) {
+            Log.e("AlarmManager", "Error setting alarm: ${e.message}")
+            e.printStackTrace()
+        }
+
+
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -69,14 +120,12 @@ class MainActivity : AppCompatActivity() {
         button.background = resources.getDrawable(R.drawable.bg_button_active)
     }
 
-    private fun setUI(){
+    private fun setLayout(){
         homeButton = findViewById(R.id.home_icon)
         studyButton = findViewById(R.id.study_icon)
         createTaskButton = findViewById(R.id.create_task_icon)
         reportButton = findViewById(R.id.report_icon)
         accountButton = findViewById(R.id.account_icon)
-
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Dashboard()).commit()
 
         homeButton.setOnClickListener {
             handleNavbarClick(homeButton)
@@ -106,6 +155,19 @@ class MainActivity : AppCompatActivity() {
         accountButton.setOnClickListener {
             handleNavbarClick(accountButton)
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, Account()).addToBackStack(null).commit()
+        }
+    }
+
+    private fun setUI(){
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+
+        if (currentFragment is DataUpdateListener) {
+            currentFragment.updateData() // This calls updateData on whichever fragment is currently displayed
+        } else if (currentFragment == null) {
+            // If no fragment is currently displayed, launch the Dashboard
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, Dashboard())
+                .commit()
         }
     }
 
@@ -164,6 +226,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance).apply {
+                description = "Notifications for task reminder"
+            }
+            // Register the channel with the system
+            val notificationManager: NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
     private fun setLanguage(){
         Locale.setDefault(Locale.ENGLISH)
         val config = Configuration()
@@ -181,6 +255,4 @@ class MainActivity : AppCompatActivity() {
     private var index: Int = -1
     private var isUserListDataReceived = false
     private var isUserTaskDataReceived = false
-
-
 }

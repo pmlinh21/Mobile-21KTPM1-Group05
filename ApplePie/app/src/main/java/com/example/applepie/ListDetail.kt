@@ -14,6 +14,7 @@ import androidx.appcompat.view.menu.MenuPopupHelper
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.TaskList
 
@@ -27,7 +28,7 @@ private const val ARG_PARAM1 = "listIndex"
  * Use the [ListDetail.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListDetail : Fragment() {
+class ListDetail : Fragment(), DataUpdateListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
 
@@ -46,14 +47,15 @@ class ListDetail : Fragment() {
         return inflater.inflate(R.layout.fragment_list_detail, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         listIndex = arguments?.getInt(ARG_PARAM1) ?: -1
-        listInfo = FirebaseManager.getUserList()[listIndex]
+//        listInfo = FirebaseManager.getUserList()[listIndex]
 
         listNameTV = view.findViewById(R.id.list_name_text_view)
-        listNameTV.text = listInfo.list_name
+//        listNameTV.text = listInfo.list_name
 
         backButton = view.findViewById(R.id.back_button)
         moreButton = view.findViewById(R.id.more_button)
@@ -63,8 +65,10 @@ class ListDetail : Fragment() {
 
         val lists = FirebaseManager.getUserList()?: listOf()
         val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
+        FirebaseManager.addDataUpdateListener(this)
 
-        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
+//        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
+        displayData()
         setupBackButton()
         setupMoreButton()
     }
@@ -98,6 +102,24 @@ class ListDetail : Fragment() {
         moreButton.setOnClickListener {
             popupMenu.show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        FirebaseManager.removeDataUpdateListener(this)
+    }
+
+    override fun updateData() {
+        displayData()
+    }
+
+    fun displayData(){
+        listInfo = FirebaseManager.getUserList()[listIndex]
+        listNameTV.text = listInfo.list_name
+
+        val lists = FirebaseManager.getUserList()?: listOf()
+        val tasksList = FirebaseManager.getUserTask().filter { it.id_list == listInfo.id_list }
+        taskRV.adapter = TaskListAdapter1(requireContext(), tasksList, lists)
     }
 
     companion object {

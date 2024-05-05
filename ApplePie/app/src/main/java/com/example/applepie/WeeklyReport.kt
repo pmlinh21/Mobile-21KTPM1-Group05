@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
@@ -195,6 +196,7 @@ class WeeklyReport : Fragment() {
         barChart.description.isEnabled = false
         barChart.legend.isEnabled = false;
         barChart.invalidate()
+        barChart.setExtraOffsets(0f,0f,0f,15f)
 
         barChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
@@ -317,6 +319,8 @@ class WeeklyReport : Fragment() {
         barChartDone.legend.isEnabled = false;
         barChartDone.invalidate()
 
+        barChartDone.setExtraOffsets(0f,0f,0f,15f)
+
         barChartDone.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         barChartDone.xAxis.position = XAxis.XAxisPosition.BOTTOM
         barChartDone.xAxis.granularity = 1f
@@ -324,6 +328,7 @@ class WeeklyReport : Fragment() {
 
         barChartDone.renderer = RoundedBarChart(barChartDone, barChartDone.animator, barChartDone.viewPortHandler)
 
+        // View all button
         viewAllButton = view.findViewById(R.id.task_all)
         viewAllButton.setOnClickListener {
             adapter.updateData(originTaskList)
@@ -335,6 +340,7 @@ class WeeklyReport : Fragment() {
             }
         }
 
+        // Study time
         val pomodoroTimeByDay = mutableMapOf<String, Long>()
         val stopwatchTimeByDay = mutableMapOf<String, Long>()
 
@@ -402,7 +408,16 @@ class WeeklyReport : Fragment() {
 
         timeBarData.setValueFormatter(object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return value.toInt().toString() + "s"
+                val totalSeconds = value.toInt()
+                val hours = totalSeconds / 3600
+                val minutes = (totalSeconds % 3600) / 60
+                val seconds = totalSeconds % 60
+
+                return when {
+                    hours > 0 -> "${hours}h${minutes}m"  // Hiển thị giờ và phút nếu có giờ
+                    minutes > 0 -> "${minutes}m${seconds}s"  // Hiển thị phút và giây nếu không có giờ nhưng có phút
+                    else -> "${seconds}s"  // Hiển thị chỉ giây nếu thời gian dưới 1 phút
+                }
             }
         })
 
@@ -412,15 +427,44 @@ class WeeklyReport : Fragment() {
         timeBarChart.axisRight.setDrawGridLines(false)
         timeBarChart.xAxis.setDrawGridLines(false)
 
+        timeBarChart.xAxis.textSize = 14f
+        timeBarChart.axisLeft.textSize = 13f
+
+        val yAxis_2: YAxis = timeBarChart.axisLeft
+        yAxis_2.setDrawGridLines(false)
+        yAxis_2.setDrawAxisLine(false)
+
+        yAxis_2.axisMinimum = 0f
+        //yAxis_2.axisMaximum = maxTime + 100f
+
+        //val maxLabelCount_1 = if (yAxis_2.axisMaximum < 500) 5 else 8
+
+        yAxis_2.setLabelCount(5)
+
+//        yAxis_2.setValueFormatter(object : ValueFormatter() {
+//            override fun getFormattedValue(value: Float): String {
+//                return value.toInt().toString()
+//            }
+//        })
+
         timeBarChart.description.isEnabled = false
-        timeBarChart.legend.isEnabled = false;
+        timeBarChart.legend.isEnabled = true;
+        timeBarChart.legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        timeBarChart.legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        timeBarChart.legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        timeBarChart.legend.xEntrySpace = 30f
+        timeBarChart.legend.textSize = 12f
+        timeBarChart.legend.yOffset = 2f
+
+        timeBarChart.setExtraOffsets(0f,5f,0f,15f)
 
         timeBarChart.data = timeBarData
-        timeBarChart.groupBars(0f, 0.1f, 0.02f)
+        timeBarChart.groupBars(-0.5f, 0.15f, 0.05f)
 
         timeBarChart.xAxis.valueFormatter = IndexAxisValueFormatter(xValues)
         timeBarChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-
+        timeBarChart.xAxis.granularity = 1.05f
+        timeBarChart.xAxis.isGranularityEnabled = true
         timeBarChart.invalidate()
 
     }
