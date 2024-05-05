@@ -107,4 +107,8 @@ dependencies {
     // Email
     implementation("com.sun.mail:android-mail:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
+
+    // Calendar
+    implementation("com.google.android.material:material:1.4.0")
+
 }

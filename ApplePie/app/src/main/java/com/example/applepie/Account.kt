@@ -1,10 +1,13 @@
 package com.example.applepie
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,22 +15,28 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CalendarView
 import android.widget.EditText
-import android.widget.NumberPicker
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.applepie.database.DataUpdateListener
 import androidx.annotation.RequiresApi
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.database.PreferenceManager
 import com.example.applepie.model.DateTime
-import java.text.SimpleDateFormat
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.daysOfWeek
+import com.kizitonwose.calendar.core.nextMonth
+import com.kizitonwose.calendar.core.previousMonth
+import com.kizitonwose.calendar.view.MonthDayBinder
+import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
+import com.kizitonwose.calendar.view.ViewContainer
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import kotlin.properties.Delegates
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -51,6 +60,7 @@ class Account : Fragment(), DataUpdateListener {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+    @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,35 +77,52 @@ class Account : Fragment(), DataUpdateListener {
         emailInput = rootView.findViewById(R.id.email_input)
         currentStreakText = rootView.findViewById(R.id.current_streak_text)
         longestStreakText = rootView.findViewById(R.id.longest_streak_text)
-        calendar = rootView.findViewById(R.id.calendarView)
+
+        val daysOfWeek = daysOfWeek()
+        val currentMonth = YearMonth.now()
+        val startMonth = currentMonth.minusMonths(200)
+        val endMonth = currentMonth.plusMonths(200)
+
+        configureBinders(rootView, daysOfWeek)
+        calendarView = rootView.findViewById<com.kizitonwose.calendar.view.CalendarView>(R.id.exFiveCalendar)
+        calendarView.setup(startMonth, endMonth, daysOfWeek.first())
+        calendarView.scrollToMonth(currentMonth)
+
+        calendarView.monthScrollListener = { month ->
+            rootView.findViewById<TextView>(R.id.exFiveMonthYearText).text = month.yearMonth.displayText()
+
+            selectedDate?.let {
+                selectedDate = null
+                calendarView.notifyDateChanged(it)
+//                updateAdapterForDate(null)
+            }
+        }
+
+        val nextMonthButton = rootView.findViewById<ImageView>(R.id.exFiveNextMonthImage)
+        nextMonthButton.setOnClickListener {
+            calendarView.findFirstVisibleMonth()?.let {
+                calendarView.smoothScrollToMonth(it.yearMonth.nextMonth)
+            }
+        }
+
+        val previousMonthButton = rootView.findViewById<ImageView>(R.id.exFivePreviousMonthImage)
+        previousMonthButton.setOnClickListener {
+            calendarView.findFirstVisibleMonth()?.let {
+                calendarView.smoothScrollToMonth(it.yearMonth.previousMonth)
+            }
+        }
 
         preferenceManager = PreferenceManager(this.activity)
 
         getStudyTime()
+
         FirebaseManager.addDataUpdateListener(this)
 
         setUI()
+        setCalendar()
         handleEventListener()
 
-        extractMonthYearFromCalendar(calendar.date)
-
-        calendar.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            val readableMonth = month + 1
-            Log.i("CalendarView", "Selected - Year: $year, Month: $readableMonth")
-
-
-        }
-
         return rootView
-    }
-
-    private fun extractMonthYearFromCalendar(dateMillis: Long) {
-        val calendar = Calendar.getInstance()
-        calendar.timeInMillis = dateMillis
-
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH) + 1
-        Log.i("CalendarView", "Currently viewing - Year: $year, Month: $month")
     }
 
     private fun getStudyTime(){
@@ -106,18 +133,89 @@ class Account : Fragment(), DataUpdateListener {
 
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-        val totalSecondsByDate: Map<LocalDate, Long> = allTimes
+        totalSecondsByDate = allTimes
             .groupBy { LocalDateTime.parse(it.start_time, dateTimeFormatter).toLocalDate() }
             .mapValues { (_, times) ->
                 times.sumOf { calculateSeconds(it.start_time, it.end_time, dateTimeFormatter) }
             }
             .filter { (_, totalSeconds) -> totalSeconds > 60 }
 
-        // Print the results
-        totalSecondsByDate.forEach { (date, totalSeconds) ->
-            Log.i("streak","Date: $date, Total Seconds: $totalSeconds")
+        totalSecondsByDate.forEach { (date: LocalDate, totalSeconds: Long) ->
+            Log.i("streak", "Date: $date, Total Seconds: $totalSeconds")
         }
     }
+
+    private fun setCalendar() {
+//        val selectedDates = listOf("2024-05-03", "2024-05-06", "2024-05-01")
+//        val preselectedDates = selectedDates.map { LocalDate.parse(it) }
+
+    }
+
+    private fun configureBinders(rootView: View, daysOfWeek: List<DayOfWeek>) {
+        val calendarView = rootView.findViewById<com.kizitonwose.calendar.view.CalendarView>(R.id.exFiveCalendar)
+        // Container for each day view in the calendar
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            lateinit var day: CalendarDay
+            val textView = view.findViewById<TextView>(R.id.exFiveDayText)
+            val layout = view.findViewById<View>(R.id.exFiveDayLayout)
+            init {
+                view.setOnClickListener {
+                    if (day.position == DayPosition.MonthDate) {
+                        //Log.d("Click: ", selectedDate.toString())
+                        if (selectedDate != day.date) {
+                            val oldDate = selectedDate
+                            selectedDate = day.date
+                            //Log.d("Click after: ", selectedDate.toString())
+                            calendarView.notifyDateChanged(day.date)
+                            // You can notify the CalendarView to update here if needed
+                            oldDate?.let {
+                                // Notify the CalendarView to update the old date if needed
+                                calendarView.notifyDateChanged(it)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, data: CalendarDay) {
+                container.day = data
+                val context = container.textView.context
+                container.textView.text = data.date.dayOfMonth.toString()
+
+                val TopView = container.layout.findViewById<View>(R.id.exFiveDayTop)
+            }
+        }
+
+        class MonthViewContainer(view: View) : ViewContainer(view) {
+            val legendLayout = view.findViewById<View>(R.id.legendLayout)
+        }
+
+        val typeFace = Typeface.create("sans-serif", Typeface.BOLD)
+        calendarView.monthHeaderBinder = object : MonthHeaderFooterBinder<MonthViewContainer> {
+            override fun create(view: View) = MonthViewContainer(view)
+
+            override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                // Setup each header day text if we have not done that already.
+                val containerLayout = container.legendLayout as ViewGroup
+                if (containerLayout.tag == null) {
+                    containerLayout.tag = data.yearMonth
+                    for (index in 0 until containerLayout.childCount) {
+                        val child = containerLayout.getChildAt(index)
+                        if (child is TextView) {
+                            child.text = daysOfWeek.getOrNull(index)?.displayText(uppercase = true) ?: ""
+                            child.setTextColorRes(R.color.green)
+                            child.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                            child.typeface = typeFace
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
     fun calculateSeconds(start: String, end: String, dateTimeFormatter: DateTimeFormatter): Long {
         val startTime = LocalDateTime.parse(start, dateTimeFormatter)
@@ -239,7 +337,10 @@ class Account : Fragment(), DataUpdateListener {
     private lateinit var currentStreakText: TextView
     private lateinit var longestStreakText: TextView
 
-    private lateinit var calendar: CalendarView
+    private var selectedDate: LocalDate? = null
+    private lateinit var calendarView: com.kizitonwose.calendar.view.CalendarView
+    //    private lateinit var calendar: CalendarView
+    private lateinit var totalSecondsByDate: Map<LocalDate,Long>
 
     private lateinit var pomodoroTime: List<DateTime>
     private lateinit var stopwatchTime: List<DateTime>
