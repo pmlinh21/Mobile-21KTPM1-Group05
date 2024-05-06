@@ -5,15 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <CheckBox
-        android:id="@+id/app_checkbox"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
     <ImageView
         android:id="@+id/app_icon"
         android:layout_width="48dp"

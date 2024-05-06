@@ -70,7 +70,7 @@ class MainActivity() : AppCompatActivity() {
                 try {
                     alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
-                        dateTime.time - 60000,
+                        dateTime.time,
                         pendingIntent
                     )
                 } catch (e: Exception) {

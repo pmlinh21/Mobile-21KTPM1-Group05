@@ -21,7 +21,6 @@ class AppListAdapter(
     inner class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val appName: TextView = itemView.findViewById(R.id.app_name)
         val appIcon: ImageView = itemView.findViewById(R.id.app_icon)
-        val appCheckbox: CheckBox = itemView.findViewById(R.id.app_checkbox)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppViewHolder {
@@ -37,16 +36,7 @@ class AppListAdapter(
 
         holder.appName.text = appInfo.loadLabel(packageManager)
         holder.appIcon.setImageDrawable(appIcon)
-        holder.appCheckbox.isChecked = !selectedApps.contains(packageName)
 
-        holder.appCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                selectedApps.remove(packageName)
-            } else {
-                selectedApps.add(packageName)
-            }
-            Log.i("notiapp", selectedApps.toString())
-        }
     }
 
     override fun getItemCount(): Int = appList.size
