@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.applepie.database.DataUpdateListener
 import com.example.applepie.database.FirebaseManager
 import com.example.applepie.model.Task
 import com.example.applepie.model.TaskList
@@ -28,7 +29,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [ViewTodayTasks.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ViewTodayTasks : Fragment() {
+class ViewTodayTasks : Fragment(), DataUpdateListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -47,11 +48,17 @@ class ViewTodayTasks : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_view_today_tasks, container, false)
+        FirebaseManager.addDataUpdateListener(this)
 
         today = rootView.findViewById(R.id.today)
+        taskText = rootView.findViewById(R.id.task_text)
+        taskRecyclerView = rootView.findViewById(R.id.recyclerView)
+        taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        previousDateButton = rootView.findViewById(R.id.previous_date)
+        nextDateButton = rootView.findViewById(R.id.next_date)
+        nextDateButton.visibility = View.INVISIBLE
 
         val currentTime = Calendar.getInstance().time
-
         val sdf = SimpleDateFormat("MMMM d yyyy", Locale.ENGLISH)
         val formattedTime = sdf.format(currentTime)
 
@@ -63,7 +70,6 @@ class ViewTodayTasks : Fragment() {
 
         val sdf_1 = SimpleDateFormat("yyyy-MM-dd")
         val appDate = sdf_1.format(currentTime)
-
         var selectedDate = appDate
 
         // Lấy những task có due_datetime bằng today (task chưa quá hạn)
@@ -72,23 +78,14 @@ class ViewTodayTasks : Fragment() {
             (taskDueDate == appDate) ?: false
         }.sortedWith(compareByDescending<Task> { it.due_datetime.split(" ")[1] })
 
-        taskText = rootView.findViewById(R.id.task_text)
-
         if (tasksList.isEmpty()) {
             taskText.text = "There are no tasks for today"
         } else {
             taskText.visibility = View.GONE
         }
 
-        taskRecyclerView = rootView.findViewById(R.id.recyclerView)
         adapter = TaskListAdapter1(requireContext(), tasksList, lists)
-
-        taskRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         taskRecyclerView.adapter = adapter
-
-        previousDateButton = rootView.findViewById(R.id.previous_date)
-        nextDateButton = rootView.findViewById(R.id.next_date)
-        nextDateButton.visibility = View.INVISIBLE
 
         previousDateButton.setOnClickListener {
             selectedDate = decreaseDate(selectedDate)
@@ -174,6 +171,46 @@ class ViewTodayTasks : Fragment() {
         } else {
             taskText.visibility = View.GONE
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        FirebaseManager.removeDataUpdateListener(this)
+    }
+
+    override fun updateData() {
+        displayData()
+    }
+
+    fun displayData(){
+        val currentTime = Calendar.getInstance().time
+        val sdf = SimpleDateFormat("MMMM d yyyy", Locale.ENGLISH)
+        val formattedTime = sdf.format(currentTime)
+
+        today.text = formattedTime
+
+        val lists = FirebaseManager.getUserList()?: listOf()
+        tasksList = FirebaseManager.getUserTask()?: listOf()
+        originalTasksList = FirebaseManager.getUserTask()?: listOf()
+
+        val sdf_1 = SimpleDateFormat("yyyy-MM-dd")
+        val appDate = sdf_1.format(currentTime)
+        var selectedDate = appDate
+
+        // Lấy những task có due_datetime bằng today (task chưa quá hạn)
+        tasksList = tasksList.filter { task ->
+            val taskDueDate = task.due_datetime.split(" ")[0]
+            (taskDueDate == appDate) ?: false
+        }.sortedWith(compareByDescending<Task> { it.due_datetime.split(" ")[1] })
+
+        if (tasksList.isEmpty()) {
+            taskText.text = "There are no tasks for today"
+        } else {
+            taskText.visibility = View.GONE
+        }
+
+        adapter = TaskListAdapter1(requireContext(), tasksList, lists)
+        taskRecyclerView.adapter = adapter
     }
 
     companion object {
