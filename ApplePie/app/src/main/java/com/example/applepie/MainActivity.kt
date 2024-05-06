@@ -240,6 +240,7 @@ class MainActivity() : AppCompatActivity() {
                     // Handle received user list data
                     Log.i("data", FirebaseManager.getUserInfo().toString())
                     isUserInfoDataReceived = true
+                    if (isUserListDataReceived && isUserTaskDataReceived)
                     setUI()
                 }
 
@@ -254,6 +255,7 @@ class MainActivity() : AppCompatActivity() {
                     Log.i("data", FirebaseManager.getUserList().toString())
 
                     isUserListDataReceived = true
+                    if (isUserInfoDataReceived && isUserTaskDataReceived)
                     setUI()
                 }
 
@@ -270,6 +272,7 @@ class MainActivity() : AppCompatActivity() {
                     }
 
                     isUserTaskDataReceived = true
+                    if (isUserInfoDataReceived && isUserListDataReceived)
                     setUI()
                 }
 
