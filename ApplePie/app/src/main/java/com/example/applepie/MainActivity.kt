@@ -241,7 +241,7 @@ class MainActivity() : AppCompatActivity() {
                     Log.i("data", FirebaseManager.getUserInfo().toString())
                     isUserInfoDataReceived = true
                     if (isUserListDataReceived && isUserTaskDataReceived)
-                    setUI()
+                        setUI()
                 }
 
                 override fun onError(error: DatabaseError) {
@@ -256,7 +256,7 @@ class MainActivity() : AppCompatActivity() {
 
                     isUserListDataReceived = true
                     if (isUserInfoDataReceived && isUserTaskDataReceived)
-                    setUI()
+                        setUI()
                 }
 
                 override fun onError(error: DatabaseError) {
@@ -273,7 +273,7 @@ class MainActivity() : AppCompatActivity() {
 
                     isUserTaskDataReceived = true
                     if (isUserInfoDataReceived && isUserListDataReceived)
-                    setUI()
+                        setUI()
                 }
 
                 override fun onError(error: DatabaseError) {
