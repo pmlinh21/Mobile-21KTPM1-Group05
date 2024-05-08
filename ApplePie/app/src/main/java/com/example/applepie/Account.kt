@@ -103,8 +103,7 @@ class Account : Fragment(), DataUpdateListener {
                 reminder_duration = userInfo.reminder_duration,
                 username = userInfo.username,
                 longest_streak = longestStreak,
-                current_streak = currentStreak,
-                code = userInfo.code
+                current_streak = currentStreak
             )
             Log.i("index", preferenceManager.getIndex().toString())
             FirebaseManager.updateUserInfo(preferenceManager.getIndex(), updateUser)

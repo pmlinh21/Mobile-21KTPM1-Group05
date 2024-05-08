@@ -11,7 +11,6 @@ data class User(
     val longest_streak: Int = 0,
     val password: String = "",
     val reminder_duration: Int = 0,
-    val username: String = "",
-    val code: String = ""
+    val username: String = ""
 )
 
